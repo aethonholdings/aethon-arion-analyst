@@ -1,0 +1,8 @@
+<table class="matrix">
+  <tr *ngFor="let row of matrix; index as i">
+    <td *ngFor="let col of row; index as j" [ngStyle]="{'background-color': colour(matrix[i][j])}">
+      {{abs(matrix[i][j]) | number: '1.1-1'}}
+    </td>
+  </tr>
+</table>
+

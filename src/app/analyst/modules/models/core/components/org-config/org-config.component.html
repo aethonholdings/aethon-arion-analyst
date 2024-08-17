@@ -1,0 +1,26 @@
+<table *ngIf="orgConfig" class="table table-xsm">
+    <thead>
+        <tr>
+            <th scope="col" class="parameter">Parameter</th>
+            <th scope="col" class="value">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>{{ orgConfig.id }}</td>
+        </tr>
+        <tr>
+            <td>Agent count</td>
+            <td>{{ orgConfig.agentCount }}</td>
+        </tr>
+        <tr>
+            <td>Model type</td>
+            <td>{{ orgConfig.type }}</td>
+        </tr>
+        <tr>
+            <td>Clock tick seconds</td>
+            <td>{{ orgConfig.clockTickSeconds }}</td>
+        </tr>
+    </tbody>
+</table>

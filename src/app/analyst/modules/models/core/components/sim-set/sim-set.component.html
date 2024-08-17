@@ -1,0 +1,35 @@
+<table class="table table-xsm">
+    <thead>
+        <tr>
+            <th scope="col" class="parameter">Parameter</th>
+            <th scope="col" class="value">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>{{ simSet.id }}</td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ simSet.description }}</td>
+        </tr>
+        <tr>
+            <td>Number of SimConfigs</td>
+            <td>{{ simSet.simConfigCount | number }}</td>
+        </tr>
+        <tr>
+            <td>Completed SimConfigs (%)</td>
+            <td>{{ simSet.completedSimConfigCount | number }} ({{ getPercentComplete() }}%)</td>
+        </tr>
+
+        <tr>
+            <td>Completed runs</td>
+            <td>{{ simSet.completedRunCount | number }}</td>
+        </tr>
+    </tbody>
+</table>

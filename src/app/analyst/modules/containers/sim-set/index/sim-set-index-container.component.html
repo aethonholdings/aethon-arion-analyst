@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-md-6 text-left"><h2>SimSets</h2></div>
+    <div class="col-md-6 text-end">
+        <button class="btn btn-primary" (click)="createSimSim()">Create new</button>
+    </div>
+</div>
+<div *ngIf="simSets$ | async as simSets" class="content-block">
+    <div class="row">
+        <div class="col-md-12">
+            <arion-sim-set-index [simSets]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set-index>
+        </div>
+    </div>
+</div>

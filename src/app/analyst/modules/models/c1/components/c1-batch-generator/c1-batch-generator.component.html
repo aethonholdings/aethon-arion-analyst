@@ -1,0 +1,129 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col" class="parameter">Parameter</th>
+            <th scope="col" class="value">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Simulation generation loops</td>
+            <td>
+                <input type="number" class="form-control" [(ngModel)]="batchParams.loops" min="1" step="1" required />
+            </td>
+        </tr>
+        <tr class="heading">
+            <td>Agent count</td>
+            <td></td>
+        </tr>
+        <ng-container *ngFor="let mapElement of batchParams.agentCount | keyvalue">
+            <tr>
+                <td>{{ mapElement.key }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="indent">Minimum</td>
+                <td>
+                    <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="mapElement.value.min"
+                        min="1"
+                        step="1"
+                        required
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="indent">Maximum</td>
+                <td>
+                    <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="mapElement.value.max"
+                        [min]="mapElement.value.min"
+                        step="1"
+                        required
+                    />
+                </td>
+            </tr>
+        </ng-container>
+
+        <tr class="heading">
+            <td>Graph</td>
+            <td></td>
+        </tr>
+        <ng-container *ngFor="let mapElement of batchParams.graph | keyvalue">
+            <tr>
+                <td>{{ mapElement.key }}</td>
+                <td>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="mapElement.value"
+                        id="flexCheckDefault"
+                    />
+                </td></tr
+        ></ng-container>
+
+        <ng-container *ngFor="let initialiser of batchParams.initialisers | keyvalue">
+            <tr class="heading">
+                <td>{{ initialiser.key }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Initialisers</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="indent">null</td>
+                <td>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="initialiser.value.matrix.null"
+                        id="flexCheckDefault"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="indent">random</td>
+                <td>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="initialiser.value.matrix.random"
+                        id="flexCheckDefault"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="indent">hybrid</td>
+                <td>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="initialiser.value.matrix.hybrid"
+                        id="flexCheckDefault"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="indent">purposeful</td>
+                <td>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="initialiser.value.matrix.purposeful"
+                        id="flexCheckDefault"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="indent">Gain</td>
+                <td><input type="text" class="form-control" [(ngModel)]="initialiser.value.gains" required /></td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
+<button class="btn btn-primary float-end" (click)="generate()">Generate</button>

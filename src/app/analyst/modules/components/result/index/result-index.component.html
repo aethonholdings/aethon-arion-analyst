@@ -1,0 +1,34 @@
+<table class="table table-hover table-sm">
+    <thead>
+        <tr>
+            <th scope="col">Result id</th>
+            <th scope="col">Sim id</th>
+            <th scope="col">Org id</th>
+            <th scope="col">Run</th>
+            <th scope="col">Agent count</th>
+            <th scope="col">Priority intensity</th>
+            <th scope="col">Initial priority intensity</th>
+            <th scope="col">Influence intensity</th>
+            <th scope="col">Judgment intensity</th>
+            <th scope="col">Incentive intensity</th>
+            <th scope="col">Performance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let result of resultSet" scope="row" (click)="resultSelected.emit(result.id)">
+          <ng-template [ngIf]="(result.simConfig) && (result.simConfig.orgConfig)">
+            <td>{{ result.id }}</td>
+            <td>{{ result.simConfigId }}</td>
+            <td>{{ result.simConfig.orgConfigId }}</td>
+            <td>{{ result.runCount }}</td>
+            <td>{{ result.simConfig.orgConfig.agentCount }}</td>
+            <td>{{ result.priorityIntensity | number : "1.2-2" }}</td>
+            <td>{{ result.simConfig.orgConfig.priorityIntensity | number : "1.2-2" }}</td>
+            <td>{{ result.simConfig.orgConfig.influenceIntensity | number : "1.2-2" }}</td>
+            <td>{{ result.simConfig.orgConfig.judgmentIntensity | number : "1.2-2" }}</td>
+            <td>{{ result.simConfig.orgConfig.incentiveIntensity | number : "1.2-2" }}</td>
+            <td>{{ result.performance | number : "1.0-0" }}</td>
+          </ng-template>
+        </tr>
+    </tbody>
+</table>

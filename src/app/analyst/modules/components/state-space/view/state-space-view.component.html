@@ -1,0 +1,175 @@
+<div *ngIf="stateSpace">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-block scroller">
+                <input
+                    type="range"
+                    class="form-control"
+                    [(ngModel)]="clockTick"
+                    min="{{ clockTickMin }}"
+                    max="{{ clockTickMax }}"
+                    step="1"
+                    required
+                    (change)="selectStateSpacePoint(clockTick)"
+                />
+                <div>
+                    <span>{{ clockTick + 1 }}</span>
+                    <span> of {{ clockTickMax + 1 }}</span>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="replay()">{{ buttonState }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="stateSpacePoint" class="state-space-point">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Reporting</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Reporting variable</th>
+                                    <th scope="col" class="text-end">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reportingVariable of stateSpacePoint.reporting; let gamma = index">
+                                    <td>{{ reportingVariablesArray[gamma] }}</td>
+                                    <td class="text-end">{{ reportingVariable | number: "1.0-0" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Board</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Reporting variable</th>
+                                    <th scope="col" class="text-end">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reportingVariable of stateSpacePoint.board; let gamma = index">
+                                    <td>{{ reportingVariablesArray[gamma] }}</td>
+                                    <td class="text-end">{{ reportingVariable | number: "1.0-0" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Agent set</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Agent set states</th>
+                                    <th scope="col" class="text-end">Priority tensor</th>
+                                    <th scope="col" class="text-end">State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let agent of stateSpacePoint.priorityTensor; let alpha = index">
+                                    <td>{{ alpha + 1 }}</td>
+                                    <td class="matrix">
+                                        <div>
+                                            <arion-matrix
+                                                [matrix]="stateSpacePoint.priorityTensor[alpha]"
+                                            ></arion-matrix>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">{{ agentStatesArray[stateSpacePoint.agentStates[alpha]] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Plant</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">State variable</th>
+                                    <th scope="col" class="text-end">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let stateVariable of stateSpacePoint.plant; let chi = index">
+                                    <td>{{ plantVariablesArray[chi] }}</td>
+                                    <td class="text-end">{{ stateVariable }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">State probabilities by agent</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th *ngFor="let state of agentStatesArray" scope="col" class="text-end">
+                                        {{ state }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let agent of agentStateProbabilities; index as alpha">
+                                    <td>{{ alpha }}</td>
+                                    <td
+                                        *ngFor="let state of agentStatesArray; index as sigma"
+                                        scope="col"
+                                        class="text-end"
+                                    >
+                                        {{ agentStateProbabilities[alpha][sigma] * 100 | number: "1.1-1" }}%
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Coordination matrix</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th
+                                        *ngFor="let agent of stateSpacePoint.priorityTensor; let alpha = index"
+                                        scope="col"
+                                        class="text-end"
+                                    >
+                                        {{ alpha + 1 }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let agentAlpha of this.coordinationMatrix; index as alpha">
+                                    <td>{{ alpha + 1 }}</td>
+                                    <td
+                                        *ngFor="let agentBeta of agentAlpha; index as beta"
+                                        scope="col"
+                                        class="text-end"
+                                    >
+                                        <span *ngIf="alpha <= beta">
+                                            {{ this.coordinationMatrix[alpha][beta] * 100 | number: "1.0-0" }}%
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<table class="table table-xsm">
+    <thead>
+        <tr>
+            <th scope="col" class="parameter">Parameter</th>
+            <th scope="col" class="value">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>{{ simConfig.id }}</td>
+        </tr>
+        <tr>
+            <td>Performance</td>
+            <td>{{ simConfig.avgPerformance | number: "1.0-0" }}</td>
+        </tr>
+        <tr>
+            <td>Standard deviation</td>
+            <td>{{ simConfig.stdDevPerformance | number: "1.0-0" }}</td>
+        </tr>
+        <tr>
+            <td>Runs</td>
+            <td>{{ simConfig.runCount }}</td>
+        </tr>
+        <tr>
+            <td>Days</td>
+            <td>{{ simConfig.days }}</td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td>{{ simConfig.state }}</td>
+        </tr>
+        <tr>
+            <td>Start</td>
+            <td>{{ simConfig.start | date: "yyyy-MM-dd hh:mm:ss" }}</td>
+        </tr>
+        <tr>
+            <td>End</td>
+            <td>{{ simConfig.end | date: "yyyy-MM-dd hh:mm:ss" }}</td>
+        </tr>
+        <tr>
+            <td>Duration seconds</td>
+            <td>{{ simConfig.durationSec }}</td>
+        </tr>
+    </tbody>
+</table>

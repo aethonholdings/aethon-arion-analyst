@@ -1,0 +1,40 @@
+<table *ngIf="resultDTO" class="table">
+  <thead>
+      <tr>
+          <th scope="col"></th>
+          <th scope="col" class="text-end">Results</th>
+          <th scope="col" class="text-end">Plan</th>
+          <th scope="col" class="text-end">Delta</th>
+      </tr>
+  </thead>
+  <tbody *ngFor="let report of presentation.reports">
+      <tr class="heading">
+          <td>{{ report.name }}</td>
+          <td class="text-end"></td>
+          <td class="text-end"></td>
+          <td class="text-end"></td>
+      </tr>
+      <tr *ngFor="let lineItem of report.lineItems" class="{{ lineItem.class }}">
+          <td><span [innerHTML]="lineItem.operator"></span> {{ lineItem.values.name }}</td>
+          <td class="text-end">{{ lineItem.values.reporting | number : "1.0-0" }}</td>
+          <td class="text-end">{{ lineItem.values.plan | number : "1.0-0" }}</td>
+          <td class="text-end">
+              {{ (lineItem.values.reporting - lineItem.values.plan) | number : "1.0-0" }}
+          </td>
+      </tr>
+  </tbody>
+  <tbody>
+      <tr class="heading">
+          <td>Priority tensors</td>
+          <td class="text-end"></td>
+          <td class="text-end"></td>
+          <td class="text-end"></td>
+      </tr>
+      <tr *ngFor="let agent of [].constructor(presentation.agentCount); index as alpha">
+          <td>{{alpha+1}}</td>
+          <td class="matrix"><div><arion-matrix [matrix]="presentation.priorityTensor[alpha]"></arion-matrix></div></td>
+          <td class="matrix"><div><arion-matrix [matrix]="presentation.targetPriorityTensor[alpha]"></arion-matrix></div></td>
+          <td class="matrix"><div><arion-matrix [matrix]="presentation.deltaTensor[alpha]"></arion-matrix></div></td>
+      </tr>
+  </tbody>
+</table>

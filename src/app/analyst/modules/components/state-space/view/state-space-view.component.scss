@@ -1,0 +1,46 @@
+.matrix > div {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.heading {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+
+.scroller {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+}
+
+.scroller > input {
+    flex-basis: 100%;
+}
+
+.scroller > div {
+    min-width: 9em;
+    text-align: right;
+    margin: 0 1em 0 1em;
+}
+
+.scroller > button {
+    width: 6em;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.dashboard > div {
+    min-width: 450px;
+    max-width: 100%;
+    margin-top: 10px;
+}

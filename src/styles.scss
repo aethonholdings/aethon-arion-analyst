@@ -1,0 +1,51 @@
+@import "node_modules/ngx-spinner/animations/ball-scale-multiple.css";
+
+// utilities
+$arion-purple-soft: rgb(231, 220, 226);
+$arion-purple-strong: rgb(128, 0, 128);
+
+body {
+    overflow: scroll;
+}
+
+.test {
+    background-color: red;
+}
+
+.test2 {
+    background-color: blue;
+}
+
+.hoverable:hover {
+    background-color: $arion-purple-soft;
+}
+
+.content-block {
+    margin-top: 10px;
+}
+
+// tables
+
+.table-fix-head {
+    overflow-y: auto;
+    height: 100vh;
+}
+
+.table-fix-head thead {
+    position: sticky;
+    top: 0;
+}
+
+.table-fix-head table:focus {
+    border: white solid 2px !important;
+}
+
+.parameter {
+    width: 50%;
+}
+
+.value {
+    width: 50%;
+}
+
+// cards

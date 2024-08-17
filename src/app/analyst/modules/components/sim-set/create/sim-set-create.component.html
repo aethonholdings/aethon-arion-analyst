@@ -1,0 +1,24 @@
+<form>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="description">Description</label>
+            </div>
+            <div class="col-md-9">
+                <textarea [(ngModel)]="simSet.description" name="description" class="form-control" id="description" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="sim-set">Model type</label>
+            </div>
+            <div class="col-md-9">
+                <select [(ngModel)]="simSet.type" name="model" id="models" class="form-select" aria-label="Models">
+                    <option *ngFor="let model of models" [value]="model">{{ model }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
