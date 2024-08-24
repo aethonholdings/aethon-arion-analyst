@@ -24,20 +24,20 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                      <button
-                          class="nav-link"
-                          id="analysis-tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#analysis"
-                          type="button"
-                          role="tab"
-                          aria-controls="analysis"
-                          aria-selected="false"
-                          (click)="loadResultSet()"
-                      >
-                          Analysis
-                      </button>
-                  </li>
+                        <button
+                            class="nav-link"
+                            id="analysis-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#analysis"
+                            type="button"
+                            role="tab"
+                            aria-controls="analysis"
+                            aria-selected="false"
+                            (click)="loadResultSet()"
+                        >
+                            Analysis
+                        </button>
+                    </li>
                     <li class="nav-item">
                         <button
                             class="nav-link"
@@ -76,22 +76,35 @@
             <div class="col-md-12">
                 <div class="tab-content" id="tabContent">
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                      <arion-sim-set-view *ngIf="simSetRefresh$ | async as simSetRefresh" [simSet]="simSetRefresh"></arion-sim-set-view>
+                        <arion-sim-set-view
+                            *ngIf="simSetRefresh$ | async as simSetRefresh"
+                            [simSet]="simSetRefresh"
+                        ></arion-sim-set-view>
                     </div>
                     <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
-                      <div *ngIf="resultSet$ | async as resultSet">
-                          <arion-result-set-view
-                              [resultSet]="resultSet" [orgConfigType]="simSet.type"></arion-result-set-view>
-                      </div>
-                  </div>
+                        <div *ngIf="resultSet$ | async as resultSet">
+                            <arion-result-set-view
+                                [resultSet]="resultSet"
+                                [orgConfigType]="simSet.type"
+                            ></arion-result-set-view>
+                        </div>
+                    </div>
                     <div class="tab-pane" id="sim-configs" role="tabpanel" aria-labelledby="sim-configs-tab">
-                      <div *ngIf="simConfigs$ | async as simConfigs">
-                          <arion-sim-config-index
-                              [simConfigs]="simConfigs.data"
-                              (selected)="navigateToSimConfig($event)"
-                          ></arion-sim-config-index>
-                      </div>
-                  </div>
+                        <div *ngIf="simConfigs$ | async as simConfigs">
+                            <arion-pagination
+                                [pagination]="simConfigs"
+                                (changePage)="loadSimConfigs($event)"
+                            ></arion-pagination>
+                            <arion-sim-config-index
+                                [simConfigs]="simConfigs.data"
+                                (selected)="navigateToSimConfig($event)"
+                            ></arion-sim-config-index>
+                            <arion-pagination
+                                [pagination]="simConfigs"
+                                (changePage)="loadSimConfigs($event)"
+                            ></arion-pagination>
+                        </div>
+                    </div>
                     <div class="tab-pane" id="generate-sims" role="tabpanel" aria-labelledby="generate-sims">
                         <arion-batch-generator-view
                             [simSet]="simSet"

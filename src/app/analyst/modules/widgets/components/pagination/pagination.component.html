@@ -1,0 +1,48 @@
+<div class="row d-flex align-items-baseline">
+    <div class="col-md-12">
+        <nav aria-label="pagination">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link" aria-label="First" (click)="onClick(1)">
+                        <span aria-hidden="true">First</span>
+                    </button>
+                </li>
+                <li class="page-item">
+                    <button
+                        class="page-link"
+                        aria-label="Previous"
+                        (click)="onPrevious()"
+                        [disabled]="currentPage === 1"
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li>
+                <li *ngFor="let page of pageArray" class="page-item" [ngClass]="page === currentPage ? 'active' : ''">
+                    <button class="page-link" (click)="onClick(page)">{{ page }}</button>
+                </li>
+                <li class="page-item">
+                    <button
+                        class="page-link"
+                        aria-label="Next"
+                        (click)="onNext()"
+                        [disabled]="currentPage === pagination.meta.totalPages"
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link" aria-label="Last" (click)="onClick(pagination.meta.totalPages)">
+                        <span aria-hidden="true">Last</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="align-self-center">
+            {{ (currentPage - 1) * pagination.meta.itemsPerPage + 1 }}-{{
+                (currentPage - 1) * pagination.meta.itemsPerPage + pagination.data.length
+            }}
+            of
+            {{ pagination.meta.totalItems }} records
+          </div>
+    </div>
+</div>

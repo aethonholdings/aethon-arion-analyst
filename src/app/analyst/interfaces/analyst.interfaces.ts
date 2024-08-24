@@ -27,23 +27,22 @@ export interface SummaryElement {
     class?: string;
 }
 
-
 export interface Pagination<T> {
-  data: [T],
-  meta: {
-    itemsPerPage: number,
-    totalItems: number,
-    currentPage: number,
-    totalPages: number,
-    sortBy?: string[][],
-    search?: string,
-    filter?: any
-  },
-  links: {
-    first: string,
-    previous: string,
-    current: string,
-    next: string,
-    last: string
-  }
+    data: [T];
+    meta: {
+        itemsPerPage: number;
+        totalItems: number;
+        currentPage: number;
+        totalPages: number;
+        sortBy?: string[][];
+        search?: string;
+        filter?: any;
+    };
+    links: {
+        first: string;
+        previous: string;
+        current: string;
+        next: string;
+        last: string;
+    };
 }

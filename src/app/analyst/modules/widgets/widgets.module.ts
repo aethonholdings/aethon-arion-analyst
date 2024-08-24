@@ -5,10 +5,11 @@ import { MatrixModule } from "./components/matrix/matrix.module";
 import { GraphModule } from "./components/graph/graph.module";
 import { GraphComponent } from "./components/graph/components/graph/graph.component";
 import { StatusIndicatorComponent } from './components/status-indicator/status-indicator.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
-    declarations: [StatusIndicatorComponent],
+    declarations: [StatusIndicatorComponent, PaginationComponent],
     imports: [CommonModule, MatrixModule, GraphModule],
-    exports: [MatrixComponent, GraphComponent, StatusIndicatorComponent]
+    exports: [MatrixComponent, GraphComponent, StatusIndicatorComponent, PaginationComponent],
 })
 export class WidgetsModule {}

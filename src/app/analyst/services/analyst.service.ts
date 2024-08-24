@@ -44,6 +44,28 @@ export class AnalystService {
         return this.apiService.request$(endpoint, disableUI);
     }
 
+    getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Pagination<SimConfigDTO>> {
+        const endpoint: Endpoint = {
+            path: `/sim-set/` + simSetId + `/sim-config`,
+            method: "GET",
+            options: {
+                params: {
+                    page: pageNumber
+                }
+            }
+        };
+        return this.apiService.request$(endpoint).pipe(share());
+    }
+
+    getSimSetResultSet$(simSetId: number): Observable<ResultDTO[]> {
+        const endpoint: Endpoint = {
+            path: `/sim-set/` + simSetId + `/result`,
+            method: "GET",
+            options: {}
+        };
+        return this.apiService.request$(endpoint).pipe(share());
+    }
+
     getResultSet$(simConfigId: number): Observable<ResultDTO[]> {
         const endpoint: Endpoint = {
             path: `/sim-config/` + simConfigId + `/result`,
@@ -94,24 +116,6 @@ export class AnalystService {
     getSimConfig$(id: number): Observable<SimConfigDTO> {
         const endpoint: Endpoint = {
             path: `/sim-config/${id}`,
-            method: "GET",
-            options: {}
-        };
-        return this.apiService.request$(endpoint).pipe(share());
-    }
-
-    getSimSetSimConfigs$(simSetId: number): Observable<Pagination<SimConfigDTO>> {
-        const endpoint: Endpoint = {
-            path: `/sim-set/` + simSetId + `/sim-config`,
-            method: "GET",
-            options: {}
-        };
-        return this.apiService.request$(endpoint).pipe(share());
-    }
-
-    getSimSetResultSet$(simSetId: number): Observable<ResultDTO[]> {
-        const endpoint: Endpoint = {
-            path: `/sim-set/` + simSetId + `/result`,
             method: "GET",
             options: {}
         };

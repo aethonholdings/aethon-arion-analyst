@@ -38,8 +38,8 @@ export class SimSetViewContainerComponent {
         this.router.navigate(["/sim-config", id]);
     }
 
-    loadSimConfigs() {
-        if (!this.simConfigs$) this.simConfigs$ = this.analystService.getSimSetSimConfigs$(this.id);
+    loadSimConfigs(pageNumber?: number) {
+        this.simConfigs$ = this.analystService.getSimSetSimConfigs$(this.id, pageNumber);
     }
 
     loadResultSet() {
