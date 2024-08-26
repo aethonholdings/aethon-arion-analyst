@@ -1,0 +1,17 @@
+<h3>Agent performance regression results</h3>
+<table *ngIf="regression" class="table table-xsm">
+  <thead>
+    <tr>
+      <th scope="col" class="parameter">Variable</th>
+      <th scope="col" class="value">Coefficient</th>
+      <th scope="col" class="value">t-stat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let variable of regression.regressionResults.summary.variables">
+      <td>{{ variable.label }}</td>
+      <td class="text-end">{{ variable.coefficients[0] | number: '1.2-2' }}</td>
+      <td class="text-end">{{ variable.tStat | number: '1.2-2' }}</td>
+    </tr>
+  </tbody>
+</table>

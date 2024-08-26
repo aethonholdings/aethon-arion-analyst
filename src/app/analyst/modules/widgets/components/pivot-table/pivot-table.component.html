@@ -1,0 +1,16 @@
+<table *ngIf="data" class="table table-sm">
+    <thead>
+        <tr *ngFor="let columnSegmentLevel of groupBy?.column; let last = last">
+            <th *ngFor="let rowSegmentHeader of groupBy.row" scope="col">{{ last ? rowSegmentHeader.name : "" }}</th>
+            <th scope="col">{{ columnSegmentLevel.name }} >></th>
+            <th *ngFor="let columnSegment of segments.column" scope="col" class="text-end">{{ columnSegment.filter[columnSegmentLevel.key] }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let segmentRow of segments.row">
+            <td *ngFor="let rowSegment of groupBy.row">{{ segmentRow.filter[rowSegment.key] }}</td>
+            <td></td>
+            <td *ngFor="let columnSegment of segments.column" scope="col" class="text-end">{{calculateField(segmentRow, columnSegment) | number:"1.1-1"}}</td>
+        </tr>
+    </tbody>
+</table>

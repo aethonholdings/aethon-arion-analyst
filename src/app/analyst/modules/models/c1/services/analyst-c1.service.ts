@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { C1ConfiguratorParamsDTO } from "aethon-arion-c1";
+import { C1ConfiguratorParamsDTO, C1ResultSet } from "aethon-arion-c1";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { BatchParams } from "../interfaces/analyst-c1.interfaces";
 
