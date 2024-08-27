@@ -14,6 +14,7 @@ export interface BatchParams {
         teams: boolean;
         topDown: boolean;
     };
+    controlStep: boolean;
     initialisers: {
         influence: {
             matrix: {
@@ -43,4 +44,5 @@ export interface BatchParams {
             gains: number[];
         };
     };
+
 }

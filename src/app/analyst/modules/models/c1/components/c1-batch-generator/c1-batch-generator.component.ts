@@ -23,7 +23,7 @@ export class C1BatchGeneratorComponent {
             this.batchParams.agentCount.layers.max >= this.batchParams.agentCount.layers.min &&
             this.batchParams.agentCount.spans.max >= this.batchParams.agentCount.spans.min
         ) {
-            this.batchGenerated.emit(this.analystC1Service.generateConfigParamsBatch(this.simSet, this.batchParams));
+            this.batchGenerated.emit(this.analystC1Service.generateConfigParamsBatch(this.batchParams));
         } else {
             throw new Error("Max values must be greater than or equal to min values");
         }

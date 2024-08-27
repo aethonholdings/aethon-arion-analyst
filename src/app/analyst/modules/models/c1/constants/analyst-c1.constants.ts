@@ -16,6 +16,7 @@ export const batchParamsInit: BatchParams = {
         teams: true,
         topDown: false
     },
+    controlStep: true,
     initialisers: {
         influence: {
             matrix: {

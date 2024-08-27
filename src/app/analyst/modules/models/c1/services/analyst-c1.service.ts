@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { C1ConfiguratorParamsDTO, C1ResultSet } from "aethon-arion-c1";
+import { C1ConfiguratorParamsDTO } from "aethon-arion-c1";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { BatchParams } from "../interfaces/analyst-c1.interfaces";
 
@@ -9,7 +9,7 @@ import { BatchParams } from "../interfaces/analyst-c1.interfaces";
 export class AnalystC1Service {
     constructor() {}
 
-    generateConfigParamsBatch(simSet: SimSetDTO, batchParams: BatchParams): C1ConfiguratorParamsDTO[] {
+    generateConfigParamsBatch(batchParams: BatchParams): C1ConfiguratorParamsDTO[] {
         let actionStateProbability: number = 0.85;
 
         const configParamsArray: C1ConfiguratorParamsDTO[] = [];
@@ -54,6 +54,9 @@ export class AnalystC1Service {
                                                                         reporting: {
                                                                             unitPayroll: 1,
                                                                             unitPrice: 1
+                                                                        },
+                                                                        board: {
+                                                                            controlStep: batchParams.controlStep
                                                                         }
                                                                     }
                                                                 } as C1ConfiguratorParamsDTO;

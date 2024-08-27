@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
-  C1ConfiguratorInitType,
-  C1ResultSet,
-} from 'aethon-arion-c1';
+  ResultSet,
+} from 'aethon-arion-pipeline';
 import { ResultDTO } from 'aethon-arion-pipeline';
 
 @Component({
@@ -11,7 +10,7 @@ import { ResultDTO } from 'aethon-arion-pipeline';
   styleUrls: ['./c1-result-set.component.scss'],
 })
 export class C1ResultSetComponent implements OnInit {
-  @Input() resultSet: C1ResultSet | undefined;
+  @Input() resultSet: ResultSet | undefined;
   results: ResultDTO[] | undefined;
 
   ngOnInit(): void {
