@@ -10,9 +10,11 @@ import { C1BatchGeneratorComponent } from "./components/c1-batch-generator/c1-ba
 import { AnalystC1Service } from "./services/analyst-c1.service";
 import { C1ResultSetComponent } from "./components/c1-result-set/c1-result-set.component";
 import { SpinnerModule } from "src/app/root/modules/spinner/spinner.module";
+import { C1BoardComponent } from "./components/c1-board/c1-board.component";
 
 @NgModule({
     declarations: [
+        C1BoardComponent,
         C1PlantComponent,
         C1ReportingComponent,
         C1ResultComponent,
@@ -23,6 +25,7 @@ import { SpinnerModule } from "src/app/root/modules/spinner/spinner.module";
     imports: [CommonModule, FormsModule, WidgetsModule, SpinnerModule],
     providers: [AnalystC1Service],
     exports: [
+        C1BoardComponent,
         C1PlantComponent,
         C1ReportingComponent,
         C1ResultComponent,

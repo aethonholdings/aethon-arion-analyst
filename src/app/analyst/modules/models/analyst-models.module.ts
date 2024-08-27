@@ -14,11 +14,13 @@ import { OrgConfigComponent } from './core/components/org-config/org-config.comp
 import { SimConfigComponent } from './core/components/sim-config/sim-config.component';
 import { SimSetComponent } from './core/components/sim-set/sim-set.component';
 import { ResultSetComponent } from './core/components/result-set/result-set.component';
+import { BoardComponent } from './core/components/board/board.component';
 
 @NgModule({
     declarations: [
         ConfiguratorComponent,
         PlantComponent,
+        BoardComponent,
         ReportingComponent,
         ResultComponent,
         AgentSetTensorsComponent,
@@ -36,6 +38,7 @@ import { ResultSetComponent } from './core/components/result-set/result-set.comp
         WidgetsModule,
         ConfiguratorComponent,
         PlantComponent,
+        BoardComponent,
         ReportingComponent,
         AgentSetTensorsComponent,
         ResultComponent,
