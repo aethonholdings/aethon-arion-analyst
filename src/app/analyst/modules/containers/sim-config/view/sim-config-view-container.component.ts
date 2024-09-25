@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ResultDTO, SimConfigDTO } from "aethon-arion-pipeline";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({

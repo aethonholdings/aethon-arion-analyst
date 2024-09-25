@@ -8,7 +8,18 @@ import {
     StateSpace,
     StateSpacePointDTO
 } from "aethon-arion-pipeline";
-import { Observable, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
+import {
+    Observable,
+    catchError,
+    concatMap,
+    finalize,
+    from,
+    map,
+    of,
+    share,
+    switchMap,
+    timer
+} from "rxjs";
 import { Endpoint } from "aethon-arion-pipeline";
 import { ApiService } from "src/app/root/modules/api/services/api.service";
 import { Pagination } from "../interfaces/analyst.interfaces";
@@ -46,7 +57,7 @@ export class AnalystService {
 
     getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Pagination<SimConfigDTO>> {
         const endpoint: Endpoint = {
-            path: `/sim-set/` + simSetId + `/sim-config`,
+            path: `/sim-set/${simSetId}/sim-config`,
             method: "GET",
             options: {
                 params: {
@@ -59,7 +70,7 @@ export class AnalystService {
 
     getSimSetResultSet$(simSetId: number): Observable<ResultDTO[]> {
         const endpoint: Endpoint = {
-            path: `/sim-set/` + simSetId + `/result`,
+            path: `/sim-set/${simSetId}/result`,
             method: "GET",
             options: {}
         };
@@ -68,7 +79,7 @@ export class AnalystService {
 
     getResultSet$(simConfigId: number): Observable<ResultDTO[]> {
         const endpoint: Endpoint = {
-            path: `/sim-config/` + simConfigId + `/result`,
+            path: `/sim-config/${simConfigId}/result`,
             method: "GET",
             options: {}
         };
@@ -150,7 +161,7 @@ export class AnalystService {
     generateConfigurationBatch$(
         simSetId: number,
         configuratorParamsDTOs: ConfiguratorParamsDTO[]
-    ): Observable<OrgConfigDTO> {
+    ): Observable<SimConfigDTO> {
         let count = 0;
         let maxCount = configuratorParamsDTOs.length;
         return of(this.spinnerService.show()).pipe(
@@ -160,20 +171,22 @@ export class AnalystService {
             concatMap((configuratorParamsDTO) => {
                 count++;
                 this.spinnerService.update("Generating configuration " + count + " of " + maxCount);
-                const endpoint: Endpoint = {
-                    path: `/sim-set/` + simSetId + `/generate`,
-                    method: "POST",
-                    options: {
-                        body: configuratorParamsDTO
-                    }
-                };
-                return this.apiService.request$(endpoint, false);
+                return this.createOrgConfig$(configuratorParamsDTO, false);
             }),
-            concatMap((response) => {
-                return of(response);
+            concatMap((orgConfig) => {
+                if (simSetId && orgConfig.id) {
+                    return this.createSimConfig$(simSetId, orgConfig.id, false);
+                } else {
+                    throw new Error("SimSetId or OrgConfigId is missing");
+                }
             }),
             finalize(() => {
                 this.spinnerService.hide();
+            }),
+            catchError((error) => {
+                console.error(error);
+                this.spinnerService.hide();
+                throw error;
             })
         );
     }
@@ -196,5 +209,33 @@ export class AnalystService {
             options: {}
         };
         return this.apiService.request$(endpoint);
+    }
+
+    createSimConfig$(simSetId: number, orgConfigId: number, disableUI: boolean = true): Observable<SimConfigDTO> {
+        const endpoint: Endpoint = {
+            path: `/sim-config/`,
+            method: "POST",
+            options: {
+                body: {
+                    simSetId: Number(simSetId),
+                    orgConfigId: Number(orgConfigId)
+                }
+            }
+        };
+        return this.apiService.request$(endpoint, disableUI);
+    }
+
+    createOrgConfig$(
+        configuratorParamsDTO: ConfiguratorParamsDTO,
+        disableUI: boolean = true
+    ): Observable<OrgConfigDTO> {
+        const endpoint: Endpoint = {
+            path: `/org-config/`,
+            method: "POST",
+            options: {
+                body: configuratorParamsDTO
+            }
+        };
+        return this.apiService.request$(endpoint, disableUI);
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { concatMap, finalize, map, Observable, of, switchMap } from "rxjs";
+import { catchError, concatMap, finalize, map, Observable, of, switchMap } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Endpoint, EndpointOptions, Environment } from "aethon-arion-pipeline";
 import { environment } from "src/env/environment";
@@ -58,6 +58,16 @@ export class ApiService {
             }),
             map((response) => {
                 return response.body;
+            }),
+            catchError((error) => {
+                if (this._debug) {
+                    console.error({
+                        source: "API",
+                        event: "ERROR",
+                        error: error
+                    });
+                }
+                throw error;
             }),
             finalize(() => (disableUI)? this.spinnerService.hide() : of(null))
         );

@@ -1,7 +1,7 @@
 export const environment = {
     debug: true,
     host: {
-        hostname: "http://127.0.0.1",
+        hostname: "http://localhost",
         path: "arion",
         port: 3000
     }
