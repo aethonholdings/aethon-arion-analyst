@@ -22,7 +22,7 @@ import {
 } from "rxjs";
 import { Endpoint } from "aethon-arion-pipeline";
 import { ApiService } from "src/app/root/modules/api/services/api.service";
-import { Pagination } from "../interfaces/analyst.interfaces";
+import { Paginated } from "aethon-paginate-types";
 import { SpinnerService } from "src/app/root/modules/spinner/services/spinner.service";
 
 @Injectable({
@@ -55,7 +55,7 @@ export class AnalystService {
         return this.apiService.request$(endpoint, disableUI);
     }
 
-    getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Pagination<SimConfigDTO>> {
+    getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
         const endpoint: Endpoint = {
             path: `/sim-set/${simSetId}/sim-config`,
             method: "GET",

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SimConfigDTO } from 'aethon-arion-pipeline';
-import { Summary } from '../../../../interfaces/analyst.interfaces';
+import { Summary } from '../../../../types/analyst.types';
 
 @Component({
   selector: 'arion-sim-config-view',

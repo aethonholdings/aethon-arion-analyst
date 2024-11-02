@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { OrgConfigDTO, Utils } from "aethon-arion-pipeline";
-import { AgentSetReportData } from "src/app/analyst/interfaces/analyst.interfaces";
+import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
 import { AnalystModelsService } from "../../services/analyst-models.service";
 
 

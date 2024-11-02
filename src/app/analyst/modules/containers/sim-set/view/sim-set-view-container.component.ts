@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ConfiguratorParamsDTO, ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
 import { concatMap, Observable, map, finalize } from "rxjs";
-import { Pagination } from "src/app/analyst/interfaces/analyst.interfaces";
+import { Paginated } from "aethon-paginate-types";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
@@ -13,7 +13,7 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 export class SimSetViewContainerComponent {
     @Input() simSet$: Observable<SimSetDTO>;
     id: number;
-    simConfigs$: Observable<Pagination<SimConfigDTO>> | undefined;
+    simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
     simSetRefresh$: Observable<SimSetDTO>;
     resultSet$: Observable<ResultSet> | undefined;
     refreshing: boolean = false;

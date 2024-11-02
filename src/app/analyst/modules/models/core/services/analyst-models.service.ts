@@ -9,7 +9,7 @@ import {
     C1ReportingVariablesArray
 } from "aethon-arion-c1";
 import { ConfiguratorParamsDTO, ConfiguratorSignatureDTO, OrgConfigDTO } from "aethon-arion-pipeline";
-import { AgentSetReportData } from "src/app/analyst/interfaces/analyst.interfaces";
+import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
 
 @Injectable({
     providedIn: "root"

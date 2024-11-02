@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Pagination } from "src/app/analyst/interfaces/analyst.interfaces";
+import { Paginated } from "aethon-paginate-types";
 
 @Component({
     selector: "arion-pagination",
@@ -7,7 +7,7 @@ import { Pagination } from "src/app/analyst/interfaces/analyst.interfaces";
     styleUrls: ["./pagination.component.scss"]
 })
 export class PaginationComponent implements OnInit {
-    @Input() pagination: Pagination<any> = {} as Pagination<any>;
+    @Input() pagination: Paginated<any> = {} as Paginated<any>;
     @Input() paginationPagesShown: number = 3;
     @Output() changePage = new EventEmitter<number>();
 
