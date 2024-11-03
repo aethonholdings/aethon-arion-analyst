@@ -9,12 +9,12 @@ import { ResultComponent } from "./core/components/result/result.component";
 import { AgentSetTensorsComponent } from "./core/components/agent-set-tensors/agent-set-tensors.component";
 import { WidgetsModule } from "../widgets/widgets.module";
 import { AnalystModelsService } from "./core/services/analyst-models.service";
-import { BatchGeneratorComponent } from './core/components/batch-generator/batch-generator.component';
-import { OrgConfigComponent } from './core/components/org-config/org-config.component';
-import { SimConfigComponent } from './core/components/sim-config/sim-config.component';
-import { SimSetComponent } from './core/components/sim-set/sim-set.component';
-import { ResultSetComponent } from './core/components/result-set/result-set.component';
-import { BoardComponent } from './core/components/board/board.component';
+import { BatchGeneratorComponent } from "./core/components/batch-generator/batch-generator.component";
+import { OrgConfigComponent } from "./core/components/org-config/org-config.component";
+import { SimConfigComponent } from "./core/components/sim-config/sim-config.component";
+import { SimSetComponent } from "./core/components/sim-set/sim-set.component";
+import { ResultSetComponent } from "./core/components/result-set/result-set.component";
+import { BoardComponent } from "./core/components/board/board.component";
 
 @NgModule({
     declarations: [

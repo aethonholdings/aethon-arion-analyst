@@ -39,13 +39,13 @@ export class PivotTableComponent implements OnInit {
             for (let i = 0; i < flattenedData.length; i++) {
                 // work through all the group definitions by position
                 const positions = Object.keys(this.groupBy) as Position[];
-                for (let position of positions) {
+                for (const position of positions) {
                     // for this position, get the fields that are used to group
                     const fields = this.groupBy[position];
                     if (fields) {
                         let filter: Filter<unknown> = {};
                         // set up the filter values for this row of data
-                        for (let field of fields) {
+                        for (const field of fields) {
                             filter = { ...filter, [field.key]: flattenedData[i][field.key] };
                         }
                         // check if we already have a group with this filter
@@ -69,13 +69,13 @@ export class PivotTableComponent implements OnInit {
             }
             // sort the groups
             const positions = Object.keys(this.segments) as Position[];
-            for (let position of positions) {
+            for (const position of positions) {
                 this.segments[position] = this.segments[position].sort((a, b) => {
                     // order of sort given by array
-                    let fields: Field[] = a.fields;
+                    const fields: Field[] = a.fields;
                     let orderBitsA: number = 0;
                     let orderBitsB: number = 0;
-                    for (let field of fields) {
+                    for (const field of fields) {
                         // compare the fields in the order they were given
                         switch (typeof a.filter[field.key]) {
                             case "string": {
@@ -105,11 +105,11 @@ export class PivotTableComponent implements OnInit {
 
     calculateField(rowSegment: Segment<unknown>, columnSegment: Segment<unknown>): number {
         // get the relevant dataset by intersecting the row and column segments
-        let intersection = new Set([...rowSegment.data].filter((x) => columnSegment.data.has(x)));
+        const intersection = new Set([...rowSegment.data].filter((x) => columnSegment.data.has(x)));
         let value = 0;
         let count = 0;
-        for (let row of intersection) {
-            switch(this.operation) {
+        for (const row of intersection) {
+            switch (this.operation) {
                 case "avg": {
                     value += row[this.value.key];
                     count += 1;

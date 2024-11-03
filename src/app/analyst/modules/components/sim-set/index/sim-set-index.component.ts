@@ -20,6 +20,6 @@ export class SimSetIndexComponent {
     }
 
     getPercentComplete(simSet: SimSetDTO): string {
-        return this.analystModelsService.getSimSetPercentComplete(simSet)
+        return this.analystModelsService.getSimSetPercentComplete(simSet);
     }
 }

@@ -1,5 +1,4 @@
 import { Component, Input } from "@angular/core";
-import { C1BoardConfig } from "aethon-arion-c1/interfaces/c1.model.interfaces";
 
 @Component({
     selector: "arion-c1-board",

@@ -15,5 +15,4 @@ export class RegressionComponent {
               outputVariableNames: string[];
           }
         | undefined;
-
 }

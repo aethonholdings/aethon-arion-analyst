@@ -19,8 +19,8 @@ export class GraphComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
 
     ngAfterViewInit(): void {
-        let cytoscape = require("cytoscape");
-        let coseBilkent = require("cytoscape-cose-bilkent");
+        const cytoscape = require("cytoscape");
+        const coseBilkent = require("cytoscape-cose-bilkent");
         cytoscape.use(coseBilkent);
         this.elements = this.graphService.generateGraphElements(this.influenceTensor);
         this.cytoscape = cytoscape({

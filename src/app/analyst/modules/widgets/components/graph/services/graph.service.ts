@@ -8,7 +8,7 @@ export class GraphService {
     constructor() {}
 
     generateGraphElements(influenceMatrix: number[][][][]): ElementsDefinition {
-        let elements: ElementsDefinition = {
+        const elements: ElementsDefinition = {
             nodes: new Array<NodeDefinition>(),
             edges: new Array<EdgeDefinition>()
         } as ElementsDefinition;

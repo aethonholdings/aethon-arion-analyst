@@ -1,5 +1,4 @@
 import { Component, Input } from "@angular/core";
-import { C1ReportingConfig } from "aethon-arion-c1";
 
 @Component({
     selector: "arion-c1-reporting",

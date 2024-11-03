@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RegressionComponent } from './regression.component';
+import { RegressionComponent } from "./regression.component";
 
-describe('RegressionComponent', () => {
-  let component: RegressionComponent;
-  let fixture: ComponentFixture<RegressionComponent>;
+describe("RegressionComponent", () => {
+    let component: RegressionComponent;
+    let fixture: ComponentFixture<RegressionComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ RegressionComponent ]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [RegressionComponent]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(RegressionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(RegressionComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
 });

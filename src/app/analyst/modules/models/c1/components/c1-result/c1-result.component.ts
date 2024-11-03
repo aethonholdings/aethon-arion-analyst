@@ -16,6 +16,6 @@ export class C1ResultComponent {
     constructor() {}
 
     ngOnInit(): void {
-        if(this.resultDTO) this.presentation = new C1Presentation(this.resultDTO);
+        if (this.resultDTO) this.presentation = new C1Presentation(this.resultDTO);
     }
 }

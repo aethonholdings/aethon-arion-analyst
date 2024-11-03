@@ -23,13 +23,13 @@ export class PaginationComponent implements OnInit {
     }
 
     onPrevious() {
-        if(this.currentPage !== 1) {
+        if (this.currentPage !== 1) {
             this.changePage.emit(this.currentPage - 1);
         }
     }
 
     onNext() {
-        if(this.currentPage !== this.pagination.meta.totalPages) {
+        if (this.currentPage !== this.pagination.meta.totalPages) {
             this.changePage.emit(this.currentPage + 1);
         }
     }

@@ -9,7 +9,6 @@ import { WidgetsModule } from "../../widgets/widgets.module";
 import { C1BatchGeneratorComponent } from "./components/c1-batch-generator/c1-batch-generator.component";
 import { AnalystC1Service } from "./services/analyst-c1.service";
 import { C1ResultSetComponent } from "./components/c1-result-set/c1-result-set.component";
-import { SpinnerModule } from "src/app/root/modules/spinner/spinner.module";
 import { C1BoardComponent } from "./components/c1-board/c1-board.component";
 
 @NgModule({
@@ -22,7 +21,7 @@ import { C1BoardComponent } from "./components/c1-board/c1-board.component";
         C1BatchGeneratorComponent,
         C1ResultSetComponent
     ],
-    imports: [CommonModule, FormsModule, WidgetsModule, SpinnerModule],
+    imports: [CommonModule, FormsModule, WidgetsModule],
     providers: [AnalystC1Service],
     exports: [
         C1BoardComponent,

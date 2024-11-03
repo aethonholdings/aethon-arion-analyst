@@ -5,6 +5,6 @@ import { AnalystService } from "./services/analyst.service";
 @NgModule({
     imports: [AnalystContainerModule],
     providers: [AnalystService],
-    exports: [AnalystContainerModule],
+    exports: [AnalystContainerModule]
 })
 export class AnalystModule {}

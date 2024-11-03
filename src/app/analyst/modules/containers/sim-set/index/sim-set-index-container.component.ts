@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
-import { map, mergeMap, Observable, of } from "rxjs";
+import { map, mergeMap, Observable } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
@@ -18,9 +18,12 @@ export class SimSetIndexContainerComponent {
         private router: Router
     ) {
         this.simSets$ = this.analystService.getRefeshTimer$().pipe(
-          map(() => this.refreshing = true),
-          mergeMap(() => this.analystService.getSimSets$(false)),
-          map((simSets) => {this.refreshing = false; return simSets})
+            map(() => (this.refreshing = true)),
+            mergeMap(() => this.analystService.getSimSets$(false)),
+            map((simSets) => {
+                this.refreshing = false;
+                return simSets;
+            })
         );
     }
 

@@ -51,7 +51,7 @@ export class SimSetViewContainerComponent {
             );
     }
 
-    deleteSimSet(id: number) {
+    deleteSimSet() {
         this.analystService.deleteSimSet$(this.id).subscribe(() => {
             this.router.navigate(["/sim-set"]);
         });

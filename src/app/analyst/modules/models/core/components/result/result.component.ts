@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ResultDTO } from "aethon-arion-pipeline";
 import { Summary } from "src/app/analyst/types/analyst.types";
 
-
 @Component({
     selector: "arion-result",
     templateUrl: "./result.component.html",

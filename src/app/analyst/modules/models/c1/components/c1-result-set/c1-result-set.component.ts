@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  ResultSet,
-} from 'aethon-arion-pipeline';
+import { ResultSet } from 'aethon-arion-pipeline';
 import { ResultDTO } from 'aethon-arion-pipeline';
 
 @Component({

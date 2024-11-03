@@ -1,7 +1,10 @@
+import { AnalystEnvironment } from "src/app/root/types/root.types";
+
 export const environment = {
     debug: true,
     host: {
-        hostname: "http://192.168.1.164",
-        path: "arion"
+        protocol: "http",
+        name: "192.168.1.164",
+        basePath: "arion"
     }
-};
+} as AnalystEnvironment;

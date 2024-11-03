@@ -15,9 +15,7 @@ import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
     providedIn: "root"
 })
 export class AnalystModelsService {
-    private _configurators: Configurator[] = [
-        new C1Configurator() as Configurator,
-    ];
+    private _configurators: Configurator[] = [new C1Configurator() as Configurator];
     private _models: string[] = ["C1", "C3"];
 
     constructor() {}
@@ -62,7 +60,7 @@ export class AnalystModelsService {
     }
 
     getConfiguratorDefaultParams(configurator: ConfiguratorSignatureDTO): ConfiguratorParamsDTO {
-        let params: ConfiguratorParamsDTO = {} as ConfiguratorParamsDTO;
+        const params: ConfiguratorParamsDTO = {} as ConfiguratorParamsDTO;
         params.configuratorName = configurator.name;
         switch (params.configuratorName) {
             case C1ConfiguratorSignature.name: {
@@ -93,11 +91,11 @@ export class AnalystModelsService {
     }
 
     getSimSetPercentComplete(simSet: SimSetDTO): string {
-      if (simSet.simConfigCount && simSet.completedSimConfigCount !== undefined) {
-          if (simSet.simConfigCount > 0) {
-              return ((simSet.completedSimConfigCount / simSet.simConfigCount) * 100).toFixed(0);
-          }
-      }
-      return "n.a.";
-  }
+        if (simSet.simConfigCount && simSet.completedSimConfigCount !== undefined) {
+            if (simSet.simConfigCount > 0) {
+                return ((simSet.completedSimConfigCount / simSet.simConfigCount) * 100).toFixed(0);
+            }
+        }
+        return "n.a.";
+    }
 }

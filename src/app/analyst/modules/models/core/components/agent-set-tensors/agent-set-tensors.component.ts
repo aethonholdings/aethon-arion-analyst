@@ -3,7 +3,6 @@ import { OrgConfigDTO, Utils } from "aethon-arion-pipeline";
 import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
 import { AnalystModelsService } from "../../services/analyst-models.service";
 
-
 @Component({
     selector: "arion-agent-set-tensors",
     templateUrl: "./agent-set-tensors.component.html",
@@ -30,8 +29,8 @@ export class AgentSetTensorsComponent {
     }
 
     transformTensor(tensor: number[][][][]): number[][][][] {
-        let shape = Utils.shape(tensor);
-        const transformed = Utils.tensor([shape[3], shape[0], shape[1], shape[2]], (x) => 0) as number[][][][];
+        const shape = Utils.shape(tensor);
+        const transformed = Utils.tensor([shape[3], shape[0], shape[1], shape[2]], () => 0) as number[][][][];
         for (let alpha = 0; alpha < shape[0]; alpha++) {
             for (let sigma = 0; sigma < shape[1]; sigma++) {
                 for (let tau = 0; tau < shape[2]; tau++) {

@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
 import { Summary } from "src/app/analyst/types/analyst.types";
 
-
 @Component({
     selector: "arion-org-config-view",
     templateUrl: "./org-config-view.component.html",

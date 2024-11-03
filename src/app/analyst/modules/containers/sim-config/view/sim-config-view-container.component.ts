@@ -24,7 +24,7 @@ export class SimConfigViewContainerComponent {
 
     getResults$(simConfigId: number | undefined): void {
         if (simConfigId && !this.results$) {
-            this.results$ = this.analystService.getResultSet$(simConfigId)
+            this.results$ = this.analystService.getResultSet$(simConfigId);
         } else {
             throw new Error("simConfigId is undefined");
         }

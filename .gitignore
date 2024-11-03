@@ -44,5 +44,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Env files
+# Yalc
+yalc.lock
+.yalc
 

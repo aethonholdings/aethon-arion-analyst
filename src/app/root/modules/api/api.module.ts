@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
-import { ApiService } from "./services/api.service";
 import { HttpClientModule } from "@angular/common/http";
-import { SpinnerModule } from "../spinner/spinner.module";
+import { HttpService } from "./services/http.service";
+import { ApiService } from "./services/api.service";
 
 @NgModule({
-    imports: [HttpClientModule, SpinnerModule],
-    providers: [ApiService]
+    imports: [HttpClientModule],
+    providers: [HttpService, ApiService]
 })
 export class ApiModule {}

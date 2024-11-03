@@ -44,5 +44,4 @@ export interface BatchParams {
             gains: number[];
         };
     };
-
 }

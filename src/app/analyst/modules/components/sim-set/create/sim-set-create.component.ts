@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Configurator, SimSetDTO } from "aethon-arion-pipeline";
+import { SimSetDTO } from "aethon-arion-pipeline";
 import { AnalystModelsService } from "../../../models/core/services/analyst-models.service";
 
 @Component({
