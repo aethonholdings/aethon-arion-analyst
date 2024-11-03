@@ -9,13 +9,13 @@ import {
     StateSpacePointDTO
 } from "aethon-arion-pipeline";
 import { Observable, catchError, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
-import { HttpService } from "src/app/root/modules/api/services/http.service";
+import { HttpService } from "src/app/root/services/http.service";
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
 import { API, APIEndpoint, HttpMethod } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
-import { ApiService } from "src/app/root/modules/api/services/api.service";
-import { SpinnerService } from "src/app/root/modules/app-container/services/spinner.service";
+import { ApiService } from "src/app/root/services/api.service";
+import { SpinnerService } from "src/app/root/services/spinner.service";
 
 @Injectable({
     providedIn: "root"

@@ -1,9 +1,13 @@
 import { NgModule } from "@angular/core";
-import { AppRoutingModule } from "./modules/routing/app-routing.module";
-import { AppContainerModule } from "./modules/app-container/app-container.module";
-import { ApiModule } from "./modules/api/api.module";
+import { AppRoutingModule } from "./routing/app-routing.module";
+import { AppComponentModule } from "./components/app-component.module";
+import { HttpClientModule } from "@angular/common/http";
+import { SpinnerService } from "./services/spinner.service";
+import { ApiService } from "./services/api.service";
+import { HttpService } from "./services/http.service";
 
 @NgModule({
-    imports: [AppContainerModule, AppRoutingModule, ApiModule]
+    imports: [HttpClientModule, AppComponentModule, AppRoutingModule],
+    providers: [HttpService, ApiService, SpinnerService]
 })
 export class RootModule {}

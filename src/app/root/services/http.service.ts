@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { APIEndpoint, APIHost, APIRequestOptions, HttpMethod, APIRequest } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import { APIResponse, APIResponseData } from "aethon-api-types";
-import { SpinnerService } from "../../app-container/services/spinner.service";
+import { SpinnerService } from "./spinner.service";
 
 @Injectable({
     providedIn: "root"

@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { AnalystContainerModule } from "./modules/containers/analyst-container.module";
+import { AnalystContainerModule } from "./containers/analyst-container.module";
 import { AnalystService } from "./services/analyst.service";
 import { AnalystCoreModule } from "../models/core/analyst-core.module";
 

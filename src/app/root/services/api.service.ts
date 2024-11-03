@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpService } from "./http.service";
+import { HttpService } from "../services/http.service";
 import { API, APIRequest, APIRequestOptions, APIResponseData } from "aethon-api-types";
 import { map, Observable } from "rxjs";
 
