@@ -46,7 +46,7 @@ export class SimSetViewContainerComponent {
         if (!this.resultSet$)
             this.resultSet$ = this.analystService.getSimSetResultSet$(this.id).pipe(
                 map((resultSet) => {
-                    return new ResultSet(resultSet);
+                    return new ResultSet(resultSet.data);
                 })
             );
     }

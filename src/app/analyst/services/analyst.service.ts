@@ -11,7 +11,7 @@ import {
 import { Observable, catchError, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
 import { HttpService } from "src/app/root/services/http.service";
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
-import { API, APIEndpoint, HttpMethod } from "aethon-api-types";
+import { API, APIEndpoint, APIRequest, APIRequestOptions, HttpMethod } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
 import { ApiService } from "src/app/root/services/api.service";
@@ -44,92 +44,8 @@ export class AnalystService {
 
     getSimSet$(id: number, disableUI: boolean = true): Observable<SimSetDTO> {
         const operation: string = "SimSetController_view";
-        return this.apiService.request$<SimSetDTO>(operation, { params: { id: id } }, disableUI);
-    }
-
-    getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
-        const operation: string = "SimSetController_simConfigs";
-        return this.apiService.request$<Paginated<SimConfigDTO>>(operation, {
-            params: { id: simSetId },
-            query: { page: pageNumber } as PaginateQuery
-        });
-    }
-
-    getSimSetResultSet$(simSetId: number): Observable<ResultDTO[]> {
-        const endpoint: APIEndpoint = {
-            path: `sim-set/${simSetId}/result`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getResultSet$(simConfigId: number): Observable<ResultDTO[]> {
-        const endpoint: APIEndpoint = {
-            path: `sim-config/${simConfigId}/result`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint);
-    }
-
-    getResult$(resultId: number): Observable<ResultDTO> {
-        const endpoint: APIEndpoint = {
-            path: `result/${resultId}`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getOrgConfig$(orgConfigId: number): Observable<OrgConfigDTO> {
-        const endpoint: APIEndpoint = {
-            path: `org-config/${orgConfigId}`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getOrgConfigs$(query?: any): Observable<OrgConfigDTO[]> {
-        const endpoint: APIEndpoint = {
-            path: `org-config/`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    deleteOrgConfig$(id: number): Observable<void> {
-        const endpoint: APIEndpoint = {
-            path: `org-config/${id}`,
-            method: HttpMethod.DELETE
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getSimConfig$(id: number): Observable<SimConfigDTO> {
-        const endpoint: APIEndpoint = {
-            path: `sim-config/${id}`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getSimConfigs$(query?: any): Observable<SimConfigDTO[]> {
-        const endpoint: APIEndpoint = {
-            path: `sim-config`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(share());
-    }
-
-    getStateSpace$(resultId: number): Observable<StateSpace> {
-        const endpoint: APIEndpoint = {
-            path: `state-space/${resultId}`,
-            method: HttpMethod.GET
-        };
-        return this.httpService.request$(endpoint).pipe(
-            map((stateSpaceDTO: StateSpacePointDTO[]) => {
-                return new StateSpace(stateSpaceDTO);
-            }),
-            share()
-        );
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<SimSetDTO>(operation, options, disableUI);
     }
 
     createSimSet$(simSetDTO: SimSetDTO): Observable<SimSetDTO> {
@@ -148,12 +64,54 @@ export class AnalystService {
         return this.httpService.request$(endpoint);
     }
 
+    getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
+        const operation: string = "SimSetController_simConfigs";
+        const options: APIRequestOptions = { params: { id: simSetId }, query: { page: pageNumber } as PaginateQuery };
+        return this.apiService.request$<Paginated<SimConfigDTO>>(operation, options);
+    }
+
+    getSimSetResultSet$(simSetId: number): Observable<Paginated<ResultDTO>> {
+        const operation: string = "SimSetController_results";
+        const options: APIRequestOptions = { params: { id: simSetId } };
+        return this.apiService.request$<Paginated<ResultDTO>>(operation, options);
+    }
+
+    getSimConfig$(id: number): Observable<SimConfigDTO> {
+        const operation: string = "SimConfigController_view";
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<SimConfigDTO>(operation, options);
+    }
+
     createSimConfig$(simSetId: number, orgConfigId: number, disableUI: boolean = true): Observable<SimConfigDTO> {
         const endpoint: APIEndpoint = {
             path: `sim-config`,
             method: HttpMethod.POST
         };
         return this.httpService.request$(endpoint, disableUI);
+    }
+
+    getSimConfigResultSet$(simConfigId: number): Observable<ResultDTO[]> {
+        const operation: string = "SimConfigController_results";
+        const options: APIRequestOptions = { params: { id: simConfigId } };
+        return this.apiService.request$<ResultDTO[]>(operation, options);
+    }
+
+    getResult$(id: number): Observable<ResultDTO> {
+        const operation: string = "ResultController_view";
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<ResultDTO>(operation, options);
+    }
+
+    getOrgConfigs$(query?: PaginateQuery): Observable<OrgConfigDTO[]> {
+        const operation: string = "OrgConfigController_index";
+        const options: APIRequestOptions = { query: query };
+        return this.apiService.request$<OrgConfigDTO[]>(operation, options);
+    }
+
+    getOrgConfig$(id: number): Observable<OrgConfigDTO> {
+        const operation: string = "OrgConfigController_view";
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<OrgConfigDTO>(operation, options);
     }
 
     createOrgConfig$(
@@ -165,6 +123,24 @@ export class AnalystService {
             method: HttpMethod.POST
         };
         return this.httpService.request$(endpoint, disableUI);
+    }
+
+    deleteOrgConfig$(id: number): Observable<void> {
+        const endpoint: APIEndpoint = {
+            path: `org-config/${id}`,
+            method: HttpMethod.DELETE
+        };
+        return this.httpService.request$(endpoint).pipe(share());
+    }
+
+    getStateSpace$(resultId: number): Observable<StateSpace> {
+        const operation = "StateSpaceController_index";
+        const options: APIRequestOptions = { params: { id: resultId } };
+        return this.apiService.request$<StateSpacePointDTO[]>(operation, options).pipe(
+            map((stateSpaceDTO: StateSpacePointDTO[]) => {
+                return new StateSpace(stateSpaceDTO);
+            })
+        );
     }
 
     generateConfigurationBatch$(

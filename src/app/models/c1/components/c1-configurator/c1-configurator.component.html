@@ -15,9 +15,14 @@
             <td>{{ configuratorParamsDTO.data.actionStateProbability }}</td>
         </tr>
         <tr>
-          <td>Board control step</td>
-          <td>{{ configuratorParamsDTO.data.board.controlStep }}</td>
-      </tr>
+            <td>Board control step</td>
+            <td *ngIf="configuratorParamsDTO.data.board?.controlStep; else notDefinedTemplate">
+                {{ configuratorParamsDTO.data.board.controlStep }}
+            </td>
+            <ng-template #notDefinedTemplate>
+                <td>Not defined</td>
+            </ng-template>
+        </tr>
         <tr>
             <td>Agent graph</td>
             <td>{{ configuratorParamsDTO.data.graph }}</td>
