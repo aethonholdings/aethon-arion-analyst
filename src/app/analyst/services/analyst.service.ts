@@ -49,19 +49,15 @@ export class AnalystService {
     }
 
     createSimSet$(simSetDTO: SimSetDTO): Observable<SimSetDTO> {
-        const endpoint: APIEndpoint = {
-            path: `sim-set`,
-            method: HttpMethod.POST
-        };
-        return this.httpService.request$(endpoint);
+        const operation: string = "SimSetController_create";
+        const options: APIRequestOptions = { body: simSetDTO };
+        return this.apiService.request$<SimSetDTO>(operation, options);
     }
 
     deleteSimSet$(id: number): Observable<void> {
-        const endpoint: APIEndpoint = {
-            path: `sim-set/${id}`,
-            method: HttpMethod.DELETE
-        };
-        return this.httpService.request$(endpoint);
+        const operation: string = "SimSetController_delete";
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<void>(operation, options);
     }
 
     getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
@@ -82,12 +78,20 @@ export class AnalystService {
         return this.apiService.request$<SimConfigDTO>(operation, options);
     }
 
-    createSimConfig$(simSetId: number, orgConfigId: number, disableUI: boolean = true): Observable<SimConfigDTO> {
-        const endpoint: APIEndpoint = {
-            path: `sim-config`,
-            method: HttpMethod.POST
-        };
-        return this.httpService.request$(endpoint, disableUI);
+    createSimConfig$(
+        simSetId: number,
+        orgConfigId: number,
+        days: number = 100,
+        randomStreamType: string = "random",
+        disableUI: boolean = true
+    ): Observable<SimConfigDTO> {
+        const operation: string = "SimConfigController_create";
+        const options: APIRequestOptions = { body: { simSetId: simSetId, orgConfigId, days, randomStreamType } };
+        return this.apiService.request$<SimConfigDTO>(operation, options, disableUI).pipe(
+            map((response) => {
+                return response;
+            })
+        );
     }
 
     getSimConfigResultSet$(simConfigId: number): Observable<ResultDTO[]> {
@@ -118,11 +122,9 @@ export class AnalystService {
         configuratorParamsDTO: ConfiguratorParamsDTO,
         disableUI: boolean = true
     ): Observable<OrgConfigDTO> {
-        const endpoint: APIEndpoint = {
-            path: `org-config`,
-            method: HttpMethod.POST
-        };
-        return this.httpService.request$(endpoint, disableUI);
+        const operation: string = "OrgConfigController_create";
+        const options: APIRequestOptions = { body: configuratorParamsDTO };
+        return this.apiService.request$<OrgConfigDTO>(operation, options, disableUI);
     }
 
     deleteOrgConfig$(id: number): Observable<void> {
@@ -160,7 +162,7 @@ export class AnalystService {
             }),
             concatMap((orgConfig) => {
                 if (simSetId && orgConfig.id) {
-                    return this.createSimConfig$(simSetId, orgConfig.id, false);
+                    return this.createSimConfig$(simSetId, orgConfig.id, 100, "random", false);
                 } else {
                     throw new Error("SimSetId or OrgConfigId is missing");
                 }

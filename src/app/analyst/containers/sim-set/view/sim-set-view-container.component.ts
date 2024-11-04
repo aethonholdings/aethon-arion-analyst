@@ -12,7 +12,7 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 })
 export class SimSetViewContainerComponent {
     @Input() simSet$: Observable<SimSetDTO>;
-    id: number;
+    simSetId: number;
     simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
     simSetRefresh$: Observable<SimSetDTO>;
     resultSet$: Observable<ResultSet> | undefined;
@@ -23,15 +23,20 @@ export class SimSetViewContainerComponent {
         private router: Router,
         private analystService: AnalystService
     ) {
-        this.id = this.activatedRoute.snapshot.paramMap.get("id") as unknown as number;
-        this.id
-            ? (this.simSet$ = this.analystService.getSimSet$(this.id))
-            : (this.simSet$ = new Observable<SimSetDTO>());
-        (this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
-            map(() => (this.refreshing = true)),
-            concatMap(() => this.analystService.getSimSet$(this.id, false))
-        )),
-            map(() => (this.refreshing = false));
+        const tmp = this.activatedRoute.snapshot.paramMap.get("id");
+        if (tmp !== null) {
+            this.simSetId = Number.parseInt(tmp);
+            this.simSetId
+                ? (this.simSet$ = this.analystService.getSimSet$(this.simSetId))
+                : (this.simSet$ = new Observable<SimSetDTO>());
+            (this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
+                map(() => (this.refreshing = true)),
+                concatMap(() => this.analystService.getSimSet$(this.simSetId, false))
+            )),
+                map(() => (this.refreshing = false));
+        } else {
+            throw new Error("No simSetId provided");
+        }
     }
 
     navigateToSimConfig(id: number) {
@@ -39,12 +44,12 @@ export class SimSetViewContainerComponent {
     }
 
     loadSimConfigs(pageNumber?: number) {
-        this.simConfigs$ = this.analystService.getSimSetSimConfigs$(this.id, pageNumber);
+        this.simConfigs$ = this.analystService.getSimSetSimConfigs$(this.simSetId, pageNumber);
     }
 
     loadResultSet() {
         if (!this.resultSet$)
-            this.resultSet$ = this.analystService.getSimSetResultSet$(this.id).pipe(
+            this.resultSet$ = this.analystService.getSimSetResultSet$(this.simSetId).pipe(
                 map((resultSet) => {
                     return new ResultSet(resultSet.data);
                 })
@@ -52,14 +57,14 @@ export class SimSetViewContainerComponent {
     }
 
     deleteSimSet() {
-        this.analystService.deleteSimSet$(this.id).subscribe(() => {
+        this.analystService.deleteSimSet$(this.simSetId).subscribe(() => {
             this.router.navigate(["/sim-set"]);
         });
     }
 
     generateSimConfigs(batch: ConfiguratorParamsDTO[]) {
         this.analystService
-            .generateConfigurationBatch$(this.id, batch)
+            .generateConfigurationBatch$(this.simSetId, batch)
             .pipe(finalize(() => location.reload()))
             .subscribe();
     }
