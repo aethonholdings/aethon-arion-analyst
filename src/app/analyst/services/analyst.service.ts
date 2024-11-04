@@ -11,7 +11,7 @@ import {
 import { Observable, catchError, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
 import { HttpService } from "src/app/root/services/http.service";
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
-import { API, APIEndpoint, APIRequest, APIRequestOptions, HttpMethod } from "aethon-api-types";
+import { API, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
 import { ApiService } from "src/app/root/services/api.service";
@@ -25,7 +25,6 @@ export class AnalystService {
 
     constructor(
         private apiService: ApiService,
-        private httpService: HttpService,
         private spinnerService: SpinnerService
     ) {
         const host = environment.host;
@@ -128,11 +127,9 @@ export class AnalystService {
     }
 
     deleteOrgConfig$(id: number): Observable<void> {
-        const endpoint: APIEndpoint = {
-            path: `org-config/${id}`,
-            method: HttpMethod.DELETE
-        };
-        return this.httpService.request$(endpoint).pipe(share());
+        const operation: string = "OrgConfigController_delete";
+        const options: APIRequestOptions = { params: { id: id } };
+        return this.apiService.request$<void>(operation, options);
     }
 
     getStateSpace$(resultId: number): Observable<StateSpace> {
