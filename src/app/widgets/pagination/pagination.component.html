@@ -1,5 +1,5 @@
 <div class="row d-flex align-items-baseline">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <nav aria-label="pagination">
             <ul class="pagination">
                 <li class="page-item">
@@ -37,12 +37,15 @@
                 </li>
             </ul>
         </nav>
-        <div class="align-self-center">
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+        <div *ngIf="pagination.meta.totalItems > 0" class="align-self-center">
             {{ (currentPage - 1) * pagination.meta.itemsPerPage + 1 }}-{{
                 (currentPage - 1) * pagination.meta.itemsPerPage + pagination.data.length
             }}
             of
             {{ pagination.meta.totalItems }} records
-          </div>
+        </div>
+        <div *ngIf="pagination.meta.totalItems === 0" class="align-self-center">0-0 of 0 records</div>
     </div>
 </div>

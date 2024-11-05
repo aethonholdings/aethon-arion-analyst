@@ -8,11 +8,11 @@ import { Paginated } from "aethon-paginate-types";
 })
 export class PaginationComponent implements OnInit {
     @Input() pagination: Paginated<any> = {} as Paginated<any>;
-    @Input() paginationPagesShown: number = 3;
     @Output() changePage = new EventEmitter<number>();
 
     currentPage: number = 1;
     pageArray: number[] = [];
+    pagesShown: number = 3;
 
     ngOnInit(): void {
         this.setPageTags();
@@ -40,18 +40,16 @@ export class PaginationComponent implements OnInit {
 
     setPageTags() {
         this.currentPage = this.pagination.meta.currentPage;
-        this.pageArray = [this.currentPage - 1, this.currentPage, this.currentPage + 1];
-        if (this.currentPage === 1) {
-            this.pageArray = Array.from({ length: this.paginationPagesShown }, (_, i) => i + 1);
-        }
-        if (this.pagination.meta.totalPages < this.paginationPagesShown) {
-            this.pageArray = Array.from({ length: this.pagination.meta.totalPages }, (_, i) => i + 1);
-        }
-        if (this.currentPage > this.pagination.meta.totalPages - this.paginationPagesShown) {
-            this.pageArray = Array.from(
-                { length: this.paginationPagesShown },
-                (_, i) => this.pagination.meta.totalPages - this.paginationPagesShown + i + 1
+        for (
+            let i = Math.max(1, Math.min(this.pagination.meta.totalPages - this.pagesShown + 1, this.currentPage - 1));
+            i <=
+            Math.min(
+                Math.max(this.currentPage + this.pagesShown - 2, this.pagesShown),
+                this.pagination.meta.totalPages
             );
+            i++
+        ) {
+            this.pageArray.push(i);
         }
     }
 }

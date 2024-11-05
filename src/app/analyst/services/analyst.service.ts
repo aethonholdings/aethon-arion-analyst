@@ -61,7 +61,7 @@ export class AnalystService {
 
     getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
         const operation: string = "SimSetController_simConfigs";
-        const options: APIRequestOptions = { params: { id: simSetId }, query: { page: pageNumber } as PaginateQuery };
+        const options: APIRequestOptions = { params: { id: simSetId }, query: { page: pageNumber, orderBy: [["avgPerformance", "DESC"]] } as PaginateQuery };
         return this.apiService.request$<Paginated<SimConfigDTO>>(operation, options);
     }
 

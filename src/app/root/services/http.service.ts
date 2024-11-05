@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { catchError, finalize, map, Observable, of, share, switchMap, tap } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { APIRequestOptions, HttpMethod, APIRequest } from "aethon-api-types";
+import { HttpMethod, APIRequest } from "aethon-api-types";
 import { APIResponse, APIResponseData } from "aethon-api-types";
 import { SpinnerService } from "./spinner.service";
+import * as qs from "qs";
 
 @Injectable({
     providedIn: "root"
@@ -18,26 +19,35 @@ export class HttpService {
     ) {}
 
     requestNew$<T>(request: APIRequest, disableUI: boolean = true): Observable<APIResponseData<T>> {
-        const url = request.getURL();
-        let json$: Observable<any>;
-
-        switch (request.endpoint.method) {
-            case HttpMethod.GET:
-                json$ = this._get$(url, request.options);
-                break;
-            case HttpMethod.POST:
-                json$ = this._post$(url, request.options);
-                break;
-            case HttpMethod.PATCH:
-                json$ = this._patch$(url, request.options);
-                break;
-            case HttpMethod.DELETE:
-                json$ = this._delete$(url, request.options);
-                break;
-            default:
-                throw new Error(`Method ${request.endpoint.method} not supported`);
+        let url = request.getURL();
+        let query: string = "";
+        // Add query parameters
+        if (request.options?.query) {
+            query = qs.stringify(request.options.query, { arrayFormat: "indices" });
+            url += `?${query}`;
         }
-
+        // get the correct method
+        const method = Object.keys(HttpMethod).find(
+            (key) => HttpMethod[key as keyof typeof HttpMethod] === request.endpoint.method
+        );
+        if (!method) {
+            throw new Error(`Method ${request.endpoint.method} not supported`);
+        }
+        // create the request object
+        let json$: Observable<any> = this.httpClient.request(method, url, {
+            body: request.options?.body,
+            headers: this._headers,
+            observe: "response"
+        });
+        // log the request in the console if debugging
+        if (this._debug) {
+            console.log({
+                event: "REQUEST",
+                url: url,
+                headers: this._headers,
+                options: request.options
+            });
+        }
         return of(disableUI ? this.spinnerService.show() : null).pipe(
             switchMap(() => json$),
             tap((response) => {
@@ -67,49 +77,5 @@ export class HttpService {
             }),
             finalize(() => (disableUI ? this.spinnerService.hide() : of(null)))
         );
-    }
-
-    private _get$(url: string, options: APIRequestOptions | undefined) {
-        this._logRequest(url, options?.params);
-        return this.httpClient.get(url, {
-            params: options?.query,
-            headers: this._headers,
-            observe: "response"
-        });
-    }
-
-    private _post$(url: string, options: APIRequestOptions | undefined) {
-        this._logRequest(url, options?.body);
-        return this.httpClient.post(url, options?.body, {
-            headers: this._headers,
-            observe: "response"
-        });
-    }
-
-    private _delete$(url: string, options: APIRequestOptions | undefined) {
-        this._logRequest(url, options?.params);
-        return this.httpClient.delete(url, {
-            headers: this._headers,
-            observe: "response"
-        });
-    }
-
-    private _patch$(url: string, options: APIRequestOptions | undefined) {
-        this._logRequest(url, options?.params);
-        return this.httpClient.patch(url, options?.params, {
-            headers: this._headers,
-            observe: "response"
-        });
-    }
-
-    private _logRequest(url: string, options: APIRequestOptions | undefined) {
-        if (this._debug) {
-            console.log({
-                event: "REQUEST",
-                url: url,
-                headers: this._headers,
-                options: options || null
-            });
-        }
     }
 }
