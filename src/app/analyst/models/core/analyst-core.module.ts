@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
-import { AnalystC1Module } from "../c1/analyst-c1.module";
 import { ConfiguratorComponent } from "./components/configurator/configurator.component";
 import { PlantComponent } from "./components/plant/plant.component";
+import { AnalystC1Module } from "../c1/analyst-c1.module";
 import { ReportingComponent } from "./components/reporting/reporting.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";

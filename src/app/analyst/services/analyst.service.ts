@@ -9,7 +9,6 @@ import {
     StateSpacePointDTO
 } from "aethon-arion-pipeline";
 import { Observable, catchError, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
-import { HttpService } from "src/app/root/services/http.service";
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
 import { API, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
@@ -61,7 +60,10 @@ export class AnalystService {
 
     getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
         const operation: string = "SimSetController_simConfigs";
-        const options: APIRequestOptions = { params: { id: simSetId }, query: { page: pageNumber, orderBy: [["avgPerformance", "DESC"]] } as PaginateQuery };
+        const options: APIRequestOptions = {
+            params: { id: simSetId },
+            query: { page: pageNumber, orderBy: [["avgPerformance", "DESC"]] } as PaginateQuery
+        };
         return this.apiService.request$<Paginated<SimConfigDTO>>(operation, options);
     }
 

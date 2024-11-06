@@ -16,7 +16,7 @@ import { SimSetCreateComponent } from "./sim-set/create/sim-set-create.component
 import { ConfiguratorCardComponent } from "./configurator/card/configurator-card.component";
 import { BatchGeneratorViewComponent } from "./batch-generator/view/batch-generator-view.component";
 import { ResultSetViewComponent } from "./result-set/view/result-set-view.component";
-import { AnalystModelsModule } from "src/app/models/analyst-models.module";
+import { AnalystModelsModule } from "src/app/analyst/models/analyst-models.module";
 
 @NgModule({
     declarations: [

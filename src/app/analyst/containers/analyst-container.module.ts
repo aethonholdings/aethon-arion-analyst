@@ -5,7 +5,7 @@ import { SimSetViewContainerComponent } from "./sim-set/view/sim-set-view-contai
 import { SimSetIndexContainerComponent } from "./sim-set/index/sim-set-index-container.component";
 import { ResultViewContainerComponent } from "./result/view/result-view-container.component";
 import { SimSetCreateContainerComponent } from "./sim-set/create/sim-set-create-container.component";
-import { AnalystModelsModule } from "src/app/models/analyst-models.module";
+import { AnalystModelsModule } from "src/app/analyst/models/analyst-models.module";
 
 @NgModule({
     declarations: [

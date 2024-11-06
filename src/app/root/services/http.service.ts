@@ -34,7 +34,7 @@ export class HttpService {
             throw new Error(`Method ${request.endpoint.method} not supported`);
         }
         // create the request object
-        let json$: Observable<any> = this.httpClient.request(method, url, {
+        const json$: Observable<any> = this.httpClient.request(method, url, {
             body: request.options?.body,
             headers: this._headers,
             observe: "response"
