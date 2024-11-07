@@ -19,7 +19,7 @@ export class SimSetIndexContainerComponent {
     ) {
         this.simSets$ = this.analystService.getRefeshTimer$().pipe(
             map(() => (this.refreshing = true)),
-            mergeMap(() => this.analystService.getSimSets$(false)),
+            mergeMap(() => this.analystService.getSimSets$()),
             map((simSets) => {
                 this.refreshing = false;
                 return simSets;

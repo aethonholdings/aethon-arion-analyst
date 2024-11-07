@@ -1,4 +1,4 @@
-import { AnalystEnvironment } from "src/app/root/types/root.types";
+import { Environment } from "src/app/root/types/root.types";
 
 export const environment = {
     debug: true,
@@ -8,4 +8,4 @@ export const environment = {
         basePath: "arion",
         port: 3000
     }
-} as AnalystEnvironment;
+} as Environment;

@@ -8,8 +8,9 @@ import { SpinnerService } from "../../services/spinner.service";
     styleUrls: ["./spinner.component.scss"]
 })
 export class SpinnerComponent {
-    spinnerText$: Observable<string>;
+    progress$: Observable<string>;
+
     constructor(private spinnerService: SpinnerService) {
-        this.spinnerText$ = this.spinnerService.getText$();
+        this.progress$ = this.spinnerService.getProgress$();
     }
 }

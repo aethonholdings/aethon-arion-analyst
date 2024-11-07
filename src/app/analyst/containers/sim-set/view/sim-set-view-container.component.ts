@@ -1,9 +1,11 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ConfiguratorParamsDTO, ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
-import { concatMap, Observable, map, finalize } from "rxjs";
+import { ConfiguratorParamsDTO, ResultDTO, ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
+import { concatMap, Observable, map, finalize, last, catchError } from "rxjs";
 import { Paginated } from "aethon-paginate-types";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
+import { SpinnerService } from "src/app/root/services/spinner.service";
+import { ProgressState } from "src/app/root/types/root.types";
 
 @Component({
     selector: "arion-sim-set-view-container",
@@ -21,7 +23,8 @@ export class SimSetViewContainerComponent {
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private analystService: AnalystService
+        private analystService: AnalystService,
+        private spinnerService: SpinnerService
     ) {
         const tmp = this.activatedRoute.snapshot.paramMap.get("id");
         if (tmp !== null) {
@@ -31,7 +34,7 @@ export class SimSetViewContainerComponent {
                 : (this.simSet$ = new Observable<SimSetDTO>());
             (this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
                 map(() => (this.refreshing = true)),
-                concatMap(() => this.analystService.getSimSet$(this.simSetId, false))
+                concatMap(() => this.analystService.getSimSet$(this.simSetId))
             )),
                 map(() => (this.refreshing = false));
         } else {
@@ -48,12 +51,22 @@ export class SimSetViewContainerComponent {
     }
 
     loadResultSet() {
-        if (!this.resultSet$)
-            this.resultSet$ = this.analystService.getSimSetResultSet$(this.simSetId).pipe(
-                map((resultSet) => {
-                    return new ResultSet(resultSet.data);
-                })
-            );
+        let results: any = [];
+        if (!this.resultSet$) this.spinnerService.show();
+        this.resultSet$ = this.analystService.getSimSetResultSet$(this.simSetId).pipe(
+            map((progress: ProgressState<ResultDTO[]>) => {
+                results = results.concat(progress.data);
+                this.spinnerService.updateProgress(`${progress.progressPercent}%`)
+                return results;
+            }),
+            last(),
+            map(() => new ResultSet(results)),
+            finalize(() => this.spinnerService.hide()),
+            catchError((error) => {
+                this.spinnerService.hide();
+                throw error;
+            })
+        );
     }
 
     deleteSimSet() {

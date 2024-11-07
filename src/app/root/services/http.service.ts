@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { catchError, finalize, map, Observable, of, share, switchMap, tap } from "rxjs";
+import { catchError, map, Observable, share, tap } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HttpMethod, APIRequest } from "aethon-api-types";
 import { APIResponse, APIResponseData } from "aethon-api-types";
-import { SpinnerService } from "./spinner.service";
 import * as qs from "qs";
 
 @Injectable({
@@ -14,14 +13,13 @@ export class HttpService {
     private _headers: HttpHeaders = new HttpHeaders();
 
     constructor(
-        private httpClient: HttpClient,
-        private spinnerService: SpinnerService
+        private httpClient: HttpClient
     ) {}
 
-    requestNew$<T>(request: APIRequest, disableUI: boolean = true): Observable<APIResponseData<T>> {
+    request$<T>(request: APIRequest): Observable<APIResponseData<T>> {
         let url = request.getURL();
         let query: string = "";
-        // Add query parameters
+        // Add query parameters, serialised
         if (request.options?.query) {
             query = qs.stringify(request.options.query, { arrayFormat: "indices" });
             url += `?${query}`;
@@ -48,8 +46,7 @@ export class HttpService {
                 options: request.options
             });
         }
-        return of(disableUI ? this.spinnerService.show() : null).pipe(
-            switchMap(() => json$),
+        return json$.pipe(
             tap((response) => {
                 if (this._debug) {
                     console.log({
@@ -74,8 +71,7 @@ export class HttpService {
                     });
                 }
                 throw error;
-            }),
-            finalize(() => (disableUI ? this.spinnerService.hide() : of(null)))
+            })
         );
     }
 }

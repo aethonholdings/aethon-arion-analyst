@@ -11,12 +11,10 @@ export class SpinnerService {
     constructor(private ngxSpinnerService: NgxSpinnerService) {}
 
     show(text?: string) {
-        if (!text) text = "Loading";
         this.ngxSpinnerService.show();
-        this.update(text);
     }
 
-    update(text: string) {
+    updateProgress(text: string | undefined) {
         this.textSubscriber.next(text);
     }
 
@@ -24,7 +22,7 @@ export class SpinnerService {
         this.ngxSpinnerService.hide();
     }
 
-    getText$(): Observable<string> {
+    getProgress$(): Observable<string> {
         return new Observable<string>((subscriber) => (this.textSubscriber = subscriber));
     }
 }

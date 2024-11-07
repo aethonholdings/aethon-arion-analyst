@@ -1,3 +1,6 @@
 <ngx-spinner type="ball-scale-multiple">
-    <p class="spinner-text">{{ spinnerText$ | async }}</p>
+    <div class="spinner-text text-center mx-auto mt-5">
+        <p>Loading...</p>
+        <p>{{ progress$ | async }}</p>
+    </div>
 </ngx-spinner>

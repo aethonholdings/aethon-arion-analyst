@@ -15,6 +15,7 @@ import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
 import { ApiService } from "src/app/root/services/api.service";
 import { SpinnerService } from "src/app/root/services/spinner.service";
+import { ProgressState } from "src/app/root/types/root.types";
 
 @Injectable({
     providedIn: "root"
@@ -35,15 +36,15 @@ export class AnalystService {
         return this._refreshTimer;
     }
 
-    getSimSets$(disableUI: boolean = true): Observable<SimSetDTO[]> {
+    getSimSets$(): Observable<SimSetDTO[]> {
         const operation: string = "SimSetController_index";
-        return this.apiService.request$<SimSetDTO[]>(operation, {}, disableUI);
+        return this.apiService.request$<SimSetDTO[]>(operation, {});
     }
 
-    getSimSet$(id: number, disableUI: boolean = true): Observable<SimSetDTO> {
+    getSimSet$(id: number): Observable<SimSetDTO> {
         const operation: string = "SimSetController_view";
         const options: APIRequestOptions = { params: { id: id } };
-        return this.apiService.request$<SimSetDTO>(operation, options, disableUI);
+        return this.apiService.request$<SimSetDTO>(operation, options);
     }
 
     createSimSet$(simSetDTO: SimSetDTO): Observable<SimSetDTO> {
@@ -67,28 +68,27 @@ export class AnalystService {
         return this.apiService.request$<Paginated<SimConfigDTO>>(operation, options);
     }
 
-    getSimSetResultSet$(simSetId: number): Observable<Paginated<ResultDTO>> {
+    getSimSetResultSet$(simSetId: number): Observable<ProgressState<ResultDTO[]>> {
         const operation: string = "SimSetController_results";
         const options: APIRequestOptions = { params: { id: simSetId } };
-        return this.apiService.request$<Paginated<ResultDTO>>(operation, options);
+        return this.apiService.fetchAllPaginated$<ResultDTO[]>(operation, options);
     }
 
     getSimConfig$(id: number): Observable<SimConfigDTO> {
         const operation: string = "SimConfigController_view";
         const options: APIRequestOptions = { params: { id: id } };
-        return this.apiService.request$<SimConfigDTO>(operation, options);
+        return this.apiService.request$<SimConfigDTO>(operation);
     }
 
     createSimConfig$(
         simSetId: number,
         orgConfigId: number,
         days: number = 100,
-        randomStreamType: string = "random",
-        disableUI: boolean = true
+        randomStreamType: string = "random"
     ): Observable<SimConfigDTO> {
         const operation: string = "SimConfigController_create";
         const options: APIRequestOptions = { body: { simSetId: simSetId, orgConfigId, days, randomStreamType } };
-        return this.apiService.request$<SimConfigDTO>(operation, options, disableUI).pipe(
+        return this.apiService.request$<SimConfigDTO>(operation, options).pipe(
             map((response) => {
                 return response;
             })
@@ -120,12 +120,11 @@ export class AnalystService {
     }
 
     createOrgConfig$(
-        configuratorParamsDTO: ConfiguratorParamsDTO,
-        disableUI: boolean = true
+        configuratorParamsDTO: ConfiguratorParamsDTO
     ): Observable<OrgConfigDTO> {
         const operation: string = "OrgConfigController_create";
         const options: APIRequestOptions = { body: configuratorParamsDTO };
-        return this.apiService.request$<OrgConfigDTO>(operation, options, disableUI);
+        return this.apiService.request$<OrgConfigDTO>(operation, options);
     }
 
     deleteOrgConfig$(id: number): Observable<void> {
@@ -156,12 +155,12 @@ export class AnalystService {
             }),
             concatMap((configuratorParamsDTO) => {
                 count++;
-                this.spinnerService.update("Generating configuration " + count + " of " + maxCount);
-                return this.createOrgConfig$(configuratorParamsDTO, false);
+                this.spinnerService.updateProgress("Generating configuration " + count + " of " + maxCount);
+                return this.createOrgConfig$(configuratorParamsDTO);
             }),
             concatMap((orgConfig) => {
                 if (simSetId && orgConfig.id) {
-                    return this.createSimConfig$(simSetId, orgConfig.id, 100, "random", false);
+                    return this.createSimConfig$(simSetId, orgConfig.id, 100, "random");
                 } else {
                     throw new Error("SimSetId or OrgConfigId is missing");
                 }
