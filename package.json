@@ -26,7 +26,7 @@
     "aethon-api-types": "^0.0.3",
     "aethon-arion-c1": "^0.2.0",
     "aethon-arion-pipeline": "^0.1.1",
-    "aethon-paginate-types": "^0.0.3",
+    "aethon-paginate-types": "^0.0.4",
     "cytoscape": "^3.28.1",
     "cytoscape-cose-bilkent": "^4.1.0",
     "ngx-spinner": "^15.0.1",
