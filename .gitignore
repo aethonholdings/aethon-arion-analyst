@@ -49,5 +49,5 @@ yalc.lock
 .yalc
 
 # Env files
-/src/app/env/*
-!/src/app/env/environment.example.ts
+/src/env/*
+!/src/env/environment.example.ts
