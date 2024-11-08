@@ -4,8 +4,7 @@ export const environment = {
     debug: true,
     host: {
         protocol: "http",
-        name: "localhost",
-        basePath: "arion",
-        port: 3000
+        name: "asterix.local",
+        basePath: "arion"
     }
 } as Environment;
