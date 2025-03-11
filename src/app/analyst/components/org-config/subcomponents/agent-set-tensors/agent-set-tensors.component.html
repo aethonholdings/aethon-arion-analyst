@@ -1,0 +1,71 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th *ngFor="let agent of priorityTensor; index as i">
+                {{ i + 1 }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td [attr.colspan]="columnCount">
+                <strong>Priority matrix</strong>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td *ngFor="let agent of priorityTensor; index as alpha">
+                <arion-matrix [matrix]="agent"></arion-matrix>
+            </td>
+        </tr>
+        <!-- Influence tensor -->
+        <tr>
+            <td [attr.colspan]="columnCount">
+                <strong>Influence tensor</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Gain</td>
+            <td *ngFor="let agent of priorityTensor">{{ agentSetReportData.gains.influence }}</td>
+        </tr>
+        <tr *ngFor="let fromAgent of influenceTensor; index as alpha">
+            <td>{{ alpha + 1 }}</td>
+            <td *ngFor="let toAgent of fromAgent; index as beta">
+                <arion-matrix [matrix]="toAgent" [gain]="agentSetReportData.gains.influence"></arion-matrix>
+            </td>
+        </tr>
+        <!-- Judgment tensor -->
+        <tr>
+            <td [attr.colspan]="columnCount">
+                <strong>Judgment tensor</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Gain</td>
+            <td *ngFor="let agent of priorityTensor">{{ agentSetReportData.gains.judgment }}</td>
+        </tr>
+        <tr *ngFor="let stateVariable of judgmentTensor; index as chi">
+            <td>{{ agentSetReportData.variableNames.plant[chi] }}</td>
+            <td *ngFor="let agent of stateVariable; index as alpha">
+                <arion-matrix [matrix]="agent" [gain]="agentSetReportData.gains.judgment"></arion-matrix>
+            </td>
+        </tr>
+        <!-- Incentive tensor -->
+        <tr>
+            <td [attr.colspan]="columnCount">
+                <strong>Incentive tensor</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Gain</td>
+            <td *ngFor="let agent of priorityTensor">{{ agentSetReportData.gains.incentive }}</td>
+        </tr>
+        <tr *ngFor="let reportingVariable of incentiveTensor; index as gamma">
+            <td>{{ agentSetReportData.variableNames.reporting[gamma] }}</td>
+            <td *ngFor="let agent of reportingVariable; index as alpha">
+                <arion-matrix [matrix]="agent" [gain]="agentSetReportData.gains.incentive"></arion-matrix>
+            </td>
+        </tr>
+    </tbody>
+</table>

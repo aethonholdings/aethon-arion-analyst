@@ -64,12 +64,13 @@
                   <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                       <arion-sim-config [dataInstance]="simConfig" [view]="views.CARD"></arion-sim-config>
                   </div>
-                  <!-- <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
-                      <arion-org-config-view
+                  <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
+                      <arion-org-config
                           *ngIf="simConfig.orgConfig as orgConfig"
-                          [orgConfig]="orgConfig"
-                      ></arion-org-config-view>
-                  </div> -->
+                          [dataInstance]="orgConfig"
+                          [view]="views.VIEW"
+                      ></arion-org-config>
+                  </div>
                   <!-- <div class="tab-pane" id="results" role="tabpanel" aria-labelledby="results-tab">
                       <arion-result-index
                           *ngIf="results$ | async as results"

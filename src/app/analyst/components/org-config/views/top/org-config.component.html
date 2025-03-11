@@ -1,0 +1,10 @@
+<div *ngIf="(dataArray || dataInstance) && view">
+    <arion-org-config-card
+        *ngIf="view === views.CARD"
+        [orgConfig]="dataInstance"
+    ></arion-org-config-card>
+    <arion-org-config-view
+        *ngIf="view === views.VIEW"
+        [orgConfig]="dataInstance"
+    ></arion-org-config-view>
+</div>

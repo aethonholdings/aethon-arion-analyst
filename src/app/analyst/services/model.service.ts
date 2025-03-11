@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Model } from "aethon-arion-pipeline";
+import { Model, OrgConfigDTO } from "aethon-arion-pipeline";
 import { C1 } from "aethon-arion-c1";
+import { AgentSetReportData } from "../types/analyst.types";
+import { C1ModelName, C1PlantStateVariablesArray, C1ReportingVariablesArray } from "aethon-arion-c1/dist/constants/c1.model.constants";
 
 @Injectable({
     providedIn: "root"
@@ -13,4 +15,20 @@ export class ModelService {
     getModels(): Model[] {
         return this._models;
     }
+
+    getAgentSetReportData(orgConfig: OrgConfigDTO): AgentSetReportData {
+      const agentSetReportData: AgentSetReportData = {} as AgentSetReportData;
+      agentSetReportData.agentSetTensorsDTO = orgConfig.agentSet;
+      switch (orgConfig.configuratorParams.modelName) {
+          case C1ModelName: {
+              agentSetReportData.gains = orgConfig.configuratorParams.data.gains;
+              agentSetReportData.variableNames = {
+                  plant: C1PlantStateVariablesArray,
+                  reporting: C1ReportingVariablesArray
+              };
+              break;
+          }
+      }
+      return agentSetReportData;
+  }
 }
