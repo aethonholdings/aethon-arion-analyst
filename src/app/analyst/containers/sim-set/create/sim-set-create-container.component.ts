@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
+import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
@@ -10,6 +11,7 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 })
 export class SimSetCreateContainerComponent {
     simSet: SimSetDTO = {} as SimSetDTO;
+    views = Views;
 
     constructor(
         private analystService: AnalystService,

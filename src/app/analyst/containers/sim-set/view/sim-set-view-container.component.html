@@ -76,12 +76,13 @@
             <div class="col-md-12">
                 <div class="tab-content" id="tabContent">
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                        <arion-sim-set-view
+                        <arion-sim-set
                             *ngIf="simSetRefresh$ | async as simSetRefresh"
-                            [simSet]="simSetRefresh"
-                        ></arion-sim-set-view>
+                            [data]="simSetRefresh"
+                            [view]="views.VIEW"
+                        ></arion-sim-set>
                     </div>
-                    <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
+                    <!-- <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
                         <div *ngIf="resultSet$ | async as resultSet">
                             <arion-result-set-view
                                 [resultSet]="resultSet"
@@ -110,7 +111,7 @@
                             [simSet]="simSet"
                             (batchGenerated)="generateSimConfigs($event)"
                         ></arion-batch-generator-view>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

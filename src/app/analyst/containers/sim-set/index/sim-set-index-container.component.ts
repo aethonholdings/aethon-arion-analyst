@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { map, mergeMap, Observable } from "rxjs";
+import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
@@ -9,9 +10,11 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
     templateUrl: "./sim-set-index-container.component.html",
     styleUrls: ["./sim-set-index-container.component.scss"]
 })
+
 export class SimSetIndexContainerComponent {
     @Input() simSets$: Observable<SimSetDTO[]>;
     refreshing: boolean = false;
+    views = Views;
 
     constructor(
         private analystService: AnalystService,

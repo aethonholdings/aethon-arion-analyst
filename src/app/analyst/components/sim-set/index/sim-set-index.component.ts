@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { SimSetDTO } from "aethon-arion-pipeline";
-import { AnalystModelsService } from "src/app/analyst/models/core/services/analyst-models.service";
+import { AnalystService } from '../../../services/analyst.service';
 
 @Component({
     selector: "arion-sim-set-index",
@@ -11,7 +11,7 @@ export class SimSetIndexComponent {
     @Input() simSets: SimSetDTO[] | undefined;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
 
-    constructor(private analystModelsService: AnalystModelsService) {}
+    constructor(private analystService: AnalystService) {}
 
     selectSimSet(id: number | undefined): void {
         if (id) {
@@ -20,6 +20,6 @@ export class SimSetIndexComponent {
     }
 
     getPercentComplete(simSet: SimSetDTO): string {
-        return this.analystModelsService.getSimSetPercentComplete(simSet);
+        return this.analystService.getPercentComplete(simSet);
     }
 }

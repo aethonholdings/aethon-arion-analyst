@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import {
-  ConfiguratorParamData,
+    ConfiguratorParamData,
     ConfiguratorParamsDTO,
     OrgConfigDTO,
     ResultDTO,
@@ -134,7 +134,7 @@ export class AnalystService {
         return this.apiService.request$<void>(operation, options);
     }
 
-    getStateSpace$(resultId: number): Observable<StateSpace> {
+    getStateSpace$<T>(resultId: number): Observable<StateSpace<T>> {
         const operation = "StateSpaceController_index";
         const options: APIRequestOptions = { params: { id: resultId } };
         return this.apiService.request$<StateSpacePointDTO[]>(operation, options).pipe(
@@ -175,5 +175,16 @@ export class AnalystService {
                 throw error;
             })
         );
+    }
+
+    getPercentComplete(simSet: SimSetDTO): string {
+        if (simSet) {
+            if (simSet.simConfigCount && simSet.completedSimConfigCount !== undefined) {
+                if (simSet.simConfigCount > 0) {
+                    return ((simSet.completedSimConfigCount / simSet.simConfigCount) * 100).toFixed(0);
+                }
+            }
+        }
+        return "n.a.";
     }
 }

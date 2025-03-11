@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { AnalystContainerModule } from "./containers/analyst-container.module";
 import { AnalystService } from "./services/analyst.service";
-import { AnalystCoreModule } from "./models/core/analyst-core.module";
+import { ModelService } from "./services/model.service";
 
 @NgModule({
-    imports: [AnalystContainerModule, AnalystCoreModule],
-    providers: [AnalystService],
+    imports: [AnalystContainerModule],
+    providers: [AnalystService, ModelService],
     exports: [AnalystContainerModule]
 })
 export class AnalystModule {}

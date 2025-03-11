@@ -6,19 +6,21 @@ import { Paginated } from "aethon-paginate-types";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { SpinnerService } from "src/app/root/services/spinner.service";
 import { ProgressState } from "src/app/root/types/root.types";
+import { Views } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
     selector: "arion-sim-set-view-container",
     templateUrl: "./sim-set-view-container.component.html",
     styleUrls: ["./sim-set-view-container.component.scss"]
 })
-export class SimSetViewContainerComponent {
+export class SimSetViewContainerComponent<T> {
     @Input() simSet$: Observable<SimSetDTO>;
     simSetId: number;
     simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
     simSetRefresh$: Observable<SimSetDTO>;
-    resultSet$: Observable<ResultSet> | undefined;
+    resultSet$: Observable<ResultSet<T>> | undefined;
     refreshing: boolean = false;
+    views = Views;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -75,7 +77,7 @@ export class SimSetViewContainerComponent {
         });
     }
 
-    generateSimConfigs(batch: ConfiguratorParamsDTO[]) {
+    generateSimConfigs(batch: ConfiguratorParamsDTO<T>[]) {
         this.analystService
             .generateConfigurationBatch$(this.simSetId, batch)
             .pipe(finalize(() => location.reload()))
