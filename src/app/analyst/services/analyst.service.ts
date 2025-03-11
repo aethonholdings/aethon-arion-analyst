@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import {
+  ConfiguratorParamData,
     ConfiguratorParamsDTO,
     OrgConfigDTO,
     ResultDTO,
@@ -119,8 +120,8 @@ export class AnalystService {
         return this.apiService.request$<OrgConfigDTO>(operation, options);
     }
 
-    createOrgConfig$(
-        configuratorParamsDTO: ConfiguratorParamsDTO
+    createOrgConfig$<T extends ConfiguratorParamData>(
+        configuratorParamsDTO: ConfiguratorParamsDTO<T>
     ): Observable<OrgConfigDTO> {
         const operation: string = "OrgConfigController_create";
         const options: APIRequestOptions = { body: configuratorParamsDTO };
@@ -143,9 +144,9 @@ export class AnalystService {
         );
     }
 
-    generateConfigurationBatch$(
+    generateConfigurationBatch$<T extends ConfiguratorParamData>(
         simSetId: number,
-        configuratorParamsDTOs: ConfiguratorParamsDTO[]
+        configuratorParamsDTOs: ConfiguratorParamsDTO<T>[]
     ): Observable<SimConfigDTO> {
         let count = 0;
         const maxCount = configuratorParamsDTOs.length;

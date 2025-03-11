@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ConfiguratorParamsDTO, SimConfigDTO } from "aethon-arion-pipeline";
+import { ConfiguratorParamData, ConfiguratorParamsDTO, SimConfigDTO } from "aethon-arion-pipeline";
 
 @Component({
     selector: "arion-sim-config-index",
     templateUrl: "./sim-config-index.component.html",
     styleUrls: ["./sim-config-index.component.scss"]
 })
-export class SimConfigIndexComponent {
+export class SimConfigIndexComponent<T extends ConfiguratorParamData> {
     @Input() simConfigs: SimConfigDTO[] = [];
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
 
-    asConfiguratorParamsDTO(val: unknown): ConfiguratorParamsDTO {
-        return val as ConfiguratorParamsDTO;
+    asConfiguratorParamsDTO(val: unknown): ConfiguratorParamsDTO<T> {
+        return val as ConfiguratorParamsDTO<T>;
     }
 
     simState(simConfig: SimConfigDTO): "running" | "pending" | "completed" | "failed" | undefined {

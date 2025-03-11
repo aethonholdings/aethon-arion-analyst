@@ -1,16 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { C1ConfiguratorParamsDTO, C1ConfiguratorSignature } from "aethon-arion-c1";
-import { ConfiguratorParamsDTO } from "aethon-arion-pipeline";
+import { ConfiguratorParamData, ConfiguratorParamsDTO } from "aethon-arion-pipeline";
 
 @Component({
     selector: "arion-c1-configurator",
     templateUrl: "./c1-configurator.component.html",
     styleUrls: ["./c1-configurator.component.scss"]
 })
-export class C1ConfiguratorComponent implements OnInit {
+export class C1ConfiguratorComponent<T extends ConfiguratorParamData> implements OnInit {
     @Input() configuratorParamsDTO: C1ConfiguratorParamsDTO | undefined;
-    @Output() configuratorParamsDTOChange: EventEmitter<ConfiguratorParamsDTO> =
-        new EventEmitter<ConfiguratorParamsDTO>();
+    @Output() configuratorParamsDTOChange: EventEmitter<ConfiguratorParamsDTO<T>> =
+        new EventEmitter<ConfiguratorParamsDTO<T>>();
     signature = C1ConfiguratorSignature;
     agentCount: number = 1;
     matrixInitOptions: string[] = ["null", "random", "purposeful", "hybrid"];

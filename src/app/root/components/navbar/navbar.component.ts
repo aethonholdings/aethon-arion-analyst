@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { ConfiguratorSignatureDTO } from "aethon-arion-pipeline";
 import { Router } from "@angular/router";
 
 @Component({
@@ -8,8 +7,6 @@ import { Router } from "@angular/router";
     styleUrls: ["./navbar.component.scss"]
 })
 export class NavbarComponent {
-    configurations: Map<string, ConfiguratorSignatureDTO> | undefined;
-
     constructor(private routerService: Router) {}
 
     onChange$(selectedConfiguration: string): void {

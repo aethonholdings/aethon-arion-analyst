@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { C1Configurator } from "aethon-arion-c1";
-import { Configurator, SimSetDTO } from "aethon-arion-pipeline";
+import { Configurator, ConfiguratorParamData, SimSetDTO } from "aethon-arion-pipeline";
 import {
     C1ConfiguratorParamsDTO,
     C1ConfiguratorSignature,
@@ -8,13 +8,13 @@ import {
     C1PlantStateVariablesArray,
     C1ReportingVariablesArray
 } from "aethon-arion-c1";
-import { ConfiguratorParamsDTO, ConfiguratorSignatureDTO, OrgConfigDTO } from "aethon-arion-pipeline";
+import { ConfiguratorParamsDTO, OrgConfigDTO } from "aethon-arion-pipeline";
 import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
 
 @Injectable({
     providedIn: "root"
 })
-export class AnalystModelsService {
+export class AnalystModelsService<T extends ConfiguratorParamData> {
     private _configurators: Configurator[] = [new C1Configurator() as Configurator];
     private _models: string[] = ["C1", "C3"];
 
