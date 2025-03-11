@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">SimConfig</h5>
+                <arion-sim-config *ngIf="simConfig" [dataInstance]="simConfig" [view]="views.CARD"></arion-sim-config>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">OrgConfig</h5>
+                <!-- <arion-org-config-card
+                  *ngIf="simConfig.orgConfig as orgConfig"
+                  [orgConfig]="orgConfig"
+              ></arion-org-config-card> -->
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Configurator params</h5>
+                <!-- <arion-configurator-card
+                  *ngIf="simConfig.orgConfig?.configuratorParams as configuratorParams"
+                  [configuratorParams]="configuratorParams"
+              ></arion-configurator-card> -->
+            </div>
+        </div>
+    </div>
+</div>

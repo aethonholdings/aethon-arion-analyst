@@ -78,7 +78,7 @@ export class AnalystService {
     getSimConfig$(id: number): Observable<SimConfigDTO> {
         const operation: string = "SimConfigController_view";
         const options: APIRequestOptions = { params: { id: id } };
-        return this.apiService.request$<SimConfigDTO>(operation);
+        return this.apiService.request$<SimConfigDTO>(operation, options);
     }
 
     createSimConfig$(

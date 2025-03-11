@@ -1,4 +1,4 @@
-<div *ngIf="dataArray || dataInstance">
+<div *ngIf="(dataArray || dataInstance) && view">
     <arion-sim-set-index
         *ngIf="view === views.INDEX"
         [simSets]="dataArray"
