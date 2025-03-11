@@ -78,7 +78,7 @@
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                         <arion-sim-set
                             *ngIf="simSetRefresh$ | async as simSetRefresh"
-                            [data]="simSetRefresh"
+                            [dataInstance]="simSetRefresh"
                             [view]="views.VIEW"
                         ></arion-sim-set>
                     </div>

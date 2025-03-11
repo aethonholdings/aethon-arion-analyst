@@ -8,23 +8,12 @@ import { Views } from "../../../constants/analyst.constants";
     styleUrls: ["./sim-set.component.scss"]
 })
 export class SimSetComponent {
-    @Input() data!: SimSetDTO | SimSetDTO[]; // Parent passes data down
-    @Input() view!: string; // Parent decides the view mode
-    @Output() dataChange = new EventEmitter<SimSetDTO | SimSetDTO[]>(); // To update parent
+    @Input() dataArray!: SimSetDTO[];
+    @Input() dataInstance!: SimSetDTO;
+    @Input() view!: string;
+    @Output() dataArrayChange = new EventEmitter<SimSetDTO[]>();
+    @Output() dataInstanceChange = new EventEmitter<SimSetDTO>();
     @Output() selected = new EventEmitter<number>(); // To notify parent of selection
 
     views = Views;
-
-    get dataArray(): SimSetDTO[] {
-        return this.data as SimSetDTO[];
-    }
-
-    get dataInstance(): SimSetDTO {
-        return this.data as SimSetDTO;
-    }
-
-    set dataInstance(data: SimSetDTO) {
-        this.data = data;
-        this.dataChange.emit(data); // Emit updated data to parent
-    }
 }

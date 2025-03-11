@@ -7,7 +7,7 @@
 <div *ngIf="simSets$ | async as simSets" class="content-block">
     <div class="row">
         <div class="col-md-12">
-            <arion-sim-set [view]="views.INDEX" [data]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set>
+            <arion-sim-set [view]="views.INDEX" [dataArray]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set>
         </div>
     </div>
 </div>

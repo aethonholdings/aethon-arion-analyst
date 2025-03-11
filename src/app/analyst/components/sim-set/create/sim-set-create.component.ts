@@ -15,9 +15,7 @@ export class SimSetCreateComponent implements OnInit {
     constructor(private modelService: ModelService) {}
 
     ngOnInit(): void {
-        if (this.simSet) {
-            this.models = this.modelService.getModels().map((model) => model.getName());
-            this.simSet.type = this.models[0];
-        }
+        this.models = this.modelService.getModels().map((model) => model.getName());
+        this.simSet.type = this.models[0];
     }
 }
