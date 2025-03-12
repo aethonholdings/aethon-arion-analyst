@@ -33,6 +33,7 @@ export class SimConfigViewContainerComponent {
     }
 
     navigateToResult(id: number): void {
+      console.log("HERE")
         this.router.navigate(["/result", id]);
     }
 }

@@ -76,6 +76,11 @@
                             <h3>Pivot</h3>
                             <arion-result [dataArray]="results" [view]="views.PIVOT"></arion-result>
                             <h3>Result set</h3>
+                            <arion-result
+                                [dataArray]="results"
+                                [view]="views.INDEX"
+                                (selected)="navigateToResult($event)"
+                            ></arion-result>
                         </div>
                     </div>
                 </div>

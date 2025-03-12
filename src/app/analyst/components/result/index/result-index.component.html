@@ -1,5 +1,18 @@
 <div *ngIf="results">
-
-
+    <table class="table table-xsm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Result ID</th>
+                <th scope="col" class="text-end">Duration (sec)</th>
+                <th scope="col" class="text-end">Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let result of results" (click)="selected.emit(result.id)">
+                <td>{{ result.id }}</td>
+                <td class="text-end">{{ result.durationSec }}</td>
+                <td class="text-end">{{ result.performance | number: "1.1-1" }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
