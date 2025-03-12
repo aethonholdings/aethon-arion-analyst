@@ -1,0 +1,12 @@
+<div *ngIf="(dataArray || dataInstance) && view">
+    <arion-result-index
+        *ngIf="view === views.INDEX"
+        [results]="dataArray"
+        (selected)="selected.emit($event)"
+    ></arion-result-index>
+    <arion-result-pivot
+        *ngIf="view === views.PIVOT"
+        [results]="dataArray"
+        (selected)="selected.emit($event)"
+    ></arion-result-pivot>
+</div>
