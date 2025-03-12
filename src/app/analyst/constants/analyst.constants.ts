@@ -4,7 +4,10 @@ export enum Views {
     INDEX = "index",
     CARD = "card",
     VIEW = "view",
-    CREATE = "create"
+    CREATE = "create",
+    PIVOT = "pivot",
+    EDIT = "edit",
+    DELETE = "delete"
 }
 
 export const modelNames = {
