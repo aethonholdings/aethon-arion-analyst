@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ResultDTO } from "aethon-arion-pipeline";
 import { Observable } from "rxjs";
+import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
@@ -11,6 +12,7 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 })
 export class ResultViewContainerComponent {
     @Input() result$: Observable<ResultDTO>;
+    views = Views;
     // stateSpace$: Observable<StateSpace> | undefined;
 
     constructor(

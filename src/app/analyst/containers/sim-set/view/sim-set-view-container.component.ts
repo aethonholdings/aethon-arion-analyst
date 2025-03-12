@@ -18,7 +18,7 @@ export class SimSetViewContainerComponent<T> {
     simSetId: number;
     simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
     simSetRefresh$: Observable<SimSetDTO>;
-    resultSet$: Observable<ResultSet<T>> | undefined;
+    resultSet$: Observable<ResultSet> | undefined;
     refreshing: boolean = false;
     views = Views;
 

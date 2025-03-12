@@ -11,10 +11,10 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">OrgConfig</h5>
-                <!-- <arion-org-config-card
+                <arion-org-config
                   *ngIf="simConfig.orgConfig as orgConfig"
-                  [orgConfig]="orgConfig"
-              ></arion-org-config-card> -->
+                  [dataInstance]="orgConfig"
+                  [view]="views.CARD"></arion-org-config>
             </div>
         </div>
     </div>

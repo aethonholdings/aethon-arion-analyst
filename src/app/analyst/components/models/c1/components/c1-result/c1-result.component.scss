@@ -1,0 +1,19 @@
+.total {
+  font-weight: bold;
+}
+
+.heading {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
+.heading > td {
+  padding-top: 1em;
+}
+
+/* You can add global styles to this file, and also import other style files */
+.matrix > div {
+  display: flex;
+  justify-content: flex-end;
+}

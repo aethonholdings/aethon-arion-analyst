@@ -4,6 +4,6 @@
         [simConfigs]="dataArray"
         (selected)="selected.emit($event)"
     ></arion-sim-config-index>
-    <arion-sim-config-card *ngIf="view === views.CARD" [simConfig]="dataInstance">
-    </arion-sim-config-card>
+    <arion-sim-config-card *ngIf="view === views.CARD" [simConfig]="dataInstance"></arion-sim-config-card>
+    <arion-sim-config-view *ngIf="view === views.VIEW" [simConfig]="dataInstance"></arion-sim-config-view>
 </div>

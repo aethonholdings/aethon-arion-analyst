@@ -1,13 +1,20 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
-import { modelNames } from "src/app/analyst/constants/analyst.constants";
+import { ModelNames } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
     selector: "arion-reporting",
     templateUrl: "./reporting.component.html",
     styleUrls: ["./reporting.component.scss"]
 })
-export class ReportingComponent {
+export class ReportingComponent implements OnInit {
     @Input() orgConfig!: OrgConfigDTO;
-    modelNames = modelNames;
+    modelNames = ModelNames;
+    modelName: string | undefined;
+
+    ngOnInit() {
+        if(!this.orgConfig) throw new Error("OrgConfigDTO is required");
+        this.modelName = this.orgConfig.configuratorParams.modelName;
+        if(!this.modelName) throw new Error("Model name is required");
+    }
 }

@@ -1,5 +1,8 @@
 import { BatchParams } from "../interfaces/analyst-c1.interfaces";
+import { C1 } from "aethon-arion-c1";
+import { ModelIndexDTO } from 'aethon-arion-pipeline';
 
+export const C1ModelIndex: ModelIndexDTO = C1.getIndex();
 export const batchParamsInit: BatchParams = {
     loops: 1,
     agentCount: {
@@ -47,3 +50,6 @@ export const batchParamsInit: BatchParams = {
         }
     }
 };
+
+
+

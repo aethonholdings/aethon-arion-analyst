@@ -10,6 +10,6 @@ export enum Views {
     DELETE = "delete"
 }
 
-export const modelNames = {
-    C1: C1.getName()
+export const ModelNames = {
+    C1: C1.name
 };

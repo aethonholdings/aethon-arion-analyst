@@ -73,18 +73,19 @@
         <div class="row">
             <div class="col-md-12">
                 <div *ngIf="result.simConfig?.orgConfig as orgConfig" class="tab-content" id="tabContent">
-                    <!-- <div class="tab-pane show active" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
-                        <arion-result-view [result]="result"></arion-result-view>
-                    </div> -->
-                    <!-- <div class="tab-pane" id="sim-config" role="tabpanel" aria-labelledby="sim-config-tab">
-                        <arion-sim-config-view
+                    <div class="tab-pane show active" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
+                        <arion-result [dataInstance]="result" [view]="views.VIEW"></arion-result>
+                    </div>
+                    <div class="tab-pane" id="sim-config" role="tabpanel" aria-labelledby="sim-config-tab">
+                        <arion-sim-config
                             *ngIf="result.simConfig as simConfig"
-                            [simConfig]="simConfig"
-                        ></arion-sim-config-view>
-                    </div> -->
-                    <!-- <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
-                        <arion-org-config-view [orgConfig]="orgConfig"> </arion-org-config-view>
-                    </div> -->
+                            [dataInstance]="simConfig"
+                            [view]="views.VIEW"
+                        ></arion-sim-config>
+                    </div>
+                    <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
+                        <arion-org-config [dataInstance]="orgConfig" [view]="views.CARD"></arion-org-config>
+                    </div>
                     <!-- <div class="tab-pane" id="state-space" role="tabpanel" aria-labelledby="state-space-tab">
                         <div *ngIf="stateSpace$ | async as stateSpace">
                             <arion-state-space-view
