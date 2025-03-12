@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { WidgetsModule } from "../../widgets/widgets.module";
+import { WidgetsModule } from "../../../widgets/widgets.module";
 import { OrgConfigComponent } from "./views/top/org-config.component";
 import { OrgConfigCardComponent } from "./views/card/org-config-card.component";
 import { OrgConfigViewComponent } from "./views/view/org-config-view.component";

@@ -3,8 +3,8 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { C1PlantComponent } from "./components/c1-plant/c1-plant.component";
 import { C1ReportingComponent } from "./components/c1-reporting/c1-reporting.component";
-import { WidgetsModule } from "../../widgets/widgets.module";
 import { C1BoardComponent } from "./components/c1-board/c1-board.component";
+import { WidgetsModule } from "src/app/analyst/widgets/widgets.module";
 
 @NgModule({
     declarations: [C1PlantComponent, C1ReportingComponent, C1BoardComponent],

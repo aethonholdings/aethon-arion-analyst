@@ -6,7 +6,7 @@ import { SimSetViewContainerComponent } from "./sim-set/view/sim-set-view-contai
 import { SimSetCreateContainerComponent } from "./sim-set/create/sim-set-create-container.component";
 import { WidgetsModule } from "../widgets/widgets.module";
 import { SimConfigViewContainerComponent } from "./sim-config/view/sim-config-view-container.component";
-import { ResultModule } from "../components/result/result.module";
+import { ResultModule } from "../components/core/result/result.module";
 import { ResultViewContainerComponent } from "./result/view/result-view-container.component";
 
 @NgModule({

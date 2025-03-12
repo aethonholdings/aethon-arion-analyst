@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
-import { modelNames } from '../../../../constants/analyst.constants';
+import { modelNames } from '../../../../../constants/analyst.constants';
 
 @Component({
     selector: "arion-board",

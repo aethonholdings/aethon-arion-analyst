@@ -1,10 +1,8 @@
 import { NgModule } from "@angular/core";
-import { SimSetModule } from "./sim-set/sim-set.module";
-import { SimConfigModule } from "./sim-config/sim-config.module";
-import { OrgConfigModule } from "./org-config/org-config.module";
+import { AnalystComponentsCoreModule } from "./core/analyst-components-core.module";
 
 @NgModule({
-    imports: [SimSetModule, SimConfigModule, OrgConfigModule],
-    exports: [SimSetModule, SimConfigModule, OrgConfigModule],
+    imports: [AnalystComponentsCoreModule],
+    exports: [AnalystComponentsCoreModule],
 })
 export class AnalystComponentModule {}

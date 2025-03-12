@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { SimSetDTO } from "aethon-arion-pipeline";
-import { AnalystService } from '../../../services/analyst.service';
+import { AnalystService } from '../../../../services/analyst.service';
 
 @Component({
     selector: "arion-sim-set-index",
