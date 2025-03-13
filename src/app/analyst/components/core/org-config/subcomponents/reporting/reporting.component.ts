@@ -13,8 +13,8 @@ export class ReportingComponent implements OnInit {
     modelName: string | undefined;
 
     ngOnInit() {
-        if(!this.orgConfig) throw new Error("OrgConfigDTO is required");
+        if (!this.orgConfig) throw new Error("OrgConfigDTO is required");
         this.modelName = this.orgConfig.configuratorParams.modelName;
-        if(!this.modelName) throw new Error("Model name is required");
+        if (!this.modelName) throw new Error("Model name is required");
     }
 }

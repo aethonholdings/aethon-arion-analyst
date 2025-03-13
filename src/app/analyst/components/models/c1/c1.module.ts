@@ -6,7 +6,7 @@ import { C1ReportingComponent } from "./components/c1-reporting/c1-reporting.com
 import { C1BoardComponent } from "./components/c1-board/c1-board.component";
 import { WidgetsModule } from "src/app/analyst/widgets/widgets.module";
 import { C1ResultComponent } from "./components/c1-result/c1-result.component";
-import { C1ConfiguratorParamsComponent } from './components/c1-configurator-params/c1-configurator-params.component';
+import { C1ConfiguratorParamsComponent } from "./components/c1-configurator-params/c1-configurator-params.component";
 
 @NgModule({
     declarations: [
@@ -14,7 +14,7 @@ import { C1ConfiguratorParamsComponent } from './components/c1-configurator-para
         C1ReportingComponent,
         C1BoardComponent,
         C1ResultComponent,
-        C1ConfiguratorParamsComponent,
+        C1ConfiguratorParamsComponent
     ],
     imports: [CommonModule, FormsModule, WidgetsModule],
     exports: [

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "../services/http.service";
 import { API, APIRequest, APIRequestOptions, APIResponse, APIResponseData } from "aethon-api-types";
-import { concatMap, from, last, map, mergeMap, Observable, of } from "rxjs";
+import { concatMap, from, map, mergeMap, Observable, of } from "rxjs";
 import { ProgressState } from "../types/root.types";
 
 @Injectable({
@@ -28,7 +28,7 @@ export class ApiService {
         let totalItems: number = 0;
         return this.requestRaw$<T>(operation, options).pipe(
             mergeMap((response: APIResponseData<T>) => {
-                let requests: Observable<APIResponseData<T>>[] = [];
+                const requests: Observable<APIResponseData<T>>[] = [];
                 if (response.paginated) {
                     requests.push(of(response));
                     for (let i = 2; i <= response.payload.meta.totalPages; i++) {
@@ -45,7 +45,10 @@ export class ApiService {
                 if (response.paginated) {
                     itemCount += response.payload.data.length;
                     totalItems = response.payload.meta.totalItems;
-                    return { progressPercent: Math.round(itemCount / totalItems * 100), data: response.payload.data as T };
+                    return {
+                        progressPercent: Math.round((itemCount / totalItems) * 100),
+                        data: response.payload.data as T
+                    };
                 } else {
                     throw new Error("API response is not paginated");
                 }
@@ -54,10 +57,7 @@ export class ApiService {
         );
     }
 
-    requestRaw$<T>(
-        operation: string,
-        options: APIRequestOptions = {}
-    ): Observable<APIResponseData<T>> {
+    requestRaw$<T>(operation: string, options: APIRequestOptions = {}): Observable<APIResponseData<T>> {
         if (!this._api) throw new Error("API specification not set");
         const request: APIRequest | undefined = this._api?.getRequest(operation, options);
         if (!request) throw new Error(`${operation} operation endpoint not found in API schema`);

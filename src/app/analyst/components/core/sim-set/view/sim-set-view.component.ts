@@ -13,7 +13,7 @@ export class SimSetViewComponent {
     constructor(private analystService: AnalystService) {}
 
     getPercentComplete(): string {
-        if(!this.simSet) return "n.a.";
+        if (!this.simSet) return "n.a.";
         return this.analystService.getPercentComplete(this.simSet);
     }
 }

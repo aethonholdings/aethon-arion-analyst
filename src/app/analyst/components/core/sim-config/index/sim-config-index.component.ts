@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { SimConfigDTO, ConfiguratorParamsDTO, StateType } from "aethon-arion-pipeline";
+import { SimConfigDTO, StateType } from "aethon-arion-pipeline";
 
 @Component({
     selector: "arion-sim-config-index",

@@ -12,9 +12,7 @@ export class HttpService {
     private _debug: boolean = true;
     private _headers: HttpHeaders = new HttpHeaders();
 
-    constructor(
-        private httpClient: HttpClient
-    ) {}
+    constructor(private httpClient: HttpClient) {}
 
     request$<T>(request: APIRequest): Observable<APIResponseData<T>> {
         let url = request.getURL();

@@ -13,8 +13,8 @@ export class ResultViewComponent implements OnInit {
     modelNames = ModelNames;
 
     ngOnInit() {
-        if(!this.result) throw new Error("Result DTO is required");
-        this.modelName = this.result?.simConfig?.orgConfig?.configuratorParams.modelName
-        if(!this.modelName) throw new Error("Model name is required");
+        if (!this.result) throw new Error("Result DTO is required");
+        this.modelName = this.result?.simConfig?.orgConfig?.configuratorParams.modelName;
+        if (!this.modelName) throw new Error("Model name is required");
     }
 }

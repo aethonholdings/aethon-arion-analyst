@@ -3,6 +3,6 @@ import { AnalystComponentsCoreModule } from "./core/analyst-components-core.modu
 
 @NgModule({
     imports: [AnalystComponentsCoreModule],
-    exports: [AnalystComponentsCoreModule],
+    exports: [AnalystComponentsCoreModule]
 })
 export class AnalystComponentModule {}

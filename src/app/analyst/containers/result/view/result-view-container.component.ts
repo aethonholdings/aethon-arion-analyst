@@ -23,7 +23,7 @@ export class ResultViewContainerComponent {
         this.result$ = this.analystService.getResult$(id);
     }
 
-    getStateSpace$(resultId: number | undefined): void {
-        // resultId ? (this.stateSpace$ = this.analystService.getStateSpace$(resultId)) : undefined;
-    }
+    // getStateSpace$(resultId: number | undefined): void {
+    //     resultId ? (this.stateSpace$ = this.analystService.getStateSpace$(resultId)) : undefined;
+    // }
 }

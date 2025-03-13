@@ -10,7 +10,6 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
     templateUrl: "./sim-set-index-container.component.html",
     styleUrls: ["./sim-set-index-container.component.scss"]
 })
-
 export class SimSetIndexContainerComponent {
     @Input() simSets$: Observable<SimSetDTO[]>;
     refreshing: boolean = false;

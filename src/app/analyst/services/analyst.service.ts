@@ -134,7 +134,7 @@ export class AnalystService {
         return this.apiService.request$<void>(operation, options);
     }
 
-    getStateSpace$<T>(resultId: number): Observable<StateSpace> {
+    getStateSpace$(resultId: number): Observable<StateSpace> {
         const operation = "StateSpaceController_index";
         const options: APIRequestOptions = { params: { id: resultId } };
         return this.apiService.request$<StateSpacePointDTO[]>(operation, options).pipe(

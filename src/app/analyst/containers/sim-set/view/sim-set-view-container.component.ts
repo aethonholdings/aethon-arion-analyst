@@ -58,7 +58,7 @@ export class SimSetViewContainerComponent<T> {
         this.resultSet$ = this.analystService.getSimSetResultSet$(this.simSetId).pipe(
             map((progress: ProgressState<ResultDTO[]>) => {
                 results = results.concat(progress.data);
-                this.spinnerService.updateProgress(`${progress.progressPercent}%`)
+                this.spinnerService.updateProgress(`${progress.progressPercent}%`);
                 return results;
             }),
             last(),

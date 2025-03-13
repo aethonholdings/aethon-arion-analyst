@@ -19,7 +19,7 @@ import { ConfiguratorParamsModule } from "../configurator-params/configurator-pa
         AgentSetTensorsComponent,
         PlantComponent,
         ReportingComponent,
-        BoardComponent,
+        BoardComponent
     ],
     imports: [CommonModule, WidgetsModule, ModelsModule, ConfiguratorParamsModule],
     exports: [OrgConfigComponent]

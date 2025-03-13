@@ -17,15 +17,11 @@ const routes: Routes = [
     },
     {
         path: "sim-config",
-        children: [
-            { path: ":id", component: SimConfigViewContainerComponent }
-        ]
+        children: [{ path: ":id", component: SimConfigViewContainerComponent }]
     },
     {
         path: "result",
-        children: [
-          { path: ":id", component: ResultViewContainerComponent }
-        ]
+        children: [{ path: ":id", component: ResultViewContainerComponent }]
     },
     { path: "", redirectTo: "sim-set", pathMatch: "full" } // Default route
 ];

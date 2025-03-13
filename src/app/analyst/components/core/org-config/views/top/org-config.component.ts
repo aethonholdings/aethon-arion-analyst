@@ -8,12 +8,12 @@ import { Views } from "src/app/analyst/constants/analyst.constants";
     styleUrls: ["./org-config.component.scss"]
 })
 export class OrgConfigComponent {
-      @Input() dataArray!: OrgConfigDTO[];
-      @Input() dataInstance!: OrgConfigDTO;
-      @Input() view!: string;
-      @Output() dataArrayChange = new EventEmitter<OrgConfigDTO[]>();
-      @Output() dataInstanceChange = new EventEmitter<OrgConfigDTO>();
-      @Output() selected = new EventEmitter<number>();
+    @Input() dataArray!: OrgConfigDTO[];
+    @Input() dataInstance!: OrgConfigDTO;
+    @Input() view!: string;
+    @Output() dataArrayChange = new EventEmitter<OrgConfigDTO[]>();
+    @Output() dataInstanceChange = new EventEmitter<OrgConfigDTO>();
+    @Output() selected = new EventEmitter<number>();
 
-      views = Views;
+    views = Views;
 }

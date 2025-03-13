@@ -18,7 +18,7 @@ export class C1ResultComponent {
     ngOnInit(): void {
         this.kpis = C1.getKPIFactory(KPIFactoryIndex.PLAN_VS_ACTUALS).generate(this.resultDTO);
         const orgConfig = this.resultDTO.simConfig?.orgConfig;
-        if(!orgConfig) throw new Error("Organisation config not found");
+        if (!orgConfig) throw new Error("Organisation config not found");
         this.agentCount = orgConfig.agentCount;
     }
 }

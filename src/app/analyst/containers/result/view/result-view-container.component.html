@@ -50,21 +50,6 @@
                             OrgConfig
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button
-                            class="nav-link"
-                            id="state-space-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#state-space"
-                            type="button"
-                            role="tab"
-                            aria-controls="state-space"
-                            aria-selected="false"
-                            (click)="getStateSpace$(result.id)"
-                        >
-                            State Space
-                        </button>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -86,16 +71,6 @@
                     <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
                         <arion-org-config [dataInstance]="orgConfig" [view]="views.CARD"></arion-org-config>
                     </div>
-                    <!-- <div class="tab-pane" id="state-space" role="tabpanel" aria-labelledby="state-space-tab">
-                        <div *ngIf="stateSpace$ | async as stateSpace">
-                            <arion-state-space-view
-                                *ngIf="stateSpace.length > 0"
-                                [stateSpace]="stateSpace"
-                                [orgConfig]="orgConfig"
-                            ></arion-state-space-view>
-                            <div *ngIf="stateSpace.length === 0">No state space available</div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>

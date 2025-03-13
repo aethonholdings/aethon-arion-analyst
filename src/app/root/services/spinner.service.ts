@@ -10,7 +10,7 @@ export class SpinnerService {
 
     constructor(private ngxSpinnerService: NgxSpinnerService) {}
 
-    show(text?: string) {
+    show() {
         this.ngxSpinnerService.show();
     }
 

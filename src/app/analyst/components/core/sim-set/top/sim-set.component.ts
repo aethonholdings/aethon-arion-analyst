@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { Views } from "../../../../constants/analyst.constants";
 

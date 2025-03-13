@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SimSetComponent } from "./top/sim-set.component";
-import { SimSetIndexComponent } from './index/sim-set-index.component';
+import { SimSetIndexComponent } from "./index/sim-set-index.component";
 import { WidgetsModule } from "../../../widgets/widgets.module";
 import { SimSetViewComponent } from "./view/sim-set-view.component";
 import { SimSetCreateComponent } from "./create/sim-set-create.component";
