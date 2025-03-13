@@ -1,0 +1,6 @@
+<div *ngIf="(dataArray || dataInstance) && view">
+    <arion-configurator-params-card
+        *ngIf="view === views.CARD"
+        [configuratorParamsDTO]="dataInstance"
+    ></arion-configurator-params-card>
+</div>

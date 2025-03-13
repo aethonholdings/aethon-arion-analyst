@@ -22,10 +22,11 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Configurator params</h5>
-                <!-- <arion-configurator-card
+                <arion-configurator-params
                   *ngIf="simConfig.orgConfig?.configuratorParams as configuratorParams"
-                  [configuratorParams]="configuratorParams"
-              ></arion-configurator-card> -->
+                  [dataInstance]="configuratorParams"
+                  [view]="views.CARD"
+              ></arion-configurator-params>
             </div>
         </div>
     </div>

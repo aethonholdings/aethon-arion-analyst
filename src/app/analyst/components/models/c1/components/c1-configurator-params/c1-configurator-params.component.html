@@ -1,0 +1,100 @@
+<table *ngIf="configuratorParamsDTO" class="table">
+  <thead>
+      <tr>
+          <th scope="col" class="parameter">Parameter</th>
+          <th scope="col" class="value">Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Configurator</td>
+          <td>{{ c1ConfiguratorParamsDTO.configuratorName }}</td>
+      </tr>
+      <tr>
+          <td>Action state probability</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.actionStateProbability }}</td>
+      </tr>
+      <tr>
+          <td>Board control step</td>
+          <td *ngIf="c1ConfiguratorParamsDTO.data.board?.controlStep; else notDefinedTemplate">
+              {{ c1ConfiguratorParamsDTO.data.board.controlStep }}
+          </td>
+          <ng-template #notDefinedTemplate>
+              <td>Not defined</td>
+          </ng-template>
+      </tr>
+      <tr>
+          <td>Agent graph</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.graph }}</td>
+      </tr>
+      <tr>
+          <td>Agent count</td>
+          <td>{{ agentCount }}</td>
+      </tr>
+      <tr>
+          <td class="indent">Layers</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.layers }}</td>
+      </tr>
+      <tr>
+          <td class="indent">Spans</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.spans }}
+          </td>
+      </tr>
+      <tr>
+          <td>Matrix initialisers</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td class="indent">Influence</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.matrixInit.influence }}</td>
+      </tr>
+      <tr>
+          <td class="indent">Judgment</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.matrixInit.judgment }}
+          </td>
+      </tr>
+      <tr>
+          <td class="indent">Incentives</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.matrixInit.incentive }}</td>
+      </tr>
+      <tr>
+          <td>Gains</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td class="indent">Influence</td>
+          <td>{{ c1ConfiguratorParamsDTO.data.gains.influence }}</td>
+      </tr>
+      <tr>
+          <td class="indent">Judgment</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.gains.judgment }}
+          </td>
+      </tr>
+      <tr>
+          <td class="indent">Incentives</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.gains.incentive }}
+          </td>
+      </tr>
+      <tr>
+          <td>Reporting</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td class="indent">Unit price</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.reporting.unitPrice }}
+          </td>
+      </tr>
+      <tr>
+          <td class="indent">Unit payroll</td>
+          <td>
+              {{ c1ConfiguratorParamsDTO.data.reporting.unitPayroll }}
+          </td>
+      </tr>
+  </tbody>
+</table>
+
