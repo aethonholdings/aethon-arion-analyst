@@ -51,5 +51,5 @@ yalc.lock
 # Env files
 /src/env/environment.dev.ts
 /src/env/environment.test.ts
-/src/env/environment.production.ts
+/src/env/environment.prod.ts
 /src/env/environment.ts
