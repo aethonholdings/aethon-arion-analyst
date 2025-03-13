@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
+import { Views } from "src/app/analyst/constants/analyst.constants";
 import { Summary } from "src/app/analyst/types/analyst.types";
 
 @Component({
@@ -11,6 +12,7 @@ export class OrgConfigViewComponent {
     @Input() orgConfig!: OrgConfigDTO;
     summaryTitle!: string;
     summary!: Summary;
+    views = Views;
 
     constructor() {}
 

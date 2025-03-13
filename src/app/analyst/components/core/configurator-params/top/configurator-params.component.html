@@ -3,4 +3,8 @@
         *ngIf="view === views.CARD"
         [configuratorParamsDTO]="dataInstance"
     ></arion-configurator-params-card>
+    <arion-configurator-params-card
+        *ngIf="view === undefined"
+        [configuratorParamsDTO]="dataInstance"
+    ></arion-configurator-params-card>
 </div>

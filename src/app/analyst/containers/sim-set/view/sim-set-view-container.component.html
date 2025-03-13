@@ -26,21 +26,6 @@
                     <li class="nav-item">
                         <button
                             class="nav-link"
-                            id="analysis-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#analysis"
-                            type="button"
-                            role="tab"
-                            aria-controls="analysis"
-                            aria-selected="false"
-                            (click)="loadResultSet()"
-                        >
-                            Analysis
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                            class="nav-link"
                             id="sim-configs-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#sim-configs"
@@ -51,20 +36,6 @@
                             (click)="loadSimConfigs()"
                         >
                             SimConfigs
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                            class="nav-link"
-                            id="generate-sims-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#generate-sims"
-                            type="button"
-                            role="tab"
-                            aria-controls="generate-sims"
-                            aria-selected="false"
-                        >
-                            Generate sim batch
                         </button>
                     </li>
                 </ul>
@@ -82,14 +53,6 @@
                             [view]="views.VIEW"
                         ></arion-sim-set>
                     </div>
-                    <!-- <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
-                        <div *ngIf="resultSet$ | async as resultSet">
-                            <arion-result-set-view
-                                [resultSet]="resultSet"
-                                [orgConfigType]="simSet.type"
-                            ></arion-result-set-view>
-                        </div>
-                    </div> -->
                     <div class="tab-pane" id="sim-configs" role="tabpanel" aria-labelledby="sim-configs-tab">
                         <div *ngIf="simConfigs$ | async as simConfigs">
                             <arion-pagination
@@ -107,12 +70,6 @@
                             ></arion-pagination>
                         </div>
                     </div>
-                    <!-- <div class="tab-pane" id="generate-sims" role="tabpanel" aria-labelledby="generate-sims">
-                        <arion-batch-generator-view
-                            [simSet]="simSet"
-                            (batchGenerated)="generateSimConfigs($event)"
-                        ></arion-batch-generator-view>
-                    </div> -->
                 </div>
             </div>
         </div>
