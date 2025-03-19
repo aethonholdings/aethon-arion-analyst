@@ -15,7 +15,7 @@
                 <label for="sim-set">Model type</label>
             </div>
             <div class="col-md-9">
-                <select [(ngModel)]="simSet.type" name="model" id="models" class="form-select" aria-label="Models">
+                <select [(ngModel)]="simSet.modelName" name="model" id="models" class="form-select" aria-label="Models">
                     <option *ngFor="let model of models" [value]="model">{{ model }}</option>
                 </select>
             </div>

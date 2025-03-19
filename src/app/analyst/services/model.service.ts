@@ -1,22 +1,17 @@
 import { Injectable } from "@angular/core";
-import { Model, OrgConfigDTO } from "aethon-arion-pipeline";
-import { C1 } from "aethon-arion-c1";
 import { AgentSetReportData } from "../types/analyst.types";
-import {
-    C1ModelName,
-    C1PlantStateVariablesArray,
-    C1ReportingVariablesArray
-} from "aethon-arion-c1/dist/constants/c1.model.constants";
+import { C1, C1ModelName } from "aethon-arion-c1";
+import { Model, OrgConfigDTO } from "aethon-arion-pipeline";
 
 @Injectable({
     providedIn: "root"
 })
 export class ModelService {
-    private _models: Model[] = [C1];
+    private _models: Model<any, any>[] = [C1];
 
     constructor() {}
 
-    getModels(): Model[] {
+    getModels(): Model<any, any>[] {
         return this._models;
     }
 
@@ -25,11 +20,16 @@ export class ModelService {
         agentSetReportData.agentSetTensorsDTO = orgConfig.agentSet;
         switch (orgConfig.configuratorParams.modelName) {
             case C1ModelName: {
-                agentSetReportData.gains = orgConfig.configuratorParams.data.gains;
-                agentSetReportData.variableNames = {
-                    plant: C1PlantStateVariablesArray,
-                    reporting: C1ReportingVariablesArray
-                };
+                const index = C1.index;
+                if (index.plant?.variableNames && index.reporting?.variableNames) {
+                    agentSetReportData.gains = orgConfig.configuratorParams.data.gains;
+                    agentSetReportData.variableNames = {
+                        plant: index.plant.variableNames,
+                        reporting: index.reporting.variableNames
+                    };
+                } else {
+                    throw new Error("Incomplete C1 model index");
+                }
                 break;
             }
         }

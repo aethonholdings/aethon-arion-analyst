@@ -6,21 +6,15 @@
             <th scope="col">id</th>
             <th scope="col">Model type</th>
             <th scope="col">Description</th>
-            <th scope="col" class="text-end">SimConfigs</th>
-            <th scope="col" class="text-end">SimConfigs Completed (%)</th>
-            <th scope="col" class="text-end">Simulation runs</th>
-            <th scope="col" class="text-end">State</th>
+            <th scope="col">Model parameters</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let simSet of simSets" scope="row" (click)="selectSimSet(simSet.id)">
             <td>{{ simSet.id }}</td>
-            <td>{{ simSet.type }}</td>
+            <td>{{ simSet.modelName }}</td>
             <td>{{ simSet.description }}</td>
-            <td class="text-end">{{ simSet.simConfigCount | number }}</td>
-            <td class="text-end">{{ simSet.completedSimConfigCount | number }} ({{ getPercentComplete(simSet) }}%)</td>
-            <td class="text-end">{{ simSet.completedRunCount | number }}</td>
-            <td class="text-end"><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
+            <td>{{ simSet.modelParams | json }}</td>
         </tr>
     </tbody>
 </table>
