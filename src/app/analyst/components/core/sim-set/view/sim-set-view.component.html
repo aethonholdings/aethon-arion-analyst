@@ -1,18 +1,30 @@
 <table *ngIf="simSet" class="table table-xsm">
-  <thead>
-      <tr>
-          <th scope="col" class="parameter">Parameter</th>
-          <th scope="col" class="value">Value</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>id</td>
-          <td>{{ simSet.id }}</td>
-      </tr>
-      <tr>
-          <td>Description</td>
-          <td>{{ simSet.description }}</td>
-      </tr>
-  </tbody>
+    <thead>
+        <tr>
+            <th scope="col" class="parameter">Parameter</th>
+            <th scope="col" class="value">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>{{ simSet.id }}</td>
+        </tr>
+        <tr>
+            <td>Model name</td>
+            <td>{{ simSet.modelName }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ simSet.description }}</td>
+        </tr>
+        <tr>
+            <td>Optimiser name</td>
+            <td>{{ simSet.optimiserName }}</td>
+        </tr>
+        <tr>
+            <td>Parameters</td>
+            <td>{{ simSet.modelParams | json }}</td>
+        </tr>
+    </tbody>
 </table>

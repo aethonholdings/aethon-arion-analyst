@@ -4,7 +4,8 @@
     <thead>
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Model type</th>
+            <th scope="col">Model name</th>
+            <th scope="col">Optimiser name</th>
             <th scope="col">Description</th>
             <th scope="col">Model parameters</th>
         </tr>
@@ -13,6 +14,7 @@
         <tr *ngFor="let simSet of simSets" scope="row" (click)="selectSimSet(simSet.id)">
             <td>{{ simSet.id }}</td>
             <td>{{ simSet.modelName }}</td>
+            <td>{{ simSet.optimiserName }}</td>
             <td>{{ simSet.description }}</td>
             <td>{{ simSet.modelParams | json }}</td>
         </tr>
