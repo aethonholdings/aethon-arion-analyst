@@ -8,6 +8,7 @@
             <th scope="col">Optimiser name</th>
             <th scope="col">Description</th>
             <th scope="col">Model parameters</th>
+            <th scope="col">State</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,7 @@
             <td>{{ simSet.optimiserName }}</td>
             <td>{{ simSet.description }}</td>
             <td>{{ simSet.modelParams | json }}</td>
+            <td><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
         </tr>
     </tbody>
 </table>

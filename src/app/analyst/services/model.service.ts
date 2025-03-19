@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
 import { AgentSetReportData } from "../types/analyst.types";
 import { C1, C1ModelName } from "aethon-arion-c1";
-import { Model, OrgConfigDTO } from "aethon-arion-pipeline";
+import { ConfiguratorParamData, Model, OptimiserData, OptimiserParameters, OrgConfigDTO } from "aethon-arion-pipeline";
 
 @Injectable({
     providedIn: "root"
 })
 export class ModelService {
-    private _models: Model<any, any>[] = [C1];
+    private _models: Model<ConfiguratorParamData, OptimiserParameters, OptimiserData>[] = [C1];
 
     constructor() {}
 
-    getModels(): Model<any, any>[] {
+    getModels(): Model<ConfiguratorParamData, OptimiserParameters, OptimiserData>[] {
         return this._models;
     }
 

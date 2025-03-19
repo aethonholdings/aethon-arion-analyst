@@ -26,5 +26,8 @@
             <td>Parameters</td>
             <td>{{ simSet.modelParams | json }}</td>
         </tr>
+        <tr>
+            <td>State</td>
+            <td><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
     </tbody>
 </table>
