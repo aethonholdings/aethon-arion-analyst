@@ -1,3 +1,6 @@
 <div *ngIf="simSet.modelName === C1ModelName">
-    <arion-c1-optimiser-state-transitions [simSet]="simSet"></arion-c1-optimiser-state-transitions>
+    <arion-c1-optimiser-state-transitions
+        [simSet]="simSet"
+        (selected)="onSelect($event)"
+    ></arion-c1-optimiser-state-transitions>
 </div>

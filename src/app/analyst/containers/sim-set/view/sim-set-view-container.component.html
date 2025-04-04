@@ -23,6 +23,20 @@
                             Summary
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button
+                            class="nav-link"
+                            id="optimiser-steps-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#optimiser-steps"
+                            type="button"
+                            role="tab"
+                            aria-controls="optimiser-steps"
+                            aria-selected="false"
+                        >
+                            Optimiser steps
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -32,11 +46,11 @@
             <div class="col-md-12">
                 <div *ngIf="simSetRefresh$ | async as simSetRefresh" class="tab-content" id="tabContent">
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                        <arion-sim-set
-                            [dataInstance]="simSetRefresh"
-                            [view]="views.VIEW"
-                        ></arion-sim-set>
+                        <arion-sim-set [dataInstance]="simSetRefresh" [view]="views.VIEW"></arion-sim-set>
                     </div>
+                    <div class="tab-pane" id="optimiser-steps" role="tabpanel" aria-labelledby="optimiser-steps-tab">
+                        <arion-sim-set-state-transition [simSet]="simSetRefresh" (selected)="onSelect($event)"></arion-sim-set-state-transition>
+                  </div>
                 </div>
             </div>
         </div>

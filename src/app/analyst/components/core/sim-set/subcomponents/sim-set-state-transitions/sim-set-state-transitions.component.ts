@@ -10,5 +10,9 @@ import { SimSetDTO } from "aethon-arion-pipeline";
 export class SimSetStateTransitionsComponent {
     @Input() simSet!: SimSetDTO;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
-    C1ModelName = C1ModelName
+    C1ModelName = C1ModelName;
+
+    onSelect(optimiserStateId: number) {
+        this.selected.emit(optimiserStateId);
+    }
 }

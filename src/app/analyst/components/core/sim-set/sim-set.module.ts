@@ -12,6 +12,6 @@ import { SimSetStateTransitionsComponent } from "./subcomponents/sim-set-state-t
 @NgModule({
     declarations: [SimSetComponent, SimSetIndexComponent, SimSetViewComponent, SimSetCreateComponent, SimSetStateTransitionsComponent],
     imports: [CommonModule, ModelsModule, FormsModule, WidgetsModule],
-    exports: [SimSetComponent]
+    exports: [SimSetComponent, SimSetStateTransitionsComponent]
 })
 export class SimSetModule {}

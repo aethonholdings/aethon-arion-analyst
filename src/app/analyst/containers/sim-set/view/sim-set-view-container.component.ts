@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
 import { concatMap, Observable, map } from "rxjs";
@@ -14,6 +14,7 @@ import { Views } from "src/app/analyst/constants/analyst.constants";
 })
 export class SimSetViewContainerComponent<T> {
     @Input() simSet$: Observable<SimSetDTO>;
+    @Output() selected: EventEmitter<number> = new EventEmitter<number>();
     simSetId: number;
     simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
     simSetRefresh$: Observable<SimSetDTO>;
@@ -24,7 +25,7 @@ export class SimSetViewContainerComponent<T> {
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private analystService: AnalystService,
+        private analystService: AnalystService
     ) {
         const tmp = this.activatedRoute.snapshot.paramMap.get("id");
         if (tmp !== null) {
@@ -48,4 +49,7 @@ export class SimSetViewContainerComponent<T> {
         });
     }
 
+    onSelect(optimiserStateId: number) {
+
+    }
 }
