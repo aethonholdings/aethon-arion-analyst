@@ -5,9 +5,9 @@
         <tr>
             <th scope="col">id</th>
             <th scope="col">Model name</th>
-            <th scope="col">Optimiser name</th>
+            <th scope="col">Optimiser</th>
+            <th scope="col">Configurator</th>
             <th scope="col">Description</th>
-            <th scope="col">Model parameters</th>
             <th scope="col">State</th>
         </tr>
     </thead>
@@ -16,8 +16,8 @@
             <td>{{ simSet.id }}</td>
             <td>{{ simSet.modelName }}</td>
             <td>{{ simSet.optimiserName }}</td>
+            <td>{{ simSet.configuratorName }}</td>
             <td>{{ simSet.description }}</td>
-            <td>{{ simSet.modelParams | json }}</td>
             <td><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
         </tr>
     </tbody>

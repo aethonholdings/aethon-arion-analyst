@@ -49,7 +49,6 @@ export class AnalystService {
     }
 
     createSimSet$(simSetDTO: SimSetDTO): Observable<SimSetDTO> {
-        simSetDTO.modelParams = simSetDTO.modelParams || undefined;
         const operation: string = "SimSetController_create";
         const options: APIRequestOptions = { body: simSetDTO };
         return this.apiService.request$<SimSetDTO>(operation, options);

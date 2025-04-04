@@ -1,11 +1,10 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ConfiguratorParamsDTO, ResultDTO, ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
-import { concatMap, Observable, map, finalize, last, catchError } from "rxjs";
+import { ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
+import { concatMap, Observable, map } from "rxjs";
 import { Paginated } from "aethon-paginate-types";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
-import { SpinnerService } from "src/app/root/services/spinner.service";
-import { ProgressState } from "src/app/root/types/root.types";
+
 import { Views } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
@@ -26,7 +25,6 @@ export class SimSetViewContainerComponent<T> {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private analystService: AnalystService,
-        private spinnerService: SpinnerService
     ) {
         const tmp = this.activatedRoute.snapshot.paramMap.get("id");
         if (tmp !== null) {
@@ -44,43 +42,10 @@ export class SimSetViewContainerComponent<T> {
         }
     }
 
-    navigateToSimConfig(id: number) {
-        this.router.navigate(["/sim-config", id]);
-    }
-
-    loadSimConfigs(pageNumber?: number) {
-        this.simConfigs$ = this.analystService.getSimSetSimConfigs$(this.simSetId, pageNumber);
-    }
-
-    loadResultSet() {
-        let results: any = [];
-        if (!this.resultSet$) this.spinnerService.show();
-        this.resultSet$ = this.analystService.getSimSetResultSet$(this.simSetId).pipe(
-            map((progress: ProgressState<ResultDTO[]>) => {
-                results = results.concat(progress.data);
-                this.spinnerService.updateProgress(`${progress.progressPercent}%`);
-                return results;
-            }),
-            last(),
-            map(() => new ResultSet(results)),
-            finalize(() => this.spinnerService.hide()),
-            catchError((error) => {
-                this.spinnerService.hide();
-                throw error;
-            })
-        );
-    }
-
     deleteSimSet() {
         this.analystService.deleteSimSet$(this.simSetId).subscribe(() => {
             this.router.navigate(["/sim-set"]);
         });
     }
 
-    generateSimConfigs(batch: ConfiguratorParamsDTO<T>[]) {
-        this.analystService
-            .generateConfigurationBatch$(this.simSetId, batch)
-            .pipe(finalize(() => location.reload()))
-            .subscribe();
-    }
 }

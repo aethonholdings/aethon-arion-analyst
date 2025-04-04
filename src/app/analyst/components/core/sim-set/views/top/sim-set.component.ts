@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { SimSetDTO } from "aethon-arion-pipeline";
-import { Views } from "../../../../constants/analyst.constants";
+import { Views } from "../../../../../constants/analyst.constants";
 
 @Component({
     selector: "arion-sim-set",

@@ -23,21 +23,6 @@
                             Summary
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button
-                            class="nav-link"
-                            id="sim-configs-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#sim-configs"
-                            type="button"
-                            role="tab"
-                            aria-controls="sim-configs"
-                            aria-selected="false"
-                            (click)="loadSimConfigs()"
-                        >
-                            SimConfigs
-                        </button>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -45,30 +30,12 @@
     <div class="content-block">
         <div class="row">
             <div class="col-md-12">
-                <div class="tab-content" id="tabContent">
+                <div *ngIf="simSetRefresh$ | async as simSetRefresh" class="tab-content" id="tabContent">
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                         <arion-sim-set
-                            *ngIf="simSetRefresh$ | async as simSetRefresh"
                             [dataInstance]="simSetRefresh"
                             [view]="views.VIEW"
                         ></arion-sim-set>
-                    </div>
-                    <div class="tab-pane" id="sim-configs" role="tabpanel" aria-labelledby="sim-configs-tab">
-                        <div *ngIf="simConfigs$ | async as simConfigs">
-                            <arion-pagination
-                                [pagination]="simConfigs"
-                                (changePage)="loadSimConfigs($event)"
-                            ></arion-pagination>
-                            <arion-sim-config
-                                [dataArray]="simConfigs.data"
-                                [view]="views.INDEX"
-                                (selected)="navigateToSimConfig($event)"
-                            ></arion-sim-config>
-                            <arion-pagination
-                                [pagination]="simConfigs"
-                                (changePage)="loadSimConfigs($event)"
-                            ></arion-pagination>
-                        </div>
                     </div>
                 </div>
             </div>
