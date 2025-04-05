@@ -17,7 +17,7 @@ const flatten = require("flat");
     templateUrl: "./c1-optimiser-state-transitions.component.html",
     styleUrls: ["./c1-optimiser-state-transitions.component.scss"]
 })
-export class C1OptimiserStateTransitionsComponent implements OnInit {
+export class C1OptimiserStateTransitionsComponent {
     @Input() simSet!: SimSetDTO;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
     states!: OptimiserStateDTO<GradientAscentOptimiserData<C1ConfiguratorParamData>>[];
@@ -26,7 +26,7 @@ export class C1OptimiserStateTransitionsComponent implements OnInit {
     del: Array<Array<number | undefined>> = [];
     domainCount!: number;
 
-    ngOnInit(): void {
+    ngOnChanges(): void {
         if (this.simSet.optimiserStates) this.states = this.simSet.optimiserStates;
         if (this.simSet.optimiserParams.parameterSpace)
             this.domains = this.simSet.optimiserParams.parameterSpace
