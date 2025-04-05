@@ -50,6 +50,6 @@ export class SimSetViewContainerComponent<T> {
     }
 
     onSelect(optimiserStateId: number) {
-
+        console.log(optimiserStateId);
     }
 }

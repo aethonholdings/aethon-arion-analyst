@@ -49,8 +49,11 @@
                         <arion-sim-set [dataInstance]="simSetRefresh" [view]="views.VIEW"></arion-sim-set>
                     </div>
                     <div class="tab-pane" id="optimiser-steps" role="tabpanel" aria-labelledby="optimiser-steps-tab">
-                        <arion-sim-set-state-transition [simSet]="simSetRefresh" (selected)="onSelect($event)"></arion-sim-set-state-transition>
-                  </div>
+                        <arion-sim-set-state-transition
+                            [simSet]="simSetRefresh"
+                            (selected)="onSelect($event)"
+                        ></arion-sim-set-state-transition>
+                    </div>
                 </div>
             </div>
         </div>

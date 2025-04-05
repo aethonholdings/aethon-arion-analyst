@@ -1,26 +1,34 @@
 <table class="table table-xsm table-hover">
     <thead>
         <tr>
-            <th scope="col">Step</th>
-            <th scope="col">Id</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col" class="text-center" [attr.colspan]="domainCount">x</th>
+            <th scope="col" class="text-center" [attr.colspan]="domainCount">del</th>
+            <th scope="col"></th>
+        </tr>
+        <tr>
+            <th scope="col" class="text-end">Step</th>
             <th scope="col" class="text-end">Start</th>
-            <th scope="col" class="text-end">Duration</th>
             <th scope="col" class="text-end">Status</th>
+            <th *ngFor="let domain of domains" scope="col" class="text-end">{{ domain }}</th>
             <th *ngFor="let domain of domains" scope="col" class="text-end">{{ domain }}</th>
             <th scope="col" class="text-end">Performance</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let optimiserState of states; index as i" (click)="selected.emit(optimiserState.id)">
-            <td>{{ optimiserState.stepCount }}</td>
-            <td>{{ optimiserState.id }}</td>
+            <td class="text-end">{{ optimiserState.stepCount }}</td>
             <td class="text-end">{{ optimiserState.start | date: "short" }}</td>
-            <td class="text-end">{{ optimiserState.durationSec | number: "1.0-0" }}</td>
             <td class="text-end">
                 <arion-status-indicator [status]="optimiserState.status"></arion-status-indicator>
             </td>
             <td *ngFor="let domain of domains" scope="col" class="text-end">
                 {{ x[i][domain] }}
+            </td>
+            <td *ngFor="let domain of domains; index as j" scope="col" class="text-end">
+                {{ del[i][j] }}
             </td>
             <td class="text-end">{{ optimiserState.performance | number: "1.0-0" }}</td>
         </tr>
