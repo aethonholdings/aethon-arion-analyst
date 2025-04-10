@@ -1,20 +1,21 @@
-<table class="table table-xsm table-hover">
+<table *ngIf="ready" class="table table-xsm table-hover">
     <thead>
         <tr>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th scope="col">Step</th>
+            <th scope="col">Start</th>
+            <th scope="col">Status</th>
             <th scope="col" class="text-center" [attr.colspan]="domainCount">x</th>
-            <th scope="col" class="text-center" [attr.colspan]="domainCount">del</th>
-            <th scope="col"></th>
+            <th scope="col" class="text-center" [attr.colspan]="domainCount + 1">del</th>
+            <th scope="col">Performance</th>
         </tr>
         <tr>
-            <th scope="col" class="text-end">Step</th>
-            <th scope="col" class="text-end">Start</th>
-            <th scope="col" class="text-end">Status</th>
-            <th *ngFor="let domain of domains" scope="col" class="text-end">{{ domain }}</th>
-            <th *ngFor="let domain of domains" scope="col" class="text-end">{{ domain }}</th>
-            <th scope="col" class="text-end">Performance</th>
+            <th scope="col" class="text-end"></th>
+            <th scope="col" class="text-end"></th>
+            <th scope="col" class="text-end"></th>
+            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-end">{{ domain.id }}</th>
+            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-end">{{ domain.id }}</th>
+            <th scope="col" class="text-end">Modulo</th>
+            <th scope="col" class="text-end"></th>
         </tr>
     </thead>
     <tbody>
@@ -24,13 +25,14 @@
             <td class="text-end">
                 <arion-status-indicator [status]="optimiserState.status"></arion-status-indicator>
             </td>
-            <td *ngFor="let domain of domains" scope="col" class="text-end">
-                {{ x[i][domain] }}
+            <td *ngFor="let domain of optimisationDomains" scope="col" class="text-end">
+                {{ x[i][domain.id].value }}
             </td>
-            <td *ngFor="let domain of domains; index as j" scope="col" class="text-end">
-                {{ del[i][j] }}
+            <td *ngFor="let domain of optimisationDomains; index as j" scope="col" class="text-end">
+                {{ del[i][domain.id].value }}
             </td>
-            <td class="text-end">{{ optimiserState.performance | number: "1.0-0" }}</td>
+            <td class="text-end">{{optimiserState.optimiserData.moduloDel}}</td>
+            <td class="text-end">{{optimiserState.performance}}</td>
         </tr>
     </tbody>
 </table>

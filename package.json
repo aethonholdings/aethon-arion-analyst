@@ -24,7 +24,7 @@
     "@angular/router": "^15.2.10",
     "@types/cytoscape": "^3.21.9",
     "aethon-api-types": "^0.0.4",
-    "aethon-arion-c1": "^0.4.0",
+    "aethon-arion-c1": "^0.4.1",
     "aethon-arion-pipeline": "^0.5.0",
     "aethon-paginate-types": "^0.0.4",
     "cytoscape": "^3.31.1",

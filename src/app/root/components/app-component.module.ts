@@ -7,10 +7,12 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { AppRoutingModule } from "../routing/app-routing.module";
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { SpinnerService } from "./spinner/spinner.service";
 
 @NgModule({
     declarations: [AppComponent, NavbarComponent, SpinnerComponent],
     imports: [CommonModule, BrowserModule, BrowserAnimationsModule, AppRoutingModule, NgxSpinnerModule],
+    providers: [SpinnerService],
     exports: [SpinnerComponent]
 })
 export class AppComponentModule {}

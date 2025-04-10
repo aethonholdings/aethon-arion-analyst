@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs";
-import { SpinnerService } from "../../services/spinner.service";
+import { SpinnerService } from "./spinner.service";
 
 @Component({
     selector: "arion-spinner",
@@ -9,8 +9,10 @@ import { SpinnerService } from "../../services/spinner.service";
 })
 export class SpinnerComponent {
     progress$: Observable<string>;
+    text$: Observable<string>;
 
     constructor(private spinnerService: SpinnerService) {
         this.progress$ = this.spinnerService.getProgress$();
+        this.text$ = this.spinnerService.getText$();
     }
 }

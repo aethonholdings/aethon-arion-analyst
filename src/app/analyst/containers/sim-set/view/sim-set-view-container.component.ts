@@ -1,46 +1,53 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ResultSet, SimConfigDTO, SimSetDTO } from "aethon-arion-pipeline";
-import { concatMap, Observable, map } from "rxjs";
-import { Paginated } from "aethon-paginate-types";
+import { SimSetDTO } from "aethon-arion-pipeline";
+import { Observable, map, mergeMap, tap } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 import { Views } from "src/app/analyst/constants/analyst.constants";
+import { SpinnerService } from "src/app/root/components/spinner/spinner.service";
 
 @Component({
     selector: "arion-sim-set-view-container",
     templateUrl: "./sim-set-view-container.component.html",
     styleUrls: ["./sim-set-view-container.component.scss"]
 })
-export class SimSetViewContainerComponent<T> {
-    @Input() simSet$: Observable<SimSetDTO>;
+export class SimSetViewContainerComponent implements OnInit {
+    @Input() simSet$!: Observable<SimSetDTO>;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
     simSetId: number;
-    simConfigs$: Observable<Paginated<SimConfigDTO>> | undefined;
-    simSetRefresh$: Observable<SimSetDTO>;
-    resultSet$: Observable<ResultSet> | undefined;
+    simSetRefresh$!: Observable<SimSetDTO>;
     refreshing: boolean = false;
     views = Views;
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private analystService: AnalystService
+        private analystService: AnalystService,
+        private spinnerService: SpinnerService
     ) {
         const tmp = this.activatedRoute.snapshot.paramMap.get("id");
-        if (tmp !== null) {
+        if (tmp) {
             this.simSetId = Number.parseInt(tmp);
-            this.simSetId
-                ? (this.simSet$ = this.analystService.getSimSet$(this.simSetId))
-                : (this.simSet$ = new Observable<SimSetDTO>());
-            (this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
-                map(() => (this.refreshing = true)),
-                concatMap(() => this.analystService.getSimSet$(this.simSetId))
-            )),
-                map(() => (this.refreshing = false));
         } else {
             throw new Error("No simSetId provided");
         }
+    }
+
+    ngOnInit() {
+        this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
+            map(() => {
+                this.refreshing = true;
+                this.spinnerService.show();
+            }),
+            mergeMap(() => {
+                return this.analystService.getSimSet$(this.simSetId);
+            }),
+            tap(() => {
+                this.refreshing = false;
+                this.spinnerService.hide();
+            })
+        );
     }
 
     deleteSimSet() {

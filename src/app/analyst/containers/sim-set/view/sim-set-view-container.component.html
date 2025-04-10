@@ -1,7 +1,7 @@
-<div *ngIf="simSet$ | async as simSet">
+<div *ngIf="simSetRefresh$ | async as simSetRefresh">
     <div class="row">
         <div class="col-md-6 text-left">
-            <h2>SimSet {{ simSet.id }}</h2>
+            <h2>SimSet {{ simSetRefresh.id }}</h2>
         </div>
         <div class="col-md-6 text-end"><button class="btn btn-danger" (click)="deleteSimSet()">Delete</button></div>
     </div>
@@ -44,7 +44,7 @@
     <div class="content-block">
         <div class="row">
             <div class="col-md-12">
-                <div *ngIf="simSetRefresh$ | async as simSetRefresh" class="tab-content" id="tabContent">
+                <div class="tab-content" id="tabContent">
                     <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                         <arion-sim-set [dataInstance]="simSetRefresh" [view]="views.VIEW"></arion-sim-set>
                     </div>

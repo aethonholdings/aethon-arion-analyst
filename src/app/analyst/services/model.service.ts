@@ -7,11 +7,11 @@ import { ConfiguratorParamData, Model, OptimiserData, OptimiserParameters, OrgCo
     providedIn: "root"
 })
 export class ModelService {
-    private _models: Model<ConfiguratorParamData, OptimiserParameters, OptimiserData>[] = [C1];
+    private _models: Model[] = [C1];
 
     constructor() {}
 
-    getModels(): Model<ConfiguratorParamData, OptimiserParameters, OptimiserData>[] {
+    getModels(): Model[] {
         return this._models;
     }
 

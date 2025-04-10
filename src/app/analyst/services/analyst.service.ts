@@ -15,14 +15,14 @@ import { API, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
 import { ApiService } from "src/app/root/services/api.service";
-import { SpinnerService } from "src/app/root/services/spinner.service";
+import { SpinnerService } from "src/app/root/components/spinner/spinner.service";
 import { ProgressState } from "src/app/root/types/root.types";
 
 @Injectable({
     providedIn: "root"
 })
 export class AnalystService {
-    private _refreshTimer: Observable<number> = timer(0, 10000).pipe(share());
+    private _refreshTimer: Observable<number> = timer(0, 60000).pipe(share());
 
     constructor(
         private apiService: ApiService,

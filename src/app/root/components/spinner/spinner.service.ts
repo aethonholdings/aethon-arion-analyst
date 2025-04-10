@@ -6,16 +6,18 @@ import { Observable, Subscriber } from "rxjs";
     providedIn: "root"
 })
 export class SpinnerService {
+    progressSubscriber: Subscriber<string> = new Subscriber<string>();
     textSubscriber: Subscriber<string> = new Subscriber<string>();
 
     constructor(private ngxSpinnerService: NgxSpinnerService) {}
 
-    show() {
+    show(text?: string) {
+        if (text) this.textSubscriber.next(text);
         this.ngxSpinnerService.show();
     }
 
-    updateProgress(text: string | undefined) {
-        this.textSubscriber.next(text);
+    updateProgress(progressText: string | undefined) {
+        this.progressSubscriber.next(progressText);
     }
 
     hide() {
@@ -23,6 +25,10 @@ export class SpinnerService {
     }
 
     getProgress$(): Observable<string> {
+        return new Observable<string>((subscriber) => (this.progressSubscriber = subscriber));
+    }
+
+    getText$(): Observable<string> {
         return new Observable<string>((subscriber) => (this.textSubscriber = subscriber));
     }
 }
