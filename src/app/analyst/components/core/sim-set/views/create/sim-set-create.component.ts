@@ -19,7 +19,7 @@ export class SimSetCreateComponent implements OnInit {
     ngOnInit(): void {
         this.models = this.modelService.getModels().map((model) => model.name);
         this.simSet.modelName = C1ModelName;
-        this.simSet.optimiserName = C1OptimiserNames.GRADIENT_ASCENT
-        this.simSet.optimiserParams = C1GradientAscentParameterDefaultDTO
+        this.simSet.optimiserName = C1OptimiserNames.GRADIENT_ASCENT;
+        this.simSet.optimiserParams = C1GradientAscentParameterDefaultDTO;
     }
 }

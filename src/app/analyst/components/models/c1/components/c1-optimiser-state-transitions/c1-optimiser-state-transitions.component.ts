@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { C1ConfiguratorParamData } from "aethon-arion-c1";
 import {
     Domain,
@@ -8,7 +8,6 @@ import {
     OptimiserStateDTO,
     SimSetDTO
 } from "aethon-arion-pipeline";
-import { ParameterSpace } from "../../../../../../../../../pipeline/dist/types/pipeline.types";
 
 const flatten = require("flat");
 type TableEntries = { [id: string]: { domainType: DomainType; value: number | string | boolean | undefined } };
@@ -55,13 +54,13 @@ export class C1OptimiserStateTransitionsComponent {
         this.domainCount = this.optimisationDomains.length;
         if (this.simSet.optimiserStates) {
             this.states = this.simSet.optimiserStates;
-            for (let state of this.states) {
-                let xTableEntries: TableEntries = {};
-                let delTableEntries: TableEntries = {};
-                for (let dataPoint of state.optimiserData.dataPoints) {
+            for (const state of this.states) {
+                const xTableEntries: TableEntries = {};
+                const delTableEntries: TableEntries = {};
+                for (const dataPoint of state.optimiserData.dataPoints) {
                     if (dataPoint.id === "x") {
                         const flattened = flatten(dataPoint.data.inputs.data);
-                        for (let domain of this.optimisationDomains) {
+                        for (const domain of this.optimisationDomains) {
                             if (domain.domain.optimise) {
                                 xTableEntries[domain.id] = {
                                     domainType: domain.domain.type,
@@ -79,10 +78,10 @@ export class C1OptimiserStateTransitionsComponent {
                                 value: dataPoint.data.outputs.slope
                             };
                         } else {
-                          delTableEntries[dataPoint.id] = {
-                            domainType: dataPoint.data.outputs.domain.type,
-                            value: dataPoint.data.outputs.performanceDelta
-                        };
+                            delTableEntries[dataPoint.id] = {
+                                domainType: dataPoint.data.outputs.domain.type,
+                                value: dataPoint.data.outputs.performanceDelta
+                            };
                         }
                     }
                 }

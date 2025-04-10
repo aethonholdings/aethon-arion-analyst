@@ -10,7 +10,13 @@ import { ModelsModule } from "../../models/models.module";
 import { SimSetStateTransitionsComponent } from "./subcomponents/sim-set-state-transitions/sim-set-state-transitions.component";
 
 @NgModule({
-    declarations: [SimSetComponent, SimSetIndexComponent, SimSetViewComponent, SimSetCreateComponent, SimSetStateTransitionsComponent],
+    declarations: [
+        SimSetComponent,
+        SimSetIndexComponent,
+        SimSetViewComponent,
+        SimSetCreateComponent,
+        SimSetStateTransitionsComponent
+    ],
     imports: [CommonModule, ModelsModule, FormsModule, WidgetsModule],
     exports: [SimSetComponent, SimSetStateTransitionsComponent]
 })

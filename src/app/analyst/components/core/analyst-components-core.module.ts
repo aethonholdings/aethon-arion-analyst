@@ -6,19 +6,7 @@ import { ConfiguratorParamsModule } from "./configurator-params/configurator-par
 import { OptimiserStateModule } from "./optimiser-state/optimiser-state.module";
 
 @NgModule({
-    imports: [
-        SimSetModule,
-        SimConfigModule,
-        OrgConfigModule,
-        ConfiguratorParamsModule,
-        OptimiserStateModule
-    ],
-    exports: [
-        SimSetModule,
-        SimConfigModule,
-        OrgConfigModule,
-        ConfiguratorParamsModule,
-        OptimiserStateModule
-    ]
+    imports: [SimSetModule, SimConfigModule, OrgConfigModule, ConfiguratorParamsModule, OptimiserStateModule],
+    exports: [SimSetModule, SimConfigModule, OrgConfigModule, ConfiguratorParamsModule, OptimiserStateModule]
 })
 export class AnalystComponentsCoreModule {}

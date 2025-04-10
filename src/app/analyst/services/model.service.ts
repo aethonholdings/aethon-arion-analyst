@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { AgentSetReportData } from "../types/analyst.types";
 import { C1, C1ModelName } from "aethon-arion-c1";
-import { ConfiguratorParamData, Model, OptimiserData, OptimiserParameters, OrgConfigDTO } from "aethon-arion-pipeline";
+import { Model, OrgConfigDTO } from "aethon-arion-pipeline";
 
 @Injectable({
     providedIn: "root"
 })
 export class ModelService {
-    private _models: Model[] = [C1];
+    private _models: Model[] = [C1 as unknown as Model];
 
     constructor() {}
 

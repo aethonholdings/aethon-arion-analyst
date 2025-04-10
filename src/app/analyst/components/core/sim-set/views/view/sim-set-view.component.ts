@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Domain, SimSetDTO } from "aethon-arion-pipeline";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
