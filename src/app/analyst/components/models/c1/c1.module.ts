@@ -8,6 +8,7 @@ import { WidgetsModule } from "src/app/analyst/widgets/widgets.module";
 import { C1ResultComponent } from "./components/c1-result/c1-result.component";
 import { C1ConfiguratorParamsComponent } from "./components/c1-configurator-params/c1-configurator-params.component";
 import { C1OptimiserStateTransitionsComponent } from "./components/c1-optimiser-state-transitions/c1-optimiser-state-transitions.component";
+import { C1OptimiserStateComponent } from './components/c1-optimiser-state/c1-optimiser-state.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { C1OptimiserStateTransitionsComponent } from "./components/c1-optimiser-
         C1BoardComponent,
         C1ResultComponent,
         C1ConfiguratorParamsComponent,
-        C1OptimiserStateTransitionsComponent
+        C1OptimiserStateTransitionsComponent,
+        C1OptimiserStateComponent
     ],
     imports: [CommonModule, FormsModule, WidgetsModule],
     exports: [
@@ -25,7 +27,8 @@ import { C1OptimiserStateTransitionsComponent } from "./components/c1-optimiser-
         C1BoardComponent,
         C1ResultComponent,
         C1ConfiguratorParamsComponent,
-        C1OptimiserStateTransitionsComponent
+        C1OptimiserStateTransitionsComponent,
+        C1OptimiserStateComponent
     ]
 })
 export class C1Module {}

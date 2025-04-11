@@ -1,3 +1,6 @@
 <div *ngIf="(dataArray || dataInstance) && view">
-
+    <arion-optimiser-state-view
+        *ngIf="view === views.VIEW"
+        [optimiserState]="dataInstance"
+    ></arion-optimiser-state-view>
 </div>

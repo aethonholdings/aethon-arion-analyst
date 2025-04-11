@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { C1ConfiguratorParamData } from "aethon-arion-c1";
 import {
     Domain,
@@ -17,7 +17,7 @@ type TableEntries = { [id: string]: { domainType: DomainType; value: number | st
     templateUrl: "./c1-optimiser-state-transitions.component.html",
     styleUrls: ["./c1-optimiser-state-transitions.component.scss"]
 })
-export class C1OptimiserStateTransitionsComponent {
+export class C1OptimiserStateTransitionsComponent implements OnInit {
     @Input() simSet!: SimSetDTO;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
     states!: OptimiserStateDTO<GradientAscentOptimiserData<C1ConfiguratorParamData>>[];
@@ -43,7 +43,13 @@ export class C1OptimiserStateTransitionsComponent {
         "reporting.unitPrice"
     ];
 
+    ngOnInit() {}
+
     ngOnChanges(): void {
+        this.ready = false;
+        this.optimisationDomains = [];
+        this.x = [];
+        this.del = [];
         if (this.simSet.optimiserParams.parameterSpace)
             this.domainIds.forEach((domainId: string) => {
                 const domain = this.simSet.optimiserParams.parameterSpace.find(
@@ -90,6 +96,9 @@ export class C1OptimiserStateTransitionsComponent {
             }
         }
         this.ready = true;
-        console.log(this.del);
+    }
+
+    toNumber(variable: string | boolean | number | undefined): number {
+        return variable as number;
     }
 }

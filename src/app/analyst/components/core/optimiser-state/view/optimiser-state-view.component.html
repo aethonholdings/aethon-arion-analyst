@@ -1,0 +1,21 @@
+<div *ngIf="optimiserState">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Optimiser state {{ optimiserState.id }}</h2>
+        </div>
+    </div>
+    <div class="content-block">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <arion-c1-optimiser-state
+                            *ngIf="optimiserState.modelName === c1ModelName"
+                            [optimiserState]="optimiserState"
+                        ></arion-c1-optimiser-state>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

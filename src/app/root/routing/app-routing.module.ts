@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { OptimiserStateViewContainerComponent } from "src/app/analyst/containers/optimiser-state/view/optimiser-state-view-container.component";
 import { ResultViewContainerComponent } from "src/app/analyst/containers/result/view/result-view-container.component";
 import { SimConfigViewContainerComponent } from "src/app/analyst/containers/sim-config/view/sim-config-view-container.component";
 import { SimSetCreateContainerComponent } from "src/app/analyst/containers/sim-set/create/sim-set-create-container.component";
@@ -13,6 +14,12 @@ const routes: Routes = [
             { path: "create", component: SimSetCreateContainerComponent },
             { path: ":id", component: SimSetViewContainerComponent },
             { path: "", component: SimSetIndexContainerComponent }
+        ]
+    },
+    {
+        path: "optimiser-state",
+        children: [
+            { path: ":id", component: OptimiserStateViewContainerComponent }
         ]
     },
     {

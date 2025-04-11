@@ -8,6 +8,7 @@ import { WidgetsModule } from "../widgets/widgets.module";
 import { SimConfigViewContainerComponent } from "./sim-config/view/sim-config-view-container.component";
 import { ResultModule } from "../components/core/result/result.module";
 import { ResultViewContainerComponent } from "./result/view/result-view-container.component";
+import { OptimiserStateViewContainerComponent } from './optimiser-state/view/optimiser-state-view-container.component';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { ResultViewContainerComponent } from "./result/view/result-view-containe
         SimSetViewContainerComponent,
         SimSetCreateContainerComponent,
         SimConfigViewContainerComponent,
-        ResultViewContainerComponent
+        ResultViewContainerComponent,
+        OptimiserStateViewContainerComponent
     ],
     imports: [CommonModule, WidgetsModule, AnalystComponentModule, ResultModule],
     exports: [SimSetIndexContainerComponent, SimSetViewContainerComponent, ResultViewContainerComponent]

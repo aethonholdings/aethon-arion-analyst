@@ -57,6 +57,6 @@ export class SimSetViewContainerComponent implements OnInit {
     }
 
     onSelect(optimiserStateId: number) {
-        console.log(optimiserStateId);
+        this.router.navigate(["/optimiser-state", optimiserStateId])
     }
 }

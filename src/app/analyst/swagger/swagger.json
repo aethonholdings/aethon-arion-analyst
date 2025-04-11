@@ -52,6 +52,7 @@
               "example": [
                 [
                   "id",
+                  "=",
                   "12"
                 ]
               ],
@@ -69,36 +70,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Paginated"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "SimConfig"
-        ]
-      },
-      "post": {
-        "operationId": "SimConfigController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "description": "The parameters of the simulation to be created under the simulation set",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimConfigDTOCreate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The SimConfig object created by the request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SimConfigDTOGet"
                 }
               }
             }
@@ -289,6 +260,7 @@
               "example": [
                 [
                   "id",
+                  "=",
                   "12"
                 ]
               ],
@@ -629,162 +601,6 @@
         ]
       }
     },
-    "/arion/sim-set/{id}/result": {
-      "get": {
-        "operationId": "SimSetController_results",
-        "parameters": [
-          {
-            "name": "page",
-            "required": false,
-            "description": "The page number to retrieve.  If the query value is higher than the number of pages, the last page is returned.  If not provided or less than 1, the first page is returned.",
-            "in": "path",
-            "schema": {
-              "example": 2,
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": false,
-            "description": "The number of items to retrieve per page.  Will be capped at a server-set maximum value if higher",
-            "in": "path",
-            "schema": {
-              "example": 10,
-              "type": "number"
-            }
-          },
-          {
-            "name": "orderBy",
-            "required": false,
-            "description": "The order by clause to sort the results by; either 'ASC' or 'DESC'. If not provided, no sort is set.",
-            "in": "path",
-            "schema": {
-              "example": [
-                [
-                  "id",
-                  "ASC"
-                ]
-              ],
-              "type": "array",
-              "items": {
-                "type": "array"
-              }
-            }
-          },
-          {
-            "name": "where",
-            "required": false,
-            "description": "The where clause to filter the results by.  For each field listed, an AND operation is performed for equality against the values provided.  If no where clause is provided, all results are fetched.",
-            "in": "path",
-            "schema": {
-              "example": [
-                [
-                  "id",
-                  "12"
-                ]
-              ],
-              "type": "array",
-              "items": {
-                "type": "array"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A Paginated<Result> object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Paginated"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "SimSet"
-        ]
-      }
-    },
-    "/arion/sim-set/{id}/sim-config": {
-      "get": {
-        "operationId": "SimSetController_simConfigs",
-        "parameters": [
-          {
-            "name": "page",
-            "required": false,
-            "description": "The page number to retrieve.  If the query value is higher than the number of pages, the last page is returned.  If not provided or less than 1, the first page is returned.",
-            "in": "path",
-            "schema": {
-              "example": 2,
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": false,
-            "description": "The number of items to retrieve per page.  Will be capped at a server-set maximum value if higher",
-            "in": "path",
-            "schema": {
-              "example": 10,
-              "type": "number"
-            }
-          },
-          {
-            "name": "orderBy",
-            "required": false,
-            "description": "The order by clause to sort the results by; either 'ASC' or 'DESC'. If not provided, no sort is set.",
-            "in": "path",
-            "schema": {
-              "example": [
-                [
-                  "id",
-                  "ASC"
-                ]
-              ],
-              "type": "array",
-              "items": {
-                "type": "array"
-              }
-            }
-          },
-          {
-            "name": "where",
-            "required": false,
-            "description": "The where clause to filter the results by.  For each field listed, an AND operation is performed for equality against the values provided.  If no where clause is provided, all results are fetched.",
-            "in": "path",
-            "schema": {
-              "example": [
-                [
-                  "id",
-                  "12"
-                ]
-              ],
-              "type": "array",
-              "items": {
-                "type": "array"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A Paginated<SimConfig> object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Paginated"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "SimSet"
-        ]
-      }
-    },
     "/arion/state-space/{id}": {
       "get": {
         "operationId": "StateSpaceController_index",
@@ -851,6 +667,50 @@
           "Seeds"
         ]
       }
+    },
+    "/arion/optimiser-state/{id}": {
+      "get": {
+        "operationId": "OptimiserStateController_view",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "OptimiserState"
+        ]
+      }
+    },
+    "/arion/open-api": {
+      "get": {
+        "operationId": "OpenAPIController_getSpec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The OpenAPI specification of the Arion API as an @nestjs/swagger OpenAPIObject",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "OpenAPI"
+        ]
+      }
     }
   },
   "info": {
@@ -878,6 +738,14 @@
     },
     {
       "name": "StateSpace",
+      "description": ""
+    },
+    {
+      "name": "OptimiserState",
+      "description": ""
+    },
+    {
+      "name": "OpenAPI",
       "description": ""
     }
   ],
@@ -1064,6 +932,27 @@
             "description": "The unique identifier of the OrgConfig to generate the simulation config for",
             "example": 1
           },
+          "convergenceTest": {
+            "type": "object",
+            "description": "The convergence test for this simulation configuration",
+            "example": {
+              "id": 1,
+              "orgConfigCount": 10,
+              "simConfigCount": 10,
+              "completedSimConfigCount": 5,
+              "resultCount": 5,
+              "dispatchedRuns": 5,
+              "avgPerformance": 9450.81,
+              "stdDevPerformance": 0.81,
+              "processingTimeSec": 100,
+              "state": "running"
+            }
+          },
+          "convergenceTestId": {
+            "type": "number",
+            "description": "The unique identifier of the convergence test for the simulation configuration",
+            "example": 1
+          },
           "runCount": {
             "type": "number",
             "description": "The number of runs executed for the simulation configuration",
@@ -1118,6 +1007,11 @@
           "results": {
             "type": "object",
             "description": "The results of the simulation"
+          },
+          "state": {
+            "type": "string",
+            "description": "The state of the simulation configuration",
+            "example": "running"
           }
         },
         "required": [
@@ -1126,13 +1020,15 @@
           "simSetId",
           "orgConfig",
           "orgConfigId",
+          "convergenceTestId",
           "runCount",
           "start",
           "end",
           "durationSec",
           "avgPerformance",
           "stdDevPerformance",
-          "entropy"
+          "entropy",
+          "state"
         ]
       },
       "StateSpacePointDTOCreate": {
@@ -1310,6 +1206,16 @@
       "ConfiguratorParamsDTOGet": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number",
+            "description": "The unique identifier of the ConfiguratorParamsDTO",
+            "example": 1
+          },
+          "modelName": {
+            "type": "string",
+            "description": "The signature name of the Model to use for generating the OrgConfigs",
+            "example": "C1"
+          },
           "configuratorName": {
             "type": "string",
             "description": "The signature name of the Configurator to use for generating the OrgConfigs",
@@ -1319,33 +1225,47 @@
             "type": "object",
             "description": "The data object containing the parameters for the model Configurator",
             "example": {
-              "spans": 1,
-              "layers": 1,
+              "board": {
+                "controlStep": true
+              },
               "gains": {
-                "influence": 0.000001,
                 "judgment": 0.00001,
-                "incentive": 1e-8
+                "incentive": 1e-8,
+                "influence": 0.000001
               },
               "graph": "teams",
-              "actionStateProbability": 0.85,
-              "matrixInit": {
-                "influence": "null",
-                "judgment": "random",
-                "incentive": "purposeful"
-              },
+              "spans": 1,
+              "layers": 1,
               "reporting": {
-                "unitPayroll": 1,
-                "unitPrice": 1
+                "unitPrice": 1,
+                "unitPayroll": 1
               },
-              "board": {
-                "controlStep": false
-              }
+              "matrixInit": {
+                "judgment": "null",
+                "incentive": "null",
+                "influence": "null"
+              },
+              "actionStateProbability": 0.85
             }
+          },
+          "hash": {
+            "type": "string",
+            "description": "Unique hash used for indexing and quick search of the ConfiguratorParamsDTO data",
+            "example": "b7c4067460b6dda6cf01dd9831b13045b4dfc721"
+          },
+          "multipleOrgConfigs": {
+            "type": "boolean",
+            "description": "Flag indicating whether the ConfiguratorParamsDTO requires multiple OrgConfigs",
+            "example": true
           }
         },
         "required": [
+          "id",
+          "modelName",
           "configuratorName",
-          "data"
+          "data",
+          "hash",
+          "multipleOrgConfigs"
         ]
       },
       "ResultDTOGet": {
@@ -2565,39 +2485,6 @@
           "reporting",
           "priorityTensor",
           "configuratorParams"
-        ]
-      },
-      "SimConfigDTOCreate": {
-        "type": "object",
-        "properties": {
-          "simSetId": {
-            "type": "number",
-            "description": "The unique identifier of the simulation set to generate a SimConfig for",
-            "example": 1
-          },
-          "orgConfigId": {
-            "type": "number",
-            "description": "The unique identifier of the OrgConfig to generate the simulation config for",
-            "example": 1
-          },
-          "days": {
-            "type": "number",
-            "description": "The number of simulation 'days' to run the simulation for.",
-            "example": 100
-          },
-          "randomStreamType": {
-            "type": "string",
-            "enum": [
-              "static",
-              "random"
-            ],
-            "description": "The type of random stream to use for the simulation. 'static' uses a deterministic sequence from fixed random seeds and is useful for testing, 'random' uses Math.random().",
-            "example": "random"
-          }
-        },
-        "required": [
-          "simSetId",
-          "orgConfigId"
         ]
       },
       "ResultDTOCreate": {
@@ -3967,6 +3854,11 @@
       "ConfiguratorParamsDTOCreate": {
         "type": "object",
         "properties": {
+          "modelName": {
+            "type": "string",
+            "description": "The signature name of the Model to use for generating the OrgConfigs",
+            "example": "C1"
+          },
           "configuratorName": {
             "type": "string",
             "description": "The signature name of the Configurator to use for generating the OrgConfigs",
@@ -3976,33 +3868,40 @@
             "type": "object",
             "description": "The data object containing the parameters for the model Configurator",
             "example": {
-              "spans": 1,
-              "layers": 1,
+              "board": {
+                "controlStep": true
+              },
               "gains": {
-                "influence": 0.000001,
                 "judgment": 0.00001,
-                "incentive": 1e-8
+                "incentive": 1e-8,
+                "influence": 0.000001
               },
               "graph": "teams",
-              "actionStateProbability": 0.85,
-              "matrixInit": {
-                "influence": "null",
-                "judgment": "random",
-                "incentive": "purposeful"
-              },
+              "spans": 1,
+              "layers": 1,
               "reporting": {
-                "unitPayroll": 1,
-                "unitPrice": 1
+                "unitPrice": 1,
+                "unitPayroll": 1
               },
-              "board": {
-                "controlStep": false
-              }
+              "matrixInit": {
+                "judgment": "null",
+                "incentive": "null",
+                "influence": "null"
+              },
+              "actionStateProbability": 0.85
             }
+          },
+          "multipleOrgConfigs": {
+            "type": "boolean",
+            "description": "Flag indicating whether the ConfiguratorParamsDTO requires multiple OrgConfigs",
+            "example": true
           }
         },
         "required": [
+          "modelName",
           "configuratorName",
-          "data"
+          "data",
+          "multipleOrgConfigs"
         ]
       },
       "SimSetDTOGet": {
@@ -4018,48 +3917,62 @@
             "description": "Text description of the simulation set",
             "example": "Here is a test description"
           },
-          "type": {
+          "modelName": {
             "type": "string",
             "description": "The signature of the organisation model for which the simulation set is run",
             "example": "C1"
           },
-          "simConfigs": {
-            "description": "The simulation configurations for the simulation set",
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
+          "optimiserName": {
+            "type": "string",
+            "description": "The name of the optimiser used for the simulation set",
+            "example": "Gradient Ascent"
+          },
+          "configuratorName": {
+            "type": "string",
+            "description": "The name of the configurator used for the simulation set",
+            "example": "C1BaseConfigurator"
           },
           "state": {
             "type": "string",
-            "description": "The current state of the simulation set",
+            "description": "The state of the simulation set",
             "example": "running"
           },
-          "runCount": {
-            "type": "number",
-            "description": "The number of simConfigs in the simulation set",
-            "example": 10
+          "modelParams": {
+            "type": "object",
+            "description": "Model parameters for the simulation set",
+            "example": {
+              "param1": "value1",
+              "param2": "value2"
+            }
           },
-          "completedRunCount": {
-            "type": "number",
-            "description": "The number of runs completed in the simulation set",
-            "example": 5
+          "optimiserStates": {
+            "type": "array",
+            "description": "The states of the optimiser"
           },
-          "completedSimConfigCount": {
+          "simConfigParams": {
+            "type": "object",
+            "description": "The parameters for simulation configurations in this SimSet"
+          },
+          "optimiserParams": {
+            "type": "object",
+            "description": "The parameters for the optimiser in this SimSet"
+          },
+          "currentOptimiserStateId": {
             "type": "number",
-            "description": "The number of simulation configurations completed in the simulation set",
-            "example": 5
+            "description": "The current optimiser state ID",
+            "example": 1
+          },
+          "currentConvergenceTestIds": {
+            "type": "array",
+            "description": "The current convergence test IDs"
           }
         },
         "required": [
           "id",
-          "description",
-          "type",
-          "simConfigs",
-          "state",
-          "runCount",
-          "completedRunCount",
-          "completedSimConfigCount"
+          "modelName",
+          "optimiserName",
+          "configuratorName",
+          "state"
         ]
       },
       "SimSetDTOCreate": {
@@ -4070,15 +3983,42 @@
             "description": "Text description of the simulation set",
             "example": "Here is a test description"
           },
-          "type": {
+          "modelName": {
             "type": "string",
             "description": "The signature of the organisation model for which the simulation set is run",
             "example": "C1"
+          },
+          "optimiserName": {
+            "type": "string",
+            "description": "The name of the optimiser used for the simulation set",
+            "example": "Gradient Ascent"
+          },
+          "configuratorName": {
+            "type": "string",
+            "description": "The name of the configurator used for the simulation set",
+            "example": "C1BaseConfigurator"
+          },
+          "modelParams": {
+            "type": "object",
+            "description": "Model parameters for the simulation set",
+            "example": {
+              "param1": "value1",
+              "param2": "value2"
+            }
+          },
+          "simConfigParams": {
+            "type": "object",
+            "description": "The parameters for simulation configurations in this SimSet"
+          },
+          "optimiserParams": {
+            "type": "object",
+            "description": "The parameters for the optimiser in this SimSet"
           }
         },
         "required": [
-          "description",
-          "type"
+          "modelName",
+          "optimiserName",
+          "configuratorName"
         ]
       }
     }

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import {
     ConfiguratorParamData,
     ConfiguratorParamsDTO,
+    OptimiserStateDTO,
     OrgConfigDTO,
     ResultDTO,
     SimConfigDTO,
@@ -58,6 +59,12 @@ export class AnalystService {
         const operation: string = "SimSetController_delete";
         const options: APIRequestOptions = { params: { id: id } };
         return this.apiService.request$<void>(operation, options);
+    }
+
+    getOptimiserState$(id: number): Observable<OptimiserStateDTO<ConfiguratorParamData>> {
+        const operation: string = "OptimiserStateController_view";
+        const options: APIRequestOptions = { params: {id: id}};
+        return this.apiService.request$<OptimiserStateDTO<ConfiguratorParamData>>(operation, options);
     }
 
     getSimSetSimConfigs$(simSetId: number, pageNumber: number = 1): Observable<Paginated<SimConfigDTO>> {
