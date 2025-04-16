@@ -1,17 +1,19 @@
 <div *ngIf="definition">
-    <div class="form-check">
-        <input
-            id="optimise"
-            [(ngModel)]="values.optimise"
-            class="form-check-input"
-            type="checkbox"
-            [disabled]="readonly"
-            (ngModelChange)="$check()"
-        />
-        <label class="form-check-label" for="optimise">Optimise</label>
-    </div>
-
+    <div>{{ values.type }}</div>
     <div class="content-block">
+        <div class="form-check">
+            <input
+                id="optimise"
+                [(ngModel)]="values.optimise"
+                class="form-check-input"
+                type="checkbox"
+                [disabled]="readonly"
+                (ngModelChange)="$check()"
+            />
+            <label class="form-check-label" for="optimise">Optimise</label>
+        </div>
+      </div>
+      <div class="content-block">
         <div *ngIf="values.type === domainTypes.DISCRETE || values.type === domainTypes.CONTINUOUS">
             <div *ngIf="values.optimise" class="form-group">
                 <label for="min">Min</label>

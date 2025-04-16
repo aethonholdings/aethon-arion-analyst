@@ -78,6 +78,11 @@ export class DomainComponent implements OnInit {
                 if (this.values.derivativeStepSize > this.values.max - this.values.min)
                     this.modalText += `<p>Domain derivative step size must be smaller than interval between max and min</p>`;
                 if (!this.modalText) {
+                    if (this.values.type === this.domainTypes.DISCRETE) {
+                        this.values.max = Math.round(this.values.max);
+                        this.values.min = Math.round(this.values.min);
+                        this.values.derivativeStepSize = Math.round(this.values.derivativeStepSize);
+                    }
                     this.values = {
                         type: this.definition.domain.type,
                         optimise: true,
@@ -136,12 +141,18 @@ export class DomainComponent implements OnInit {
     }
 
     $clickDefault(index: number) {
-        if (!this.values.optimise && (this.definition.domain.type === DomainTypes.CATEGORICAL || this.definition.domain.type === DomainTypes.BOOLEAN)) {
+        if (
+            !this.values.optimise &&
+            (this.definition.domain.type === DomainTypes.CATEGORICAL ||
+                this.definition.domain.type === DomainTypes.BOOLEAN)
+        ) {
             for (let i = 0; i < this.selectionFlags.length; i++) {
                 if (i === index) {
                     this.selectionFlags[i][1] = true;
-                    if(this.definition.domain.type === DomainTypes.CATEGORICAL) this.values.default = this.definition.domain.categories[index];
-                    if(this.definition.domain.type === DomainTypes.BOOLEAN) this.values.default = (i===0)? true: false;
+                    if (this.definition.domain.type === DomainTypes.CATEGORICAL)
+                        this.values.default = this.definition.domain.categories[index];
+                    if (this.definition.domain.type === DomainTypes.BOOLEAN)
+                        this.values.default = i === 0 ? true : false;
                 } else this.selectionFlags[i][1] = false;
             }
         }

@@ -24,8 +24,4 @@ export class C1GradientAscentOptimiserParamsComponent implements OnInit {
     ngOnInit(): void {
         if (!this.gradientAscentParameters) this.gradientAscentParameters = C1GradientAscentDefaultOptimiserParams;
     }
-
-    onChanges() {
-        console.log(this.gradientAscentParameters);
-    }
 }
