@@ -1,0 +1,16 @@
+<div *ngIf="optimisers" class="form-group">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="sim-set">Optimiser</label>
+        </div>
+        <div class="col-md-9">
+            <select [(ngModel)]="selected" name="optimiser" id="optimiser" class="form-select" aria-label="Optimisers" (change)="onSelect()">
+                <option *ngFor="let optimiser of optimisers" [value]="optimiser.name">{{ optimiser.name }}</option>
+            </select>
+        </div>
+    </div>
+    <arion-c1-gradient-ascent-optimiser-params
+        *ngIf="selected === c1OptimiserNames.GRADIENT_ASCENT"
+        [(gradientAscentParameters)]="simSet.optimiserParams"
+    ></arion-c1-gradient-ascent-optimiser-params>
+</div>

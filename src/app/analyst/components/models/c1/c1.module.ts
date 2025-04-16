@@ -8,7 +8,10 @@ import { WidgetsModule } from "src/app/analyst/widgets/widgets.module";
 import { C1ResultComponent } from "./components/c1-result/c1-result.component";
 import { C1ConfiguratorParamsComponent } from "./components/c1-configurator-params/c1-configurator-params.component";
 import { C1OptimiserStateTransitionsComponent } from "./components/c1-optimiser-state-transitions/c1-optimiser-state-transitions.component";
-import { C1OptimiserStateComponent } from './components/c1-optimiser-state/c1-optimiser-state.component';
+import { C1OptimiserStateComponent } from "./components/c1-optimiser-state/c1-optimiser-state.component";
+import { C1SimSetComponent } from "./components/c1-sim-set/c1-sim-set.component";
+import { C1Service } from "./services/c1.service";
+import { C1GradientAscentOptimiserParamsComponent } from './components/c1-gradient-ascent-optimiser-params/c1-gradient-ascent-optimiser-params.component';
 
 @NgModule({
     declarations: [
@@ -18,8 +21,11 @@ import { C1OptimiserStateComponent } from './components/c1-optimiser-state/c1-op
         C1ResultComponent,
         C1ConfiguratorParamsComponent,
         C1OptimiserStateTransitionsComponent,
-        C1OptimiserStateComponent
+        C1OptimiserStateComponent,
+        C1SimSetComponent,
+        C1GradientAscentOptimiserParamsComponent
     ],
+    providers: [C1Service],
     imports: [CommonModule, FormsModule, WidgetsModule],
     exports: [
         C1PlantComponent,
@@ -28,7 +34,8 @@ import { C1OptimiserStateComponent } from './components/c1-optimiser-state/c1-op
         C1ResultComponent,
         C1ConfiguratorParamsComponent,
         C1OptimiserStateTransitionsComponent,
-        C1OptimiserStateComponent
+        C1OptimiserStateComponent,
+        C1SimSetComponent
     ]
 })
 export class C1Module {}

@@ -8,10 +8,12 @@ import { MatrixModule } from "./matrix/matrix.module";
 import { GraphModule } from "./graph/graph.module";
 import { GraphComponent } from "./graph/components/graph/graph.component";
 import { MatrixComponent } from "./matrix/components/matrix/matrix.component";
+import { DomainComponent } from './domain/domain.component';
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
-    declarations: [StatusIndicatorComponent, PaginationComponent, PivotTableComponent, RegressionComponent],
-    imports: [CommonModule, MatrixModule, GraphModule],
-    exports: [MatrixComponent, GraphComponent, StatusIndicatorComponent, PaginationComponent, PivotTableComponent]
+    declarations: [StatusIndicatorComponent, PaginationComponent, PivotTableComponent, RegressionComponent, DomainComponent],
+    imports: [CommonModule, MatrixModule, GraphModule, FormsModule],
+    exports: [MatrixComponent, GraphComponent, StatusIndicatorComponent, PaginationComponent, PivotTableComponent, DomainComponent]
 })
 export class WidgetsModule {}
