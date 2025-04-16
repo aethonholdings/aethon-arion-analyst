@@ -5,7 +5,13 @@
                 <label for="description">Description</label>
             </div>
             <div class="col-md-9">
-                <textarea [(ngModel)]="simSet.description" name="description" class="form-control" id="description" rows="3"></textarea>
+                <textarea
+                    [(ngModel)]="simSet.description"
+                    name="description"
+                    class="form-control"
+                    id="description"
+                    rows="3"
+                ></textarea>
             </div>
         </div>
     </div>
@@ -21,7 +27,11 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <arion-c1-sim-set *ngIf="selected==='C1'" [(simSet)]="simSet"></arion-c1-sim-set>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <arion-c1-sim-set *ngIf="selected === 'C1'" [(simSet)]="simSet"></arion-c1-sim-set>
+            </div>
+        </div>
     </div>
 </form>

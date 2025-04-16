@@ -210,8 +210,8 @@ export const C1DomainDefinitions: DomainDefinition[] = [
             categories: [
                 C1MatrixInitTypes.NULL,
                 C1MatrixInitTypes.RANDOM,
-                C1MatrixInitTypes.PURPOSEFUL,
-                C1MatrixInitTypes.HYBRID
+                C1MatrixInitTypes.HYBRID,
+                C1MatrixInitTypes.PURPOSEFUL
             ],
             default: C1MatrixInitTypes.PURPOSEFUL
         }
