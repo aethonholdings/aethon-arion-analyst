@@ -2,12 +2,12 @@
     <thead>
         <tr>
             <th scope="col">Variable</th>
-            <th scope="col"></th>
+            <th scope="col" class="text-end">x</th>
             <th scope="col"  class="text-center" [attr.colspan]="del.length">Optimisation parameters</th>
         </tr>
         <tr>
             <th scope="col"></th>
-            <th class="col-md-2 text-end" scope="col">x</th>
+            <th class="col-md-2" scope="col"></th>
             <th *ngFor="let parameter of del" class="col-md-2 text-end" scope="col">{{ parameter.id }}</th>
         </tr>
     </thead>
@@ -17,6 +17,13 @@
             <td class="text-end"></td>
             <td *ngFor="let parameter of del" class="text-end" scope="col"></td>
         </tr>
+        <tr>
+          <td>Optimisation variable value</td>
+          <td class="text-end"></td>
+          <td *ngFor="let parameter of del" scope="col" class="text-end">
+              {{ parameter.data.outputs.configuratorParameterValue }}
+          </td>
+      </tr>
         <tr>
             <td>Performance</td>
             <td class="text-end">{{ x.data.outputs.performance | number: "1.0-0" }}</td>
