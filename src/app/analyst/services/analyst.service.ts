@@ -10,7 +10,7 @@ import {
     StateSpace,
     StateSpacePointDTO
 } from "aethon-arion-pipeline";
-import { Observable, catchError, concatMap, finalize, from, map, of, share, switchMap, timer } from "rxjs";
+import { Observable, catchError, concatMap, finalize, from, map, of, shareReplay, switchMap, timer } from "rxjs";
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
 import { API, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
@@ -23,7 +23,7 @@ import { ProgressState } from "src/app/root/types/root.types";
     providedIn: "root"
 })
 export class AnalystService {
-    private _refreshTimer: Observable<number> = timer(0, 60000).pipe(share());
+    private _refreshTimer: Observable<number> = timer(0, 60000).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
     constructor(
         private apiService: ApiService,

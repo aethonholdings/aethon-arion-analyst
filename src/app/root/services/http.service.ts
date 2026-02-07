@@ -4,12 +4,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HttpMethod, APIRequest } from "aethon-api-types";
 import { APIResponse, APIResponseData } from "aethon-api-types";
 import * as qs from "qs";
+import { environment } from "src/env/environment";
 
 @Injectable({
     providedIn: "root"
 })
 export class HttpService {
-    private _debug: boolean = true;
+    private _debug: boolean = environment.debug;
     private _headers: HttpHeaders = new HttpHeaders();
 
     constructor(private httpClient: HttpClient) {}
