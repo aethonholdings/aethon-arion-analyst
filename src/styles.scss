@@ -1,31 +1,27 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
 @import "node_modules/ngx-spinner/animations/ball-scale-multiple.css";
 
-// utilities
-$arion-purple-soft: rgb(231, 220, 226);
-$arion-purple-strong: rgb(128, 0, 128);
+/* Arion custom theme */
+@theme {
+  --color-arion-purple-soft: rgb(231, 220, 226);
+  --color-arion-purple-strong: rgb(128, 0, 128);
+}
 
 body {
     overflow: scroll;
 }
 
-.test {
-    background-color: red;
-}
-
-.test2 {
-    background-color: blue;
-}
-
 .hoverable:hover {
-    background-color: $arion-purple-soft;
+    background-color: var(--color-arion-purple-soft);
 }
 
 .content-block {
     margin-top: 3em;
 }
 
-// tables
-
+/* tables */
 .table-fix-head {
     overflow-y: auto;
     height: 100vh;
@@ -48,8 +44,7 @@ body {
     width: 50%;
 }
 
-// forms
+/* forms */
 .form-group {
   padding-bottom: 1em;
 }
-

@@ -1,19 +1,19 @@
 <div *ngIf="definition">
     <div>{{ values.type }}</div>
     <div class="content-block">
-        <div class="form-check">
+        <label class="flex items-center gap-2 cursor-pointer">
             <input
                 id="optimise"
                 [(ngModel)]="values.optimise"
-                class="form-check-input"
+                class="checkbox"
                 type="checkbox"
                 [disabled]="readonly"
                 (ngModelChange)="$check()"
             />
-            <label class="form-check-label" for="optimise">Optimise</label>
-        </div>
-      </div>
-      <div class="content-block">
+            <span>Optimise</span>
+        </label>
+    </div>
+    <div class="content-block">
         <div *ngIf="values.type === domainTypes.DISCRETE || values.type === domainTypes.CONTINUOUS">
             <div *ngIf="values.optimise" class="form-group">
                 <label for="min">Min</label>
@@ -21,7 +21,7 @@
                     [(ngModel)]="values.min"
                     id="min"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     [disabled]="readonly"
                     (ngModelChange)="$check()"
                 />
@@ -32,7 +32,7 @@
                     [(ngModel)]="values.max"
                     id="max"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     [disabled]="readonly"
                     (ngModelChange)="$check()"
                 />
@@ -43,7 +43,7 @@
                     [(ngModel)]="values.default"
                     id="default"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     [disabled]="readonly"
                     (ngModelChange)="$check()"
                 />
@@ -54,7 +54,7 @@
                     [(ngModel)]="values.derivativeStepSize"
                     id="derivativeStep"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     [disabled]="readonly"
                     (ngModelChange)="$check()"
                 />
@@ -64,29 +64,29 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col" class="col-6">Category</th>
-                        <th *ngIf="values.optimise" class="col-6" scope="col">Include in optimisation</th>
-                        <th *ngIf="!values.optimise" class="col-6" scope="col">Default value</th>
+                        <th scope="col" class="w-1/2">Category</th>
+                        <th *ngIf="values.optimise" class="w-1/2" scope="col">Include in optimisation</th>
+                        <th *ngIf="!values.optimise" class="w-1/2" scope="col">Default value</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let category of definition.domain.categories; index as i">
-                        <td class="col-6">{{ category }}</td>
-                        <td *ngIf="values.optimise" class="col-6">
+                        <td class="w-1/2">{{ category }}</td>
+                        <td *ngIf="values.optimise" class="w-1/2">
                             <input
                                 [(ngModel)]="selectionFlags[i][0]"
                                 [id]="category + '-optimise'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="readonly"
                                 (ngModelChange)="$clickInclusive(category)"
                             />
                         </td>
-                        <td *ngIf="!values.optimise" class="col-6">
+                        <td *ngIf="!values.optimise" class="w-1/2">
                             <input
                                 [(ngModel)]="selectionFlags[i][1]"
                                 [id]="category + '-default'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="readonly"
                                 (ngModelChange)="$clickDefault(i)"
@@ -100,27 +100,27 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col" class="col-6">Category</th>
-                        <th *ngIf="values.optimise" class="col-6" scope="col">Include in optimisation</th>
-                        <th *ngIf="!values.optimise" class="col-6" scope="col">Default value</th>
+                        <th scope="col" class="w-1/2">Category</th>
+                        <th *ngIf="values.optimise" class="w-1/2" scope="col">Include in optimisation</th>
+                        <th *ngIf="!values.optimise" class="w-1/2" scope="col">Default value</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="col-6">true</td>
-                        <td *ngIf="values.optimise" class="col-6">
+                        <td class="w-1/2">true</td>
+                        <td *ngIf="values.optimise" class="w-1/2">
                             <input
                                 [id]="'true-optimise'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="true"
                                 checked="true"
                             />
                         </td>
-                        <td *ngIf="!values.optimise" class="col-6">
+                        <td *ngIf="!values.optimise" class="w-1/2">
                             <input
                                 [id]="'true-default'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="readonly"
                                 checked="true"
@@ -130,20 +130,20 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="col-6">false</td>
-                        <td *ngIf="values.optimise" class="col-6">
+                        <td class="w-1/2">false</td>
+                        <td *ngIf="values.optimise" class="w-1/2">
                             <input
                                 [id]="'false-optimise'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="true"
                                 checked="true"
                             />
                         </td>
-                        <td *ngIf="!values.optimise" class="col-6">
+                        <td *ngIf="!values.optimise" class="w-1/2">
                             <input
                                 [id]="'false-default'"
-                                class="form-check-input"
+                                class="checkbox"
                                 type="checkbox"
                                 [disabled]="readonly"
                                 checked="true"

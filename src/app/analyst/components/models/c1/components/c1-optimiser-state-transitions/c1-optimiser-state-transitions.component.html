@@ -1,4 +1,4 @@
-<table *ngIf="ready" class="table table-xsm table-hover">
+<table *ngIf="ready" class="table table-xs">
     <thead>
         <tr>
             <th scope="col">Step</th>
@@ -9,23 +9,23 @@
             <th scope="col">Performance</th>
         </tr>
         <tr>
-            <th scope="col" class="text-end"></th>
-            <th scope="col" class="text-end"></th>
-            <th scope="col" class="text-end"></th>
-            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-end">{{ domain.id }}</th>
-            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-end">{{ domain.id }}</th>
-            <th scope="col" class="text-end">Modulo</th>
-            <th scope="col" class="text-end"></th>
+            <th scope="col" class="text-right"></th>
+            <th scope="col" class="text-right"></th>
+            <th scope="col" class="text-right"></th>
+            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-right">{{ domain.id }}</th>
+            <th *ngFor="let domain of optimisationDomains" scope="col" class="text-right">{{ domain.id }}</th>
+            <th scope="col" class="text-right">Modulo</th>
+            <th scope="col" class="text-right"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let optimiserState of states; index as i" (click)="selected.emit(optimiserState.id)">
-            <td class="text-end">{{ optimiserState.stepCount }}</td>
-            <td class="text-end">{{ optimiserState.start | date: "short" }}</td>
-            <td class="text-end">
+            <td class="text-right">{{ optimiserState.stepCount }}</td>
+            <td class="text-right">{{ optimiserState.start | date: "short" }}</td>
+            <td class="text-right">
                 <arion-status-indicator [status]="optimiserState.status"></arion-status-indicator>
             </td>
-            <td *ngFor="let domain of optimisationDomains" scope="col" class="text-end">
+            <td *ngFor="let domain of optimisationDomains" scope="col" class="text-right">
                 <span *ngIf="domain.domain.type === domainTypes.CONTINUOUS">{{
                     toNumber(x[i][domain.id].value) | number: "1.6-6"
                 }}</span>
@@ -37,7 +37,7 @@
                     >{{ x[i][domain.id].value }}</span
                 >
             </td>
-            <td *ngFor="let domain of optimisationDomains; index as j" scope="col" class="text-end">
+            <td *ngFor="let domain of optimisationDomains; index as j" scope="col" class="text-right">
                 <span *ngIf="domain.domain.type === domainTypes.CONTINUOUS">{{
                     toNumber(del[i][domain.id].value) | number: "1.6-6"
                 }}</span>
@@ -49,8 +49,8 @@
                     >{{ toNumber(del[i][domain.id].value) | number: "1.0-0" }}</span
                 >
             </td>
-            <td class="text-end">{{ optimiserState.optimiserData.moduloDel | number: "1.0-0" }}</td>
-            <td class="text-end">{{ optimiserState.performance | number: "1.0-0" }}</td>
+            <td class="text-right">{{ optimiserState.optimiserData.moduloDel | number: "1.0-0" }}</td>
+            <td class="text-right">{{ optimiserState.performance | number: "1.0-0" }}</td>
         </tr>
     </tbody>
 </table>

@@ -1,14 +1,14 @@
 <form>
     <div class="form-group">
-        <div class="row">
-            <div class="col-md-3">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-3">
                 <label for="description">Description</label>
             </div>
-            <div class="col-md-9">
+            <div class="col-span-12 md:col-span-9">
                 <textarea
                     [(ngModel)]="simSet.description"
                     name="description"
-                    class="form-control"
+                    class="textarea textarea-bordered w-full"
                     id="description"
                     rows="3"
                 ></textarea>
@@ -16,22 +16,18 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="row">
-            <div class="col-md-3">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-3">
                 <label for="sim-set">Model type</label>
             </div>
-            <div class="col-md-9">
-                <select [(ngModel)]="simSet.modelName" name="model" id="models" class="form-select" aria-label="Models">
+            <div class="col-span-12 md:col-span-9">
+                <select [(ngModel)]="simSet.modelName" name="model" id="models" class="select select-bordered w-full" aria-label="Models">
                     <option *ngFor="let model of models" [value]="model">{{ model }}</option>
                 </select>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <arion-c1-sim-set *ngIf="selected === 'C1'" [(simSet)]="simSet"></arion-c1-sim-set>
-            </div>
-        </div>
+    <div class="form-group">
+        <arion-c1-sim-set *ngIf="selected === 'C1'" [(simSet)]="simSet"></arion-c1-sim-set>
     </div>
 </form>

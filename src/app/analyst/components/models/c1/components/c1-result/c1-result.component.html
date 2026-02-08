@@ -2,31 +2,31 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col" class="text-end">Actuals</th>
-            <th scope="col" class="text-end">Plan</th>
-            <th scope="col" class="text-end">Delta</th>
+            <th scope="col" class="text-right">Actuals</th>
+            <th scope="col" class="text-right">Plan</th>
+            <th scope="col" class="text-right">Delta</th>
         </tr>
     </thead>
     <tbody *ngFor="let report of kpis.data.proFormas">
         <tr class="heading">
             <td>{{ report.name }}</td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
         </tr>
         <tr *ngFor="let lineItem of report.lineItems" class="{{ lineItem.class }}">
             <td><span [innerHTML]="lineItem.operator"></span> {{ lineItem.data?.name }}</td>
-            <td class="text-end">{{ lineItem.data?.actual | number: "1.0-0" }}</td>
-            <td class="text-end">{{ lineItem.data?.plan | number: "1.0-0" }}</td>
-            <td class="text-end">{{ lineItem.data?.delta | number: "1.0-0" }}</td>
+            <td class="text-right">{{ lineItem.data?.actual | number: "1.0-0" }}</td>
+            <td class="text-right">{{ lineItem.data?.plan | number: "1.0-0" }}</td>
+            <td class="text-right">{{ lineItem.data?.delta | number: "1.0-0" }}</td>
         </tr>
     </tbody>
     <tbody>
         <tr class="heading">
             <td>Priority tensors</td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
         </tr>
         <tr *ngFor="let agent of [].constructor(agentCount); index as alpha">
             <td>{{ alpha + 1 }}</td>

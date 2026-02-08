@@ -1,87 +1,59 @@
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Summary</h5>
-                    <arion-org-config-card [orgConfig]="orgConfig"></arion-org-config-card>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Summary</h5>
+            <arion-org-config-card [orgConfig]="orgConfig"></arion-org-config-card>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Configurator parameters</h5>
-                    <arion-configurator-params
-                        [dataInstance]="orgConfig.configuratorParams"
-                        [view]="views.CARD"
-                    ></arion-configurator-params>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Configurator parameters</h5>
+            <arion-configurator-params
+                [dataInstance]="orgConfig.configuratorParams"
+                [view]="views.CARD"
+            ></arion-configurator-params>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Graph</h5>
-                    <arion-graph [influenceTensor]="orgConfig.agentSet.influenceTensor"></arion-graph>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Graph</h5>
+            <arion-graph [influenceTensor]="orgConfig.agentSet.influenceTensor"></arion-graph>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Agent set tensors</h5>
-                    <arion-agent-set-tensors [orgConfigDTO]="orgConfig"></arion-agent-set-tensors>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Agent set tensors</h5>
+            <arion-agent-set-tensors [orgConfigDTO]="orgConfig"></arion-agent-set-tensors>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Plant</h5>
-                    <arion-plant [orgConfig]="orgConfig"></arion-plant>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Plant</h5>
+            <arion-plant [orgConfig]="orgConfig"></arion-plant>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Reporting</h5>
-                    <arion-reporting [orgConfig]="orgConfig"></arion-reporting>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Reporting</h5>
+            <arion-reporting [orgConfig]="orgConfig"></arion-reporting>
         </div>
     </div>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Board</h5>
-                    <arion-board [orgConfig]="orgConfig"></arion-board>
-                </div>
-            </div>
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Board</h5>
+            <arion-board [orgConfig]="orgConfig"></arion-board>
         </div>
     </div>
 </div>

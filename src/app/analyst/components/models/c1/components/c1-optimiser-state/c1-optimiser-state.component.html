@@ -2,192 +2,192 @@
     <thead>
         <tr>
             <th scope="col">Variable</th>
-            <th scope="col" class="text-end">x</th>
+            <th scope="col" class="text-right">x</th>
             <th scope="col"  class="text-center" [attr.colspan]="del.length">Optimisation parameters</th>
         </tr>
         <tr>
             <th scope="col"></th>
-            <th class="col-md-2" scope="col"></th>
-            <th *ngFor="let parameter of del" class="col-md-2 text-end" scope="col">{{ parameter.id }}</th>
+            <th class="w-1/6" scope="col"></th>
+            <th *ngFor="let parameter of del" class="w-1/6 text-right" scope="col">{{ parameter.id }}</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td class="heading">OUTPUTS</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" class="text-end" scope="col"></td>
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" class="text-right" scope="col"></td>
         </tr>
         <tr>
           <td>Optimisation variable value</td>
-          <td class="text-end"></td>
-          <td *ngFor="let parameter of del" scope="col" class="text-end">
+          <td class="text-right"></td>
+          <td *ngFor="let parameter of del" scope="col" class="text-right">
               {{ parameter.data.outputs.configuratorParameterValue }}
           </td>
       </tr>
         <tr>
             <td>Performance</td>
-            <td class="text-end">{{ x.data.outputs.performance | number: "1.0-0" }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.outputs.performance | number: "1.0-0" }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.outputs.performance | number: "1.0-0" }}
             </td>
         </tr>
         <tr>
             <td>Δ(Performance)</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.outputs.performanceDelta | number: "1.6-6" }}
             </td>
         </tr>
         <tr>
             <td>Δ(Input)</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.outputs.xDelta | number: "1.6-6" }}
             </td>
         </tr>
         <tr>
             <td>Slope</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.outputs.slope | number: "1.4-4" }}
             </td>
         </tr>
         <tr>
             <td class="heading">INPUTS</td>
-            <td class="text-end"></td>
+            <td class="text-right"></td>
             <td *ngFor="let parameter of del" scope="col"></td>
         </tr>
         <tr>
             <td>Configurator</td>
-            <td class="text-end">{{ x.data.inputs.configuratorName }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.configuratorName }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.configuratorName }}
             </td>
         </tr>
         <tr>
             <td>Action state probability</td>
-            <td class="text-end">{{ x.data.inputs.data.actionStateProbability }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.actionStateProbability }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.actionStateProbability }}
             </td>
         </tr>
         <tr>
             <td>Board control step</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.board.controlStep }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.board.controlStep }}
             </td>
         </tr>
         <tr>
             <td>Agent graph</td>
-            <td class="text-end">{{ x.data.inputs.data.graph }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.graph }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.graph }}
             </td>
         </tr>
         <tr>
             <td>Agent count</td>
-            <td class="text-end">{{ agentCounts[0] }}</td>
-            <td *ngFor="let parameter of del; index as i" class="text-end">
+            <td class="text-right">{{ agentCounts[0] }}</td>
+            <td *ngFor="let parameter of del; index as i" class="text-right">
                 {{ agentCounts[i + 1] }}
             </td>
         </tr>
         <tr>
             <td class="indent">Layers</td>
-            <td class="text-end">{{ x.data.inputs.data.layers }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.layers }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.layers }}
             </td>
         </tr>
         <tr>
             <td class="indent">Spans</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.spans }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.spans }}
             </td>
         </tr>
         <tr>
             <td>Matrix initialisers</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end"></td>
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right"></td>
         </tr>
         <tr>
             <td class="indent">Influence</td>
-            <td class="text-end">{{ x.data.inputs.data.matrixInit.influence }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.matrixInit.influence }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.matrixInit.influence }}
             </td>
         </tr>
         <tr>
             <td class="indent">Judgment</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.matrixInit.judgment }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.matrixInit.judgment }}
             </td>
         </tr>
         <tr>
             <td class="indent">Incentives</td>
-            <td class="text-end">{{ x.data.inputs.data.matrixInit.incentive }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.matrixInit.incentive }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.matrixInit.incentive }}
             </td>
         </tr>
         <tr>
             <td>Gains</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end"></td>
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right"></td>
         </tr>
         <tr>
             <td class="indent">Influence</td>
-            <td class="text-end">{{ x.data.inputs.data.gains.influence | number: "1.6-6" }}</td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td class="text-right">{{ x.data.inputs.data.gains.influence | number: "1.6-6" }}</td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.gains.influence | number: "1.6-6" }}
             </td>
         </tr>
         <tr>
             <td class="indent">Judgment</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.gains.judgment | number: "1.6-6" }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.gains.judgment | number: "1.6-6" }}
             </td>
         </tr>
         <tr>
             <td class="indent">Incentives</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.gains.incentive | number: "1.6-6" }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.gains.incentive | number: "1.6-6" }}
             </td>
         </tr>
         <tr>
             <td>Reporting</td>
-            <td class="text-end"></td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end"></td>
+            <td class="text-right"></td>
+            <td *ngFor="let parameter of del" scope="col" class="text-right"></td>
         </tr>
         <tr>
             <td class="indent">Unit price</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.reporting.unitPrice }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.reporting.unitPrice }}
             </td>
         </tr>
         <tr>
             <td class="indent">Unit payroll</td>
-            <td class="text-end">
+            <td class="text-right">
                 {{ x.data.inputs.data.reporting.unitPayroll }}
             </td>
-            <td *ngFor="let parameter of del" scope="col" class="text-end">
+            <td *ngFor="let parameter of del" scope="col" class="text-right">
                 {{ parameter.data.inputs.data.reporting.unitPayroll }}
             </td>
         </tr>

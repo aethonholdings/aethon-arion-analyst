@@ -1,15 +1,7 @@
 <h2>SimSet</h2>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <arion-sim-set [(dataInstance)]="simSet" [view]="views.CREATE"></arion-sim-set>
-        </div>
-    </div>
+    <arion-sim-set [(dataInstance)]="simSet" [view]="views.CREATE"></arion-sim-set>
 </div>
 <div class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <button class="btn btn-primary" (click)="createSimSet()">Save</button>
-        </div>
-    </div>
+    <button class="btn btn-primary" (click)="createSimSet()">Save</button>
 </div>

@@ -1,89 +1,54 @@
 <div *ngIf="simConfig$ | async as simConfig">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>SimConfig {{ simConfig.id }}</h2>
+    <h2>SimConfig {{ simConfig.id }}</h2>
+    <div class="content-block">
+        <div role="tablist" class="tabs tabs-bordered">
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'summary'"
+                (click)="activeTab = 'summary'"
+            >
+                Summary
+            </button>
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'org-config'"
+                (click)="activeTab = 'org-config'"
+            >
+                OrgConfig
+            </button>
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'results'"
+                (click)="activeTab = 'results'; getResults$(simConfig.id)"
+            >
+                Results
+            </button>
         </div>
     </div>
     <div class="content-block">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="tabs" role="tablist">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <button
-                                class="nav-link active"
-                                id="summary-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#summary"
-                                type="button"
-                                role="tab"
-                                aria-controls="summary"
-                                aria-selected="true"
-                            >
-                                Summary
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button
-                                class="nav-link"
-                                id="org-config-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#org-config"
-                                type="button"
-                                role="tab"
-                                aria-controls="org-config"
-                                aria-selected="false"
-                            >
-                                OrgConfig
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button
-                                class="nav-link"
-                                id="results-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#results"
-                                type="button"
-                                role="tab"
-                                aria-controls="results"
-                                aria-selected="false"
-                                (click)="getResults$(simConfig.id)"
-                            >
-                                Results
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div [hidden]="activeTab !== 'summary'">
+            <arion-sim-config [dataInstance]="simConfig" [view]="views.CARD"></arion-sim-config>
         </div>
-    </div>
-    <div class="content-block">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tab-content" id="tabContent">
-                    <div class="tab-pane show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                        <arion-sim-config [dataInstance]="simConfig" [view]="views.CARD"></arion-sim-config>
-                    </div>
-                    <div class="tab-pane" id="org-config" role="tabpanel" aria-labelledby="org-config-tab">
-                        <arion-org-config
-                            *ngIf="simConfig.orgConfig as orgConfig"
-                            [dataInstance]="orgConfig"
-                            [view]="views.VIEW"
-                        ></arion-org-config>
-                    </div>
-                    <div class="tab-pane" id="results" role="tabpanel" aria-labelledby="results-tab">
-                        <div *ngIf="results$ | async as results">
-                            <h3>Pivot</h3>
-                            <arion-result [dataArray]="results" [view]="views.PIVOT"></arion-result>
-                            <h3>Result set</h3>
-                            <arion-result
-                                [dataArray]="results"
-                                [view]="views.INDEX"
-                                (selected)="navigateToResult($event)"
-                            ></arion-result>
-                        </div>
-                    </div>
-                </div>
+        <div [hidden]="activeTab !== 'org-config'">
+            <arion-org-config
+                *ngIf="simConfig.orgConfig as orgConfig"
+                [dataInstance]="orgConfig"
+                [view]="views.VIEW"
+            ></arion-org-config>
+        </div>
+        <div [hidden]="activeTab !== 'results'">
+            <div *ngIf="results$ | async as results">
+                <h3>Pivot</h3>
+                <arion-result [dataArray]="results" [view]="views.PIVOT"></arion-result>
+                <h3>Result set</h3>
+                <arion-result
+                    [dataArray]="results"
+                    [view]="views.INDEX"
+                    (selected)="navigateToResult($event)"
+                ></arion-result>
             </div>
         </div>
     </div>

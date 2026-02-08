@@ -1,51 +1,38 @@
-<div class="row d-flex align-items-baseline">
-    <div class="col-md-6">
+<div class="grid grid-cols-12 gap-4 items-baseline">
+    <div class="col-span-12 md:col-span-6">
         <nav aria-label="pagination">
-            <ul class="pagination">
-                <li class="page-item">
-                    <button class="page-link" aria-label="First" (click)="onClick(1)">
-                        <span aria-hidden="true">First</span>
-                    </button>
-                </li>
-                <li class="page-item">
-                    <button
-                        class="page-link"
-                        aria-label="Previous"
-                        (click)="onPrevious()"
-                        [disabled]="currentPage === 1"
-                    >
-                        <span aria-hidden="true">&laquo;</span>
-                    </button>
-                </li>
-                <li *ngFor="let page of pageArray" class="page-item" [ngClass]="page === currentPage ? 'active' : ''">
-                    <button class="page-link" (click)="onClick(page)">{{ page }}</button>
-                </li>
-                <li class="page-item">
-                    <button
-                        class="page-link"
-                        aria-label="Next"
-                        (click)="onNext()"
-                        [disabled]="currentPage === pagination.meta.totalPages"
-                    >
-                        <span aria-hidden="true">&raquo;</span>
-                    </button>
-                </li>
-                <li class="page-item">
-                    <button class="page-link" aria-label="Last" (click)="onClick(pagination.meta.totalPages)">
-                        <span aria-hidden="true">Last</span>
-                    </button>
-                </li>
-            </ul>
+            <div class="join">
+                <button class="join-item btn btn-sm" aria-label="First" (click)="onClick(1)">First</button>
+                <button
+                    class="join-item btn btn-sm"
+                    aria-label="Previous"
+                    (click)="onPrevious()"
+                    [disabled]="currentPage === 1"
+                >&laquo;</button>
+                <button
+                    *ngFor="let page of pageArray"
+                    class="join-item btn btn-sm"
+                    [class.btn-active]="page === currentPage"
+                    (click)="onClick(page)"
+                >{{ page }}</button>
+                <button
+                    class="join-item btn btn-sm"
+                    aria-label="Next"
+                    (click)="onNext()"
+                    [disabled]="currentPage === pagination.meta.totalPages"
+                >&raquo;</button>
+                <button class="join-item btn btn-sm" aria-label="Last" (click)="onClick(pagination.meta.totalPages)">Last</button>
+            </div>
         </nav>
     </div>
-    <div class="col-md-6 d-flex justify-content-end">
-        <div *ngIf="pagination.meta.totalItems > 0" class="align-self-center">
+    <div class="col-span-12 md:col-span-6 flex justify-end">
+        <div *ngIf="pagination.meta.totalItems > 0" class="self-center">
             {{ (currentPage - 1) * pagination.meta.itemsPerPage + 1 }}-{{
                 (currentPage - 1) * pagination.meta.itemsPerPage + pagination.data.length
             }}
             of
             {{ pagination.meta.totalItems }} records
         </div>
-        <div *ngIf="pagination.meta.totalItems === 0" class="align-self-center">0-0 of 0 records</div>
+        <div *ngIf="pagination.meta.totalItems === 0" class="self-center">0-0 of 0 records</div>
     </div>
 </div>

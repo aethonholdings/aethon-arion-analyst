@@ -14,6 +14,7 @@ export class SimConfigViewContainerComponent {
     @Input() simConfig$: Observable<SimConfigDTO>;
     results$: Observable<ResultDTO[]> | undefined;
     views = Views;
+    activeTab: string = 'summary';
 
     constructor(
         private activatedRoute: ActivatedRoute,

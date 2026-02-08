@@ -13,6 +13,7 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 export class ResultViewContainerComponent {
     @Input() result$: Observable<ResultDTO>;
     views = Views;
+    activeTab: string = 'reporting';
     // stateSpace$: Observable<StateSpace> | undefined;
 
     constructor(

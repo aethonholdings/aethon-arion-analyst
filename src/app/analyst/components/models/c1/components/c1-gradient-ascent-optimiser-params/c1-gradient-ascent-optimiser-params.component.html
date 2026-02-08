@@ -1,18 +1,18 @@
 <div *ngIf="gradientAscentParameters" class="content-block">
-    <div class="row">
-        <div class="col-md-3">Iterations</div>
-        <div class="col-md-9"></div>
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-3">Iterations</div>
+        <div class="col-span-12 md:col-span-9"></div>
     </div>
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-9">
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-3"></div>
+        <div class="col-span-12 md:col-span-9">
             <div class="form-group">
                 <label for="learningRate">Learning rate</label>
                 <input
                     [(ngModel)]="gradientAscentParameters.iterations.learningRate"
                     id="learningRate"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     step="0.0001"
                 />
             </div>
@@ -22,7 +22,7 @@
                     [(ngModel)]="gradientAscentParameters.iterations.max"
                     id="maxIterations"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     step="1"
                 />
             </div>
@@ -32,22 +32,22 @@
                     [(ngModel)]="gradientAscentParameters.iterations.tolerance"
                     id="tolerance"
                     type="number"
-                    class="form-control"
+                    class="input input-bordered w-full"
                     step="0.0001"
                 />
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">Optimisation domains</div>
-        <div class="col-md-9"></div>
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-3">Optimisation domains</div>
+        <div class="col-span-12 md:col-span-9"></div>
     </div>
 
     <div *ngFor="let param of gradientAscentParameters.parameterSpace" class="content-block">
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-2">{{ param.id }}</div>
-            <div class="col-md-7">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-3"></div>
+            <div class="col-span-12 md:col-span-2">{{ param.id }}</div>
+            <div class="col-span-12 md:col-span-7">
                 <arion-domain
                     [(values)]="param.domain"
                     [definition]="domainDefinitions[param.id]"

@@ -1,13 +1,9 @@
-<div class="row">
-    <div class="col-md-6 text-left"><h2>SimSets</h2></div>
-    <div class="col-md-6 text-end">
+<div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 md:col-span-6 text-left"><h2>SimSets</h2></div>
+    <div class="col-span-12 md:col-span-6 text-right">
         <button class="btn btn-primary" (click)="createSimSim()">Create new</button>
     </div>
 </div>
 <div *ngIf="simSets$ | async as simSets" class="content-block">
-    <div class="row">
-        <div class="col-md-12">
-            <arion-sim-set [view]="views.INDEX" [dataArray]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set>
-        </div>
-    </div>
+    <arion-sim-set [view]="views.INDEX" [dataArray]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set>
 </div>

@@ -19,6 +19,7 @@ export class SimSetViewContainerComponent implements OnInit {
     simSetRefresh$!: Observable<SimSetDTO>;
     refreshing: boolean = false;
     views = Views;
+    activeTab: string = 'summary';
 
     constructor(
         private activatedRoute: ActivatedRoute,

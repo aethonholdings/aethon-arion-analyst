@@ -7,7 +7,13 @@ import { Router } from "@angular/router";
     styleUrls: ["./navbar.component.scss"]
 })
 export class NavbarComponent {
+    isMenuOpen = false;
+
     constructor(private routerService: Router) {}
+
+    toggleMenu(): void {
+        this.isMenuOpen = !this.isMenuOpen;
+    }
 
     onChange$(selectedConfiguration: string): void {
         this.routerService.navigate(["/sim-configs"], { queryParams: { configurator: selectedConfiguration } });
