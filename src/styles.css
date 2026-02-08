@@ -1,20 +1,13 @@
-@import "tailwindcss";
-@plugin "daisyui";
-
-@import "node_modules/ngx-spinner/animations/ball-scale-multiple.css";
-
-/* Arion custom theme */
-@theme {
-  --color-arion-purple-soft: rgb(231, 220, 226);
-  --color-arion-purple-strong: rgb(128, 0, 128);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
     overflow: scroll;
 }
 
 .hoverable:hover {
-    background-color: var(--color-arion-purple-soft);
+    background-color: rgb(231, 220, 226);
 }
 
 .content-block {
