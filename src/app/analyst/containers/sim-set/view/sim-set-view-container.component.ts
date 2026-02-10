@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
-import { Observable, map, mergeMap, tap } from "rxjs";
+import { Observable, Subject, interval, map, mergeMap, takeUntil, tap } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 import { Views } from "src/app/analyst/constants/analyst.constants";
@@ -12,7 +12,7 @@ import { SpinnerService } from "src/app/root/components/spinner/spinner.service"
     templateUrl: "./sim-set-view-container.component.html",
     styleUrls: ["./sim-set-view-container.component.scss"]
 })
-export class SimSetViewContainerComponent implements OnInit {
+export class SimSetViewContainerComponent implements OnInit, OnDestroy {
     @Input() simSet$!: Observable<SimSetDTO>;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
     simSetId: number;
@@ -20,6 +20,8 @@ export class SimSetViewContainerComponent implements OnInit {
     refreshing: boolean = false;
     views = Views;
     activeTab: string = 'summary';
+    secondsUntilRefresh: number = 60;
+    private destroy$ = new Subject<void>();
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -36,9 +38,18 @@ export class SimSetViewContainerComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Countdown timer (updates every second)
+        interval(1000).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(() => {
+            this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
+        });
+
+        // Auto-refresh timer (every 60 seconds)
         this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
             map(() => {
                 this.refreshing = true;
+                this.secondsUntilRefresh = 60;
                 this.spinnerService.show();
             }),
             mergeMap(() => {
@@ -49,6 +60,19 @@ export class SimSetViewContainerComponent implements OnInit {
                 this.spinnerService.hide();
             })
         );
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    manualRefresh() {
+        this.secondsUntilRefresh = 60;
+        // Just navigate to trigger a reload
+        this.router.navigate(['/sim-set', this.simSetId], {
+            queryParams: { refresh: Date.now() }
+        });
     }
 
     deleteSimSet() {
