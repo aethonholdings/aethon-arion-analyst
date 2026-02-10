@@ -14,12 +14,21 @@ export class OptimiserStateViewComponent implements OnInit {
       orgConfigId?: number;
 
       ngOnInit() {
-          // Extract orgConfigId from the baseline datapoint (x)
-          const baselineDatapoint = (this.optimiserState as any).optimiserData?.dataPoints?.find(
-              (dp: any) => dp.id === 'x'
-          );
-          if (baselineDatapoint?.data?.inputs?.orgConfigId) {
-              this.orgConfigId = baselineDatapoint.data.inputs.orgConfigId;
+          // Extract orgConfigId from the simSet
+          const simSet = (this.optimiserState as any).simSet;
+
+          if (simSet?.orgConfigId) {
+              this.orgConfigId = simSet.orgConfigId;
+          } else if (simSet?.orgConfig?.id) {
+              this.orgConfigId = simSet.orgConfig.id;
+          } else {
+              // Try to get from baseline datapoint as fallback
+              const baselineDatapoint = (this.optimiserState as any).optimiserData?.dataPoints?.find(
+                  (dp: any) => dp.id === 'x'
+              );
+              if (baselineDatapoint?.data?.inputs?.orgConfigId) {
+                  this.orgConfigId = baselineDatapoint.data.inputs.orgConfigId;
+              }
           }
       }
 }
