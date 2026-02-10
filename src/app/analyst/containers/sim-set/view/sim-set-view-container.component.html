@@ -1,10 +1,5 @@
 <div *ngIf="simSetRefresh$ | async as simSetRefresh">
-    <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-12 md:col-span-6 text-left">
-            <h2>SimSet {{ simSetRefresh.id }}</h2>
-        </div>
-        <div class="col-span-12 md:col-span-6 text-right"><button class="btn btn-error" (click)="deleteSimSet()">Delete</button></div>
-    </div>
+    <h2>SimSet {{ simSetRefresh.id }}</h2>
     <div class="content-block">
         <div role="tablist" class="tabs tabs-bordered">
             <button
@@ -35,5 +30,8 @@
                 (selected)="onSelect($event)"
             ></arion-sim-set-state-transition>
         </div>
+    </div>
+    <div class="content-block text-right">
+        <button class="btn btn-error" (click)="deleteSimSet()">Delete</button>
     </div>
 </div>

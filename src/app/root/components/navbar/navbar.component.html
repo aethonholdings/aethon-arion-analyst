@@ -2,21 +2,4 @@
     <div class="navbar-start">
         <a class="btn btn-ghost text-xl" href="#">Arion</a>
     </div>
-    <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">
-            <li><a href="#">Home</a></li>
-        </ul>
-    </div>
-    <div class="navbar-end lg:hidden">
-        <button class="btn btn-ghost" (click)="toggleMenu()" aria-label="Toggle navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
-        </button>
-    </div>
-</div>
-<div *ngIf="isMenuOpen" class="lg:hidden bg-base-200 px-4 pb-4">
-    <ul class="menu">
-        <li><a href="#">Home</a></li>
-    </ul>
 </div>

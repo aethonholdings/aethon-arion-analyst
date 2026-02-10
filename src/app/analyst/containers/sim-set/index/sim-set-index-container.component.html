@@ -1,9 +1,7 @@
-<div class="grid grid-cols-12 gap-4">
-    <div class="col-span-12 md:col-span-6 text-left"><h2>SimSets</h2></div>
-    <div class="col-span-12 md:col-span-6 text-right">
-        <button class="btn btn-primary" (click)="createSimSim()">Create new</button>
-    </div>
-</div>
+<h2>SimSets</h2>
 <div *ngIf="simSets$ | async as simSets" class="content-block">
     <arion-sim-set [view]="views.INDEX" [dataArray]="simSets" (selected)="navigateToSimSet($event)"></arion-sim-set>
+</div>
+<div class="content-block text-right">
+    <button class="btn btn-success" (click)="createSimSim()">Create new</button>
 </div>
