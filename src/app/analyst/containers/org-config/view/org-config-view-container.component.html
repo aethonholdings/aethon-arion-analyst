@@ -1,0 +1,9 @@
+<div *ngIf="orgConfig$ | async as orgConfig">
+    <h2>OrgConfig {{ orgConfig.id }}</h2>
+    <div class="content-block">
+        <arion-org-config
+            [dataInstance]="orgConfig"
+            [view]="views.VIEW"
+        ></arion-org-config>
+    </div>
+</div>

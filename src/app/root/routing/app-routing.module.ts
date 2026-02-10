@@ -6,6 +6,7 @@ import { SimConfigViewContainerComponent } from "src/app/analyst/containers/sim-
 import { SimSetCreateContainerComponent } from "src/app/analyst/containers/sim-set/create/sim-set-create-container.component";
 import { SimSetIndexContainerComponent } from "src/app/analyst/containers/sim-set/index/sim-set-index-container.component";
 import { SimSetViewContainerComponent } from "src/app/analyst/containers/sim-set/view/sim-set-view-container.component";
+import { OrgConfigViewContainerComponent } from "src/app/analyst/containers/org-config/view/org-config-view-container.component";
 
 const routes: Routes = [
     {
@@ -29,6 +30,10 @@ const routes: Routes = [
     {
         path: "result",
         children: [{ path: ":id", component: ResultViewContainerComponent }]
+    },
+    {
+        path: "org-config",
+        children: [{ path: ":id", component: OrgConfigViewContainerComponent }]
     },
     { path: "", redirectTo: "sim-set", pathMatch: "full" } // Default route
 ];
