@@ -1,6 +1,6 @@
 {
   "name": "@arion/analyst",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "The Arion simulation result viewer Angular application",
   "repository": "github:aethonholdings/aethon-arion-analyst",
   "scripts": {

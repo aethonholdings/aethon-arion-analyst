@@ -1,14 +1,21 @@
-<div *ngIf="optimisers" class="form-group">
-    <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-12 md:col-span-3">
-            <label for="sim-set">Optimiser</label>
-        </div>
-        <div class="col-span-12 md:col-span-9">
-            <select [(ngModel)]="selected" name="optimiser" id="optimiser" class="select select-bordered w-full" aria-label="Optimisers" (change)="onSelect()">
-                <option *ngFor="let optimiser of optimisers" [value]="optimiser.name">{{ optimiser.name }}</option>
-            </select>
-        </div>
+<div *ngIf="optimisers" class="space-y-4">
+    <h3>Optimiser Configuration</h3>
+
+    <div class="form-control w-full max-w-xs">
+        <label class="label" for="optimiser">
+            <span class="label-text font-medium">Optimiser</span>
+        </label>
+        <select
+            [(ngModel)]="selected"
+            name="optimiser"
+            id="optimiser"
+            class="select select-bordered w-full"
+            aria-label="Optimisers"
+            (change)="onSelect()">
+            <option *ngFor="let optimiser of optimisers" [value]="optimiser.name">{{ optimiser.name }}</option>
+        </select>
     </div>
+
     <arion-c1-gradient-ascent-optimiser-params
         *ngIf="selected === c1OptimiserNames.GRADIENT_ASCENT"
         [(gradientAscentParameters)]="simSet.optimiserParams"

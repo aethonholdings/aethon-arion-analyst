@@ -1,3 +1,4 @@
+<arion-breadcrumbs *ngIf="breadcrumbs$ | async as breadcrumbs" [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
 <div *ngIf="result$ | async as result">
     <h2>Result {{ result.id }}</h2>
     <div class="content-block">

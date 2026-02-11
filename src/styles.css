@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    h1 {
+        @apply text-4xl font-bold mb-4 text-base-content;
+    }
+
+    h2 {
+        @apply text-3xl font-bold mb-3 text-base-content;
+    }
+
+    h3 {
+        @apply text-2xl font-semibold mb-2 text-base-content;
+    }
+
+    h4 {
+        @apply text-xl font-semibold mb-2 text-base-content;
+    }
+
+    h5 {
+        @apply text-lg font-medium mb-1 text-base-content;
+    }
+
+    h6 {
+        @apply text-base font-medium mb-1 text-base-content;
+    }
+}
+
 body {
     overflow: scroll;
 }
@@ -40,4 +66,16 @@ body {
 /* forms */
 .form-group {
   padding-bottom: 1em;
+}
+
+/* Override btn-success with imperial purple */
+.btn-success {
+    background-color: #5B2C6F;
+    border-color: #5B2C6F;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #4A2359;
+    border-color: #4A2359;
 }

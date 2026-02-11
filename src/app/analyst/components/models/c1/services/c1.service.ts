@@ -105,7 +105,7 @@ export class C1Service {
         return [
             {
                 name: this._model.getOptimiser(C1OptimiserNames.GRADIENT_ASCENT).name,
-                defaults: this._c1GradientAscentDefaultOptimiserParams
+                defaults: JSON.parse(JSON.stringify(this._c1GradientAscentDefaultOptimiserParams))
             }
         ];
     }
