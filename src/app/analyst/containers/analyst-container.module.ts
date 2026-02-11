@@ -10,6 +10,7 @@ import { ResultModule } from "../components/core/result/result.module";
 import { ResultViewContainerComponent } from "./result/view/result-view-container.component";
 import { OptimiserStateViewContainerComponent } from './optimiser-state/view/optimiser-state-view-container.component';
 import { OrgConfigViewContainerComponent } from './org-config/view/org-config-view-container.component';
+import { SimSetOrgConfigContainerComponent } from './sim-set/org-config/sim-set-org-config-container.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { OrgConfigViewContainerComponent } from './org-config/view/org-config-vi
         SimConfigViewContainerComponent,
         ResultViewContainerComponent,
         OptimiserStateViewContainerComponent,
-        OrgConfigViewContainerComponent
+        OrgConfigViewContainerComponent,
+        SimSetOrgConfigContainerComponent
     ],
     imports: [CommonModule, WidgetsModule, AnalystComponentModule, ResultModule],
     exports: [SimSetIndexContainerComponent, SimSetViewContainerComponent, ResultViewContainerComponent]

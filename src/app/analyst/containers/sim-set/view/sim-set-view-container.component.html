@@ -1,3 +1,4 @@
+<arion-breadcrumbs [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
 <div *ngIf="simSetRefresh$ | async as simSetRefresh">
     <div class="flex justify-between items-baseline">
         <h2>SimSet {{ simSetRefresh.id }}</h2>
@@ -35,6 +36,14 @@
             >
                 Optimiser steps
             </button>
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'org-configs'"
+                (click)="activeTab = 'org-configs'"
+            >
+                Org configs
+            </button>
         </div>
     </div>
     <div class="content-block">
@@ -46,6 +55,9 @@
                 [simSet]="simSetRefresh"
                 (selected)="onSelect($event)"
             ></arion-sim-set-state-transition>
+        </div>
+        <div [hidden]="activeTab !== 'org-configs'">
+            <arion-sim-set-org-config-view *ngIf="stepsData$ | async as stepsData" [stepsData]="stepsData" [simSetId]="simSetId"></arion-sim-set-org-config-view>
         </div>
     </div>
     <div class="content-block text-right">

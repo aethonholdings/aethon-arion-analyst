@@ -1,37 +1,38 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { SimSetDTO } from "aethon-arion-pipeline";
-import { Observable, Subject, interval, map, mergeMap, takeUntil, tap } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Observable, map } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
-
-import { Views } from "src/app/analyst/constants/analyst.constants";
-import { SpinnerService } from "src/app/root/components/spinner/spinner.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
-import { StepData, OrgConfigGroup } from "../org-config/sim-set-org-config-container.component";
+
+export interface OrgConfigGroup {
+    orgConfigId: number;
+    orgConfig: any;
+    configuratorParams: string;
+    simConfigs: Array<{
+        id: number;
+        avgPerformance: number | null;
+    }>;
+}
+
+export interface StepData {
+    stepCount: number;
+    optimiserStateId: number;
+    orgConfigs: OrgConfigGroup[];
+}
 
 @Component({
-    selector: "arion-sim-set-view-container",
-    templateUrl: "./sim-set-view-container.component.html",
-    styleUrls: ["./sim-set-view-container.component.scss"]
+    selector: "arion-sim-set-org-config-container",
+    templateUrl: "./sim-set-org-config-container.component.html",
+    styleUrls: ["./sim-set-org-config-container.component.scss"]
 })
-export class SimSetViewContainerComponent implements OnInit, OnDestroy {
-    @Input() simSet$!: Observable<SimSetDTO>;
-    @Output() selected: EventEmitter<number> = new EventEmitter<number>();
+export class SimSetOrgConfigContainerComponent implements OnInit {
     simSetId: number;
-    simSetRefresh$!: Observable<SimSetDTO>;
-    stepsData$!: Observable<StepData[]>;
-    refreshing: boolean = false;
-    views = Views;
-    activeTab: string = 'summary';
-    secondsUntilRefresh: number = 60;
-    private destroy$ = new Subject<void>();
     breadcrumbs: Breadcrumb[] = [];
+    stepsData$!: Observable<StepData[]>;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private analystService: AnalystService,
-        private spinnerService: SpinnerService
+        private analystService: AnalystService
     ) {
         const tmp = this.activatedRoute.snapshot.paramMap.get("id");
         if (tmp) {
@@ -42,40 +43,13 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
 
         this.breadcrumbs = [
             { label: 'SimSets', route: ['/sim-set'] },
-            { label: `SimSet ${this.simSetId}` }
+            { label: `SimSet ${this.simSetId}`, route: ['/sim-set', this.simSetId.toString()] },
+            { label: 'OrgConfig Analysis' }
         ];
     }
 
     ngOnInit() {
-        // Countdown timer (updates every second)
-        interval(1000).pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(() => {
-            this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
-        });
-
-        // Auto-refresh timer (every 60 seconds)
-        this.simSetRefresh$ = this.analystService.getRefeshTimer$().pipe(
-            tap(() => {
-                setTimeout(() => {
-                    this.refreshing = true;
-                    this.secondsUntilRefresh = 60;
-                    this.spinnerService.show();
-                });
-            }),
-            mergeMap(() => {
-                return this.analystService.getSimSet$(this.simSetId);
-            }),
-            tap(() => {
-                setTimeout(() => {
-                    this.refreshing = false;
-                    this.spinnerService.hide();
-                });
-            })
-        );
-
-        // Process sim-set data for org-config view
-        this.stepsData$ = this.simSetRefresh$.pipe(
+        this.stepsData$ = this.analystService.getSimSet$(this.simSetId).pipe(
             map(simSet => {
                 const stepsData: StepData[] = [];
 
@@ -122,28 +96,5 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
                 return stepsData;
             })
         );
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
-    }
-
-    manualRefresh() {
-        this.secondsUntilRefresh = 60;
-        // Just navigate to trigger a reload
-        this.router.navigate(['/sim-set', this.simSetId], {
-            queryParams: { refresh: Date.now() }
-        });
-    }
-
-    deleteSimSet() {
-        this.analystService.deleteSimSet$(this.simSetId).subscribe(() => {
-            this.router.navigate(["/sim-set"]);
-        });
-    }
-
-    onSelect(optimiserStateId: number) {
-        this.router.navigate(["/optimiser-state", optimiserStateId])
     }
 }

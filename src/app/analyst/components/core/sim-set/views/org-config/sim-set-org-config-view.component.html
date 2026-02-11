@@ -1,0 +1,69 @@
+<div class="overflow-x-auto w-full">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col" class="w-24">Step</th>
+                <th scope="col" class="w-32">OrgConfig ID</th>
+                <th scope="col" class="w-32">Org Config Hash</th>
+                <th scope="col" class="w-32">SimConfig ID</th>
+                <th scope="col" class="w-32 text-right">Avg Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let step of stepsData">
+                <ng-container *ngFor="let orgConfig of step.orgConfigs; first as isFirstOrgConfig">
+                    <ng-container *ngFor="let simConfig of orgConfig.simConfigs; first as isFirstSimConfig; index as simConfigIndex">
+                        <tr class="hover:bg-base-200 cursor-pointer">
+                            <!-- Step column - only show on first orgConfig, first simConfig -->
+                            <td
+                                *ngIf="isFirstOrgConfig && isFirstSimConfig"
+                                [attr.rowspan]="getTotalSimConfigsForStep(step)"
+                                class="align-top border-r-2 border-base-300"
+                                (click)="navigateToOptimiserState(step.optimiserStateId)"
+                            >
+                                <span class="font-medium">{{ step.stepCount }}</span>
+                            </td>
+
+                            <!-- OrgConfig ID - only show on first simConfig of each orgConfig -->
+                            <td
+                                *ngIf="isFirstSimConfig"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top border-r-2 border-base-300"
+                                (click)="navigateToOrgConfig(orgConfig.orgConfigId)"
+                            >
+                                <span class="font-medium">{{ orgConfig.orgConfigId }}</span>
+                            </td>
+
+                            <!-- Config Hash - only show on first simConfig of each orgConfig -->
+                            <td
+                                *ngIf="isFirstSimConfig"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top border-r-2 border-base-300 font-mono text-sm"
+                                (click)="navigateToOrgConfig(orgConfig.orgConfigId)"
+                            >
+                                {{ getOrgConfigHash(orgConfig.orgConfig) }}
+                            </td>
+
+                            <!-- SimConfig details -->
+                            <td (click)="navigateToSimConfig(simConfig.id)">
+                                {{ simConfig.id }}
+                            </td>
+                            <td class="text-right" (click)="navigateToSimConfig(simConfig.id)">
+                                <span *ngIf="simConfig.avgPerformance !== null">
+                                    {{ simConfig.avgPerformance | number: '1.0-0' }}
+                                </span>
+                                <span *ngIf="simConfig.avgPerformance === null" class="opacity-50">
+                                    -
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="!stepsData || stepsData.length === 0" class="text-center py-8 opacity-70">
+    No data available
+</div>

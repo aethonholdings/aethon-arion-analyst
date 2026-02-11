@@ -1,0 +1,7 @@
+<arion-breadcrumbs [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
+
+<h1>SimSet {{ simSetId }} - OrgConfig Analysis</h1>
+
+<div class="mt-6" *ngIf="stepsData$ | async as stepsData">
+    <arion-sim-set-org-config-view [stepsData]="stepsData" [simSetId]="simSetId"></arion-sim-set-org-config-view>
+</div>
