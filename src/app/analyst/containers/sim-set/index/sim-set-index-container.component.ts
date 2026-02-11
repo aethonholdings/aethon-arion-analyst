@@ -4,6 +4,7 @@ import { SimSetDTO } from "aethon-arion-pipeline";
 import { map, mergeMap, Observable, tap } from "rxjs";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
+import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
     selector: "arion-sim-set-index-container",
@@ -14,6 +15,9 @@ export class SimSetIndexContainerComponent implements OnInit {
     @Input() simSets$!: Observable<SimSetDTO[]>;
     refreshing: boolean = false;
     views = Views;
+    breadcrumbs: Breadcrumb[] = [
+        { label: 'SimSets' }
+    ];
 
     constructor(
         private analystService: AnalystService,
@@ -30,6 +34,12 @@ export class SimSetIndexContainerComponent implements OnInit {
 
     navigateToSimSet(id: number): void {
         this.router.navigate(["/sim-set", id]);
+    }
+
+    cloneSimSet(id: number): void {
+        this.router.navigate(["/sim-set", "create"], {
+            queryParams: { cloneId: id }
+        });
     }
 
     createSimSim(): void {

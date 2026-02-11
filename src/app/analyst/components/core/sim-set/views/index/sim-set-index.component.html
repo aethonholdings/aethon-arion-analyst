@@ -1,6 +1,6 @@
 <div *ngIf="simSets"></div>
 
-<table class="table table-sm hover:cursor-pointer">
+<table class="table table-sm">
     <thead>
         <tr>
             <th scope="col">id</th>
@@ -9,16 +9,27 @@
             <th scope="col">Configurator</th>
             <th scope="col">Description</th>
             <th scope="col">State</th>
+            <th scope="col" class="w-24">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let simSet of simSets" scope="row" (click)="selectSimSet(simSet.id)">
-            <td>{{ simSet.id }}</td>
-            <td>{{ simSet.modelName }}</td>
-            <td>{{ simSet.optimiserName }}</td>
-            <td>{{ simSet.configuratorName }}</td>
-            <td>{{ simSet.description }}</td>
-            <td><arion-status-indicator [status]="simSet.state"></arion-status-indicator></td>
+        <tr *ngFor="let simSet of simSets" scope="row">
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.id }}</td>
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.modelName }}</td>
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.optimiserName }}</td>
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.configuratorName }}</td>
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.description }}</td>
+            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">
+                <arion-status-indicator [status]="simSet.state"></arion-status-indicator>
+            </td>
+            <td>
+                <button
+                    class="btn btn-xs btn-ghost"
+                    (click)="cloneSimSet(simSet.id, $event)"
+                    title="Clone this SimSet">
+                    📋 Clone
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>

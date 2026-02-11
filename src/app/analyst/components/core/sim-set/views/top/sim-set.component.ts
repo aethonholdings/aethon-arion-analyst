@@ -14,6 +14,7 @@ export class SimSetComponent {
     @Output() dataArrayChange = new EventEmitter<SimSetDTO[]>();
     @Output() dataInstanceChange = new EventEmitter<SimSetDTO>();
     @Output() selected = new EventEmitter<number>(); // To notify parent of selection
+    @Output() clone = new EventEmitter<number>(); // To notify parent of clone request
 
     views = Views;
 }

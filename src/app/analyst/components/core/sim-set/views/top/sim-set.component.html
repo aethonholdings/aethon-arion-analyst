@@ -3,6 +3,7 @@
         *ngIf="view === views.INDEX"
         [simSets]="dataArray"
         (selected)="selected.emit($event)"
+        (clone)="clone.emit($event)"
     ></arion-sim-set-index>
     <arion-sim-set-view *ngIf="view === views.VIEW" [simSet]="dataInstance"></arion-sim-set-view>
     <arion-sim-set-create *ngIf="view === views.CREATE" [(simSet)]="dataInstance"></arion-sim-set-create>
