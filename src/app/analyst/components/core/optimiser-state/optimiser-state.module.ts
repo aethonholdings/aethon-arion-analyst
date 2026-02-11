@@ -5,9 +5,10 @@ import { OptimiserStateComponent } from "./top/optimiser-state.component";
 import { WidgetsModule } from "src/app/analyst/widgets/widgets.module";
 import { ModelsModule } from "../../models/models.module";
 import { OptimiserStateViewComponent } from './view/optimiser-state-view.component';
+import { OptimiserStateOrgconfigViewComponent } from './views/orgconfig/optimiser-state-orgconfig-view.component';
 
 @NgModule({
-    declarations: [OptimiserStateComponent, OptimiserStateViewComponent],
+    declarations: [OptimiserStateComponent, OptimiserStateViewComponent, OptimiserStateOrgconfigViewComponent],
     imports: [CommonModule, RouterModule, WidgetsModule, ModelsModule],
     exports: [OptimiserStateComponent]
 })

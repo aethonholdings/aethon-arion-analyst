@@ -1,6 +1,5 @@
 <div *ngIf="optimiserState">
     <div class="flex justify-between items-baseline">
-        <h2>Optimiser state {{ optimiserState.id }}</h2>
         <a
             *ngIf="orgConfigId"
             [routerLink]="['/org-config', orgConfigId]"
@@ -11,10 +10,33 @@
             </svg>
         </a>
     </div>
+
+    <!-- Tabs -->
+    <div role="tablist" class="tabs tabs-bordered mt-4">
+        <button role="tab" class="tab"
+            [class.tab-active]="activeTab === 'gradient-table'"
+            (click)="activeTab = 'gradient-table'">
+            Gradient Table
+        </button>
+        <button role="tab" class="tab"
+            [class.tab-active]="activeTab === 'orgconfigs'"
+            (click)="activeTab = 'orgconfigs'">
+            OrgConfig Exploration
+        </button>
+    </div>
+
     <div class="content-block">
-        <arion-c1-optimiser-state
-            *ngIf="optimiserState.modelName === c1ModelName"
-            [optimiserState]="optimiserState"
-        ></arion-c1-optimiser-state>
+        <div [hidden]="activeTab !== 'gradient-table'">
+            <arion-c1-optimiser-state
+                *ngIf="optimiserState.modelName === c1ModelName"
+                [optimiserState]="optimiserState"
+            ></arion-c1-optimiser-state>
+        </div>
+        <div [hidden]="activeTab !== 'orgconfigs'">
+            <arion-optimiser-state-orgconfig-view
+                *ngIf="optimiserState.modelName === c1ModelName"
+                [optimiserState]="optimiserState"
+            ></arion-optimiser-state-orgconfig-view>
+        </div>
     </div>
 </div>

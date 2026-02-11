@@ -12,22 +12,26 @@ export class OptimiserStateViewComponent implements OnInit {
       @Output() optimiserStateChange = new EventEmitter<OptimiserStateDTO<ConfiguratorParamData>>();
       c1ModelName = C1ModelName;
       orgConfigId?: number;
+      activeTab: string = 'gradient-table';
 
       ngOnInit() {
-          // Extract orgConfigId from the simSet
-          const simSet = (this.optimiserState as any).simSet;
+          // Extract orgConfigId from convergenceTests -> simConfigs -> orgConfig
+          const convergenceTests = (this.optimiserState as any).convergenceTests;
 
-          if (simSet?.orgConfigId) {
-              this.orgConfigId = simSet.orgConfigId;
-          } else if (simSet?.orgConfig?.id) {
-              this.orgConfigId = simSet.orgConfig.id;
-          } else {
-              // Try to get from baseline datapoint as fallback
-              const baselineDatapoint = (this.optimiserState as any).optimiserData?.dataPoints?.find(
-                  (dp: any) => dp.id === 'x'
-              );
-              if (baselineDatapoint?.data?.inputs?.orgConfigId) {
-                  this.orgConfigId = baselineDatapoint.data.inputs.orgConfigId;
+          if (convergenceTests?.length > 0) {
+              const firstConvergenceTest = convergenceTests[0];
+              const simConfigs = firstConvergenceTest.simConfigs;
+
+              if (simConfigs?.length > 0) {
+                  const firstSimConfig = simConfigs[0];
+
+                  // Try to get orgConfigId from the orgConfig relation
+                  if (firstSimConfig.orgConfig?.id) {
+                      this.orgConfigId = firstSimConfig.orgConfig.id;
+                  } else if (firstSimConfig.orgConfigId) {
+                      // Fallback to orgConfigId property
+                      this.orgConfigId = firstSimConfig.orgConfigId;
+                  }
               }
           }
       }

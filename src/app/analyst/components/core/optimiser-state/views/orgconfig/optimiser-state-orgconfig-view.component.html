@@ -1,0 +1,163 @@
+<div class="overflow-x-auto w-full">
+    <div *ngIf="!baselineColumn && deltaColumns.length === 0" class="text-center py-8 opacity-70">
+        No optimisation data found
+    </div>
+
+    <table *ngIf="baselineColumn || deltaColumns.length > 0" class="table table-sm">
+        <thead>
+            <tr class="bg-base-200">
+                <th scope="col" class="sticky left-0 bg-base-200 z-10">Variable</th>
+                <th scope="col" class="text-right bg-base-200 min-w-[140px]" *ngIf="baselineColumn">
+                    Baseline (x)
+                </th>
+                <th scope="col" class="text-center bg-base-200" [attr.colspan]="deltaColumns.length">
+                    Optimization Dimensions (∂)
+                </th>
+            </tr>
+            <tr class="bg-base-300">
+                <th scope="col" class="sticky left-0 bg-base-300 z-10"></th>
+                <th class="bg-base-300" scope="col" *ngIf="baselineColumn"></th>
+                <th *ngFor="let column of deltaColumns"
+                    class="min-w-[140px] text-right bg-base-300 cursor-pointer hover:bg-base-200"
+                    scope="col"
+                    (click)="toggleColumn(column)">
+                    <span class="font-mono text-xs">{{ column.id }}</span>
+                    <span class="ml-1">{{ column.expanded ? '▼' : '▶' }}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Parameter Path/Name -->
+            <tr class="bg-primary/10">
+                <td class="heading sticky left-0 bg-primary/10 z-10">Parameter</td>
+                <td class="text-right bg-primary/10" *ngIf="baselineColumn">
+                    <span class="font-mono text-xs">{{ baselineColumn.parameterPath }}</span>
+                </td>
+                <td *ngFor="let column of deltaColumns" class="text-right bg-primary/10">
+                    <span class="font-mono text-xs">{{ column.parameterPath }}</span>
+                </td>
+            </tr>
+
+            <!-- Parameter Value -->
+            <tr>
+                <td class="sticky left-0 bg-base-100">Value</td>
+                <td class="text-right font-mono" *ngIf="baselineColumn">
+                    {{ formatValue(baselineColumn.parameterValue) }}
+                </td>
+                <td *ngFor="let column of deltaColumns" class="text-right font-mono">
+                    {{ formatValue(column.parameterValue) }}
+                </td>
+            </tr>
+
+            <!-- Average Performance -->
+            <tr>
+                <td class="sticky left-0 bg-base-100">Avg Performance</td>
+                <td class="text-right font-mono" *ngIf="baselineColumn">
+                    {{ baselineColumn.avgPerformance | number: '1.0-0' }}
+                </td>
+                <td *ngFor="let column of deltaColumns" class="text-right font-mono">
+                    {{ column.avgPerformance | number: '1.0-0' }}
+                </td>
+            </tr>
+
+            <!-- Standard Deviation -->
+            <tr>
+                <td class="sticky left-0 bg-base-100">Std Dev Performance</td>
+                <td class="text-right font-mono" *ngIf="baselineColumn">
+                    {{ baselineColumn.stdDevPerformance | number: '1.2-2' }}
+                </td>
+                <td *ngFor="let column of deltaColumns" class="text-right font-mono">
+                    {{ column.stdDevPerformance | number: '1.2-2' }}
+                </td>
+            </tr>
+
+            <!-- OrgConfig Count -->
+            <tr>
+                <td class="sticky left-0 bg-base-100">OrgConfig Count</td>
+                <td class="text-right font-mono" *ngIf="baselineColumn">
+                    {{ baselineColumn.orgConfigs.length }}
+                </td>
+                <td *ngFor="let column of deltaColumns" class="text-right font-mono">
+                    {{ column.orgConfigs.length }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Expanded OrgConfig Details -->
+    <div *ngFor="let column of deltaColumns" class="mt-6">
+        <div *ngIf="column.expanded" class="border-l-4 border-primary pl-4">
+            <h4 class="text-md font-semibold mb-3">
+                {{ column.id }} - OrgConfigs ({{ column.parameterPath }})
+            </h4>
+            <table class="table table-sm table-zebra">
+                <thead>
+                    <tr>
+                        <th scope="col">OrgConfig ID</th>
+                        <th scope="col">Config Hash</th>
+                        <th scope="col" class="text-right">Avg Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orgConfig of column.orgConfigs"
+                        class="hover:bg-base-200 cursor-pointer"
+                        (click)="navigateToOrgConfig(orgConfig.id, $event)">
+                        <td>
+                            <span class="font-medium">{{ orgConfig.id }}</span>
+                        </td>
+                        <td class="font-mono text-sm">
+                            {{ orgConfig.hash }}
+                        </td>
+                        <td class="text-right">
+                            <span *ngIf="orgConfig.avgPerformance !== null">
+                                {{ orgConfig.avgPerformance | number: '1.0-0' }}
+                            </span>
+                            <span *ngIf="orgConfig.avgPerformance === null" class="opacity-50">
+                                -
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Baseline OrgConfigs (expandable) -->
+    <div *ngIf="baselineColumn" class="mt-6">
+        <button class="btn btn-sm btn-ghost" (click)="toggleColumn(baselineColumn)">
+            <span class="mr-2">{{ baselineColumn.expanded ? '▼' : '▶' }}</span>
+            Baseline OrgConfigs ({{ baselineColumn.orgConfigs.length }})
+        </button>
+        <div *ngIf="baselineColumn.expanded" class="border-l-4 border-secondary pl-4 mt-3">
+            <table class="table table-sm table-zebra">
+                <thead>
+                    <tr>
+                        <th scope="col">OrgConfig ID</th>
+                        <th scope="col">Config Hash</th>
+                        <th scope="col" class="text-right">Avg Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orgConfig of baselineColumn.orgConfigs"
+                        class="hover:bg-base-200 cursor-pointer"
+                        (click)="navigateToOrgConfig(orgConfig.id, $event)">
+                        <td>
+                            <span class="font-medium">{{ orgConfig.id }}</span>
+                        </td>
+                        <td class="font-mono text-sm">
+                            {{ orgConfig.hash }}
+                        </td>
+                        <td class="text-right">
+                            <span *ngIf="orgConfig.avgPerformance !== null">
+                                {{ orgConfig.avgPerformance | number: '1.0-0' }}
+                            </span>
+                            <span *ngIf="orgConfig.avgPerformance === null" class="opacity-50">
+                                -
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
