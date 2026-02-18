@@ -1,0 +1,7 @@
+<div *ngIf="chartData" class="w-full" style="height: 200px;">
+    <canvas baseChart
+        [data]="chartData"
+        [options]="chartOptions"
+        type="bar">
+    </canvas>
+</div>

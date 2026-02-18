@@ -32,15 +32,20 @@ body {
     overflow: scroll;
 }
 
-.hoverable:hover {
-    background-color: rgb(231, 220, 226);
-}
-
 .content-block {
     margin-top: 3em;
 }
 
 /* tables */
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover td,
+.clickable-row:hover th {
+    background-color: oklch(var(--b2)) !important;
+}
+
 .table-fix-head {
     overflow-y: auto;
     height: 100vh;

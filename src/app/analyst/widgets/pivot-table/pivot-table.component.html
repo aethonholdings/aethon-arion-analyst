@@ -1,4 +1,4 @@
-<table *ngIf="data" class="table table-sm">
+<table *ngIf="data" class="table table-xs">
     <thead>
         <tr *ngFor="let columnSegmentLevel of groupBy?.column; let last = last">
             <th *ngFor="let rowSegmentHeader of groupBy.row" scope="col" class="col">{{ last ? rowSegmentHeader.name : "" }}</th>

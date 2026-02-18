@@ -1,6 +1,6 @@
 <div *ngIf="simSets"></div>
 
-<table class="table table-sm">
+<table class="table table-xs">
     <thead>
         <tr>
             <th scope="col">id</th>
@@ -13,13 +13,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let simSet of simSets" scope="row">
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.id }}</td>
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.modelName }}</td>
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.optimiserName }}</td>
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.configuratorName }}</td>
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">{{ simSet.description }}</td>
-            <td class="cursor-pointer" (click)="selectSimSet(simSet.id)">
+        <tr *ngFor="let simSet of simSets" scope="row"
+            class="clickable-row"
+            (click)="selectSimSet(simSet.id)">
+            <td>{{ simSet.id }}</td>
+            <td>{{ simSet.modelName }}</td>
+            <td>{{ simSet.optimiserName }}</td>
+            <td>{{ simSet.configuratorName }}</td>
+            <td>{{ simSet.description }}</td>
+            <td>
                 <arion-status-indicator [status]="simSet.state"></arion-status-indicator>
             </td>
             <td>

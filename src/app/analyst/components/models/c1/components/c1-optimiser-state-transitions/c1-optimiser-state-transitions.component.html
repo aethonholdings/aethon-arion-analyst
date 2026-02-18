@@ -2,21 +2,21 @@
     <table *ngIf="ready" class="table table-xs">
         <thead>
             <tr>
-                <th scope="col" rowspan="2" class="align-bottom">Step</th>
-                <th scope="col" rowspan="2" class="align-bottom">Start</th>
-                <th scope="col" rowspan="2" class="align-bottom">Status</th>
-                <th scope="col" class="text-center border-l-2 border-base-300" [attr.colspan]="domainCount">x</th>
-                <th scope="col" class="text-center border-l-2 border-base-300" [attr.colspan]="domainCount + 1">del</th>
-                <th scope="col" rowspan="2" class="align-bottom border-l-2 border-base-300">Performance</th>
+                <th scope="col" [attr.rowspan]="domainCount > 0 ? 2 : 1" class="align-bottom">Step</th>
+                <th scope="col" [attr.rowspan]="domainCount > 0 ? 2 : 1" class="align-bottom">Start</th>
+                <th scope="col" [attr.rowspan]="domainCount > 0 ? 2 : 1" class="align-bottom">Status</th>
+                <th *ngIf="domainCount > 0" scope="col" class="text-center border-l-2 border-base-300" [attr.colspan]="domainCount">x</th>
+                <th *ngIf="domainCount > 0" scope="col" class="text-center border-l-2 border-base-300" [attr.colspan]="domainCount + 1">del</th>
+                <th scope="col" [attr.rowspan]="domainCount > 0 ? 2 : 1" class="align-bottom border-l-2 border-base-300">Performance</th>
             </tr>
-            <tr>
+            <tr *ngIf="domainCount > 0">
                 <th *ngFor="let domain of optimisationDomains; first as isFirst" scope="col" class="text-right" [class.border-l-2]="isFirst" [class.border-base-300]="isFirst">{{ domain.id }}</th>
                 <th *ngFor="let domain of optimisationDomains; first as isFirst" scope="col" class="text-right" [class.border-l-2]="isFirst" [class.border-base-300]="isFirst">{{ domain.id }}</th>
                 <th scope="col" class="text-right border-l-2 border-base-300">Modulo</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let optimiserState of states; index as i" (click)="selected.emit(optimiserState.id)">
+            <tr *ngFor="let optimiserState of states; index as i" class="clickable-row" (click)="selected.emit(optimiserState.id)">
                 <td class="text-right">{{ optimiserState.stepCount }}</td>
                 <td class="text-right">{{ optimiserState.start | date: "short" }}</td>
                 <td class="text-right">
@@ -46,7 +46,7 @@
                         >{{ toNumber(del[i][domain.id].value) | number: "1.0-0" }}</span
                     >
                 </td>
-                <td class="text-right border-l-2 border-base-300">{{ optimiserState.optimiserData.moduloDel | number: "1.0-0" }}</td>
+                <td *ngIf="domainCount > 0" class="text-right border-l-2 border-base-300">{{ optimiserState.optimiserData.moduloDel | number: "1.0-0" }}</td>
                 <td class="text-right border-l-2 border-base-300">{{ optimiserState.performance | number: "1.0-0" }}</td>
             </tr>
         </tbody>

@@ -1,4 +1,4 @@
-<arion-breadcrumbs *ngIf="breadcrumbs$ | async as breadcrumbs" [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
+<arion-breadcrumbs [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
 <div *ngIf="simConfig$ | async as simConfig">
     <h2>SimConfig {{ simConfig.id }}</h2>
     <div class="content-block">
@@ -14,14 +14,6 @@
             <button
                 role="tab"
                 class="tab"
-                [class.tab-active]="activeTab === 'org-config'"
-                (click)="activeTab = 'org-config'"
-            >
-                OrgConfig
-            </button>
-            <button
-                role="tab"
-                class="tab"
                 [class.tab-active]="activeTab === 'results'"
                 (click)="activeTab = 'results'; getResults$(simConfig.id)"
             >
@@ -33,14 +25,8 @@
         <div [hidden]="activeTab !== 'summary'">
             <arion-sim-config [dataInstance]="simConfig" [view]="views.CARD"></arion-sim-config>
         </div>
-        <div [hidden]="activeTab !== 'org-config'">
-            <arion-org-config
-                *ngIf="simConfig.orgConfig as orgConfig"
-                [dataInstance]="orgConfig"
-                [view]="views.VIEW"
-            ></arion-org-config>
-        </div>
         <div [hidden]="activeTab !== 'results'">
+            <arion-histogram [data]="performanceValues"></arion-histogram>
             <div *ngIf="results$ | async as results">
                 <h3>Pivot</h3>
                 <arion-result [dataArray]="results" [view]="views.PIVOT"></arion-result>

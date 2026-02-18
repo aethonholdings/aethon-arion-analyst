@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { OptimiserStateDTO, ConfiguratorParamData, DataPoint } from "aethon-arion-pipeline";
+import { OptimiserStateDTO, ConfiguratorParamData, DataPoint, StateType } from "aethon-arion-pipeline";
 
 export interface DimensionColumn {
     id: string;
@@ -12,6 +12,7 @@ export interface DimensionColumn {
         id: number;
         hash: string;
         avgPerformance: number | null;
+        state: StateType;
     }>;
     expanded: boolean;
 }
@@ -43,27 +44,36 @@ export class OptimiserStateOrgconfigViewComponent implements OnInit {
             return;
         }
 
-        // Build a map of all orgConfigs
-        const orgConfigMap = new Map<number, any>();
+        // Build a map of configuratorParams.hash -> orgConfigs
+        const hashToOrgConfigs = new Map<string, Array<{
+            id: number;
+            paramsHash: string;
+            avgPerformance: number | null;
+            state: StateType;
+        }>>();
+
         for (const convergenceTest of convergenceTests) {
-            if (convergenceTest.simConfigs) {
-                for (const simConfig of convergenceTest.simConfigs) {
-                    if (simConfig.orgConfig) {
-                        orgConfigMap.set(simConfig.orgConfig.id, {
-                            id: simConfig.orgConfig.id,
-                            params: simConfig.orgConfig.configuratorParams,
-                            avgPerformance: simConfig.avgPerformance
-                        });
-                    }
+            const ctHash = convergenceTest.configuratorParams?.hash;
+            if (!ctHash || !convergenceTest.simConfigs) continue;
+
+            for (const simConfig of convergenceTest.simConfigs) {
+                if (!simConfig.orgConfig) continue;
+
+                if (!hashToOrgConfigs.has(ctHash)) {
+                    hashToOrgConfigs.set(ctHash, []);
                 }
+                hashToOrgConfigs.get(ctHash)!.push({
+                    id: simConfig.orgConfig.id,
+                    paramsHash: ctHash,
+                    avgPerformance: simConfig.avgPerformance,
+                    state: simConfig.state || 'pending'
+                });
             }
         }
 
-        const allOrgConfigs = Array.from(orgConfigMap.values());
-
-        // Process each dataPoint
+        // Process each dataPoint, matching by hash
         for (const dataPoint of dataPoints) {
-            const column = this.createColumnFromDataPoint(dataPoint, allOrgConfigs);
+            const column = this.createColumnFromDataPoint(dataPoint, hashToOrgConfigs);
 
             if (dataPoint.id === 'x') {
                 this.baselineColumn = column;
@@ -73,172 +83,38 @@ export class OptimiserStateOrgconfigViewComponent implements OnInit {
         }
     }
 
-    createColumnFromDataPoint(dataPoint: any, allOrgConfigs: any[]): DimensionColumn {
-        const parameterPath = this.extractParameterPath(dataPoint);
+    createColumnFromDataPoint(
+        dataPoint: any,
+        hashToOrgConfigs: Map<string, Array<{ id: number; paramsHash: string; avgPerformance: number | null; state: StateType }>>
+    ): DimensionColumn {
+        const parameterPath = dataPoint.data?.inputs?.configuratorName || 'Unknown';
         const parameterValue = dataPoint.data?.outputs?.configuratorParameterValue;
+        const dataPointHash = dataPoint.data?.inputs?.hash;
 
-        // Find matching orgConfigs based on parameter values
-        const matchingOrgConfigs = this.findMatchingOrgConfigs(dataPoint, allOrgConfigs);
+        const matchingOrgConfigs = dataPointHash ? (hashToOrgConfigs.get(dataPointHash) || []) : [];
 
-        // Calculate performance statistics
         const performances = matchingOrgConfigs
             .map(oc => oc.avgPerformance)
-            .filter(p => p !== null && p !== undefined);
+            .filter((p): p is number => p !== null && p !== undefined);
 
         const avgPerformance = performances.length > 0
             ? performances.reduce((sum, p) => sum + p, 0) / performances.length
             : 0;
-
-        const stdDevPerformance = this.calculateStdDev(performances);
 
         return {
             id: dataPoint.id,
             parameterPath,
             parameterValue,
             avgPerformance,
-            stdDevPerformance,
+            stdDevPerformance: this.calculateStdDev(performances),
             orgConfigs: matchingOrgConfigs.map(oc => ({
                 id: oc.id,
-                hash: this.getOrgConfigHash(oc.params),
-                avgPerformance: oc.avgPerformance
+                hash: oc.paramsHash.substring(0, 8),
+                avgPerformance: oc.avgPerformance,
+                state: oc.state
             })),
             expanded: false
         };
-    }
-
-    extractParameterPath(dataPoint: any): string {
-        const configuratorName = dataPoint.data?.inputs?.configuratorName;
-        if (configuratorName) {
-            return configuratorName;
-        }
-        return 'Unknown';
-    }
-
-    findMatchingOrgConfigs(dataPoint: any, allOrgConfigs: any[]): any[] {
-        if (allOrgConfigs.length === 0) {
-            return [];
-        }
-
-        // For baseline (x), we need to find the baseline orgConfig(s)
-        // Compare dataPoint params to find matching orgConfigs
-        const dataPointParams = dataPoint.data?.inputs?.data;
-        if (!dataPointParams) {
-            return [];
-        }
-
-        // Match orgConfigs whose configuratorParams.data closely matches the dataPoint's inputs.data
-        const matchingOrgConfigs = allOrgConfigs.filter(oc => {
-            const orgConfigData = oc.params?.data;
-            if (!orgConfigData) {
-                return false;
-            }
-
-            // Calculate similarity score between dataPoint params and orgConfig params
-            const similarity = this.calculateParamsSimilarity(dataPointParams, orgConfigData);
-
-            // For baseline (x), look for very close matches (>95% similarity)
-            // For delta points, look for matches to that specific variation (>90% similarity)
-            const threshold = dataPoint.id === 'x' ? 0.95 : 0.90;
-
-            return similarity >= threshold;
-        });
-
-        // If no exact matches found for delta points, try to find by parameter value
-        if (matchingOrgConfigs.length === 0 && dataPoint.id !== 'x') {
-            const paramValue = dataPoint.data?.outputs?.configuratorParameterValue;
-            if (paramValue !== undefined) {
-                // Try to find orgConfigs with this specific parameter value
-                return this.findOrgConfigsByParamValue(dataPointParams, paramValue, allOrgConfigs);
-            }
-        }
-
-        return matchingOrgConfigs;
-    }
-
-    calculateParamsSimilarity(params1: any, params2: any): number {
-        // Compare two parameter objects and return similarity score (0-1)
-        const keys1 = this.getAllKeys(params1);
-        const keys2 = this.getAllKeys(params2);
-        const allKeys = new Set([...keys1, ...keys2]);
-
-        let matches = 0;
-        let total = 0;
-
-        for (const key of allKeys) {
-            const val1 = this.getNestedValue(params1, key);
-            const val2 = this.getNestedValue(params2, key);
-
-            total++;
-            if (JSON.stringify(val1) === JSON.stringify(val2)) {
-                matches++;
-            }
-        }
-
-        return total > 0 ? matches / total : 0;
-    }
-
-    getAllKeys(obj: any, prefix: string = ''): string[] {
-        const keys: string[] = [];
-
-        if (typeof obj !== 'object' || obj === null) {
-            return keys;
-        }
-
-        for (const key of Object.keys(obj)) {
-            const fullKey = prefix ? `${prefix}.${key}` : key;
-            const value = obj[key];
-
-            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                keys.push(...this.getAllKeys(value, fullKey));
-            } else {
-                keys.push(fullKey);
-            }
-        }
-
-        return keys;
-    }
-
-    getNestedValue(obj: any, path: string): any {
-        return path.split('.').reduce((current, key) => current?.[key], obj);
-    }
-
-    findOrgConfigsByParamValue(dataPointParams: any, paramValue: any, allOrgConfigs: any[]): any[] {
-        // Try to find the parameter that has the specified value
-        const paramPath = this.findParameterPathWithValue(dataPointParams, paramValue);
-
-        if (!paramPath) {
-            return [];
-        }
-
-        // Find orgConfigs where this parameter has the same value
-        return allOrgConfigs.filter(oc => {
-            const orgConfigValue = this.getNestedValue(oc.params?.data, paramPath);
-            return Math.abs(orgConfigValue - paramValue) < 0.0001; // Float comparison with tolerance
-        });
-    }
-
-    findParameterPathWithValue(obj: any, value: any, prefix: string = ''): string | null {
-        if (typeof obj !== 'object' || obj === null) {
-            return null;
-        }
-
-        for (const key of Object.keys(obj)) {
-            const fullKey = prefix ? `${prefix}.${key}` : key;
-            const val = obj[key];
-
-            if (typeof val === 'number' && Math.abs(val - value) < 0.0001) {
-                return fullKey;
-            }
-
-            if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-                const found = this.findParameterPathWithValue(val, value, fullKey);
-                if (found) {
-                    return found;
-                }
-            }
-        }
-
-        return null;
     }
 
     calculateStdDev(values: number[]): number {
@@ -251,40 +127,18 @@ export class OptimiserStateOrgconfigViewComponent implements OnInit {
         return Math.sqrt(variance);
     }
 
-    getOrgConfigHash(params: any): string {
-        if (!params) {
-            return '00000000';
-        }
-        const seen = new WeakSet();
-        const jsonStr = JSON.stringify(params, (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                if (seen.has(value)) {
-                    return '[Circular]';
-                }
-                seen.add(value);
-            }
-            return value;
-        });
-        return this.hashString(jsonStr);
-    }
-
-    hashString(str: string): string {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return Math.abs(hash).toString(16).padStart(8, '0');
-    }
-
     toggleColumn(column: DimensionColumn) {
         column.expanded = !column.expanded;
     }
 
     navigateToOrgConfig(orgConfigId: number, event: Event) {
         event.stopPropagation();
-        this.router.navigate(['/org-config', orgConfigId]);
+        this.router.navigate(['/org-config', orgConfigId], {
+            queryParams: {
+                optimiserStateId: this.optimiserState.id,
+                simSetId: (this.optimiserState as any).simSet?.id
+            }
+        });
     }
 
     formatValue(value: any): string {

@@ -11,6 +11,6 @@ import { ConfiguratorParamsModule } from "../configurator-params/configurator-pa
 @NgModule({
     declarations: [SimConfigComponent, SimConfigIndexComponent, SimConfigViewComponent, SimConfigCardComponent],
     imports: [CommonModule, WidgetsModule, OrgConfigModule, ConfiguratorParamsModule],
-    exports: [SimConfigComponent]
+    exports: [SimConfigComponent, SimConfigIndexComponent]
 })
 export class SimConfigModule {}

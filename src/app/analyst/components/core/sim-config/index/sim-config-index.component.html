@@ -1,6 +1,6 @@
 <table class="table table-xs">
   <thead>
-      <tr>
+      <tr *ngIf="!compact">
           <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col"></th>
@@ -13,28 +13,30 @@
           <th scope="col" colspan="2" class="text-center">Agent performance</th>
       </tr>
       <tr>
-          <th scope="col">Configurator</th>
           <th scope="col">id</th>
           <th scope="col">State</th>
-          <th scope="col" class="text-right">Days</th>
-          <th scope="col" class="text-right">Runs</th>
-          <th scope="col" class="text-right">Agent count</th>
-          <th scope="col" class="text-right">Gain</th>
-          <th scope="col">Init</th>
-          <th scope="col" class="text-right">Gain</th>
-          <th scope="col">Init</th>
-          <th scope="col" class="text-right">Gain</th>
-          <th scope="col">Init</th>
+          <ng-container *ngIf="!compact">
+              <th scope="col">Configurator</th>
+              <th scope="col" class="text-right">Days</th>
+              <th scope="col" class="text-right">Runs</th>
+              <th scope="col" class="text-right">Agent count</th>
+              <th scope="col" class="text-right">Gain</th>
+              <th scope="col">Init</th>
+              <th scope="col" class="text-right">Gain</th>
+              <th scope="col">Init</th>
+              <th scope="col" class="text-right">Gain</th>
+              <th scope="col">Init</th>
+          </ng-container>
           <th scope="col" class="text-right">σ</th>
           <th scope="col" class="text-right">Performance</th>
       </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let config of simConfigs" (click)="selected.emit(config.id)">
-          <ng-template [ngIf]="config.orgConfig">
+      <tr *ngFor="let config of simConfigs" class="clickable-row" (click)="selected.emit(config.id)">
+          <td>{{ config.id }}</td>
+          <td><arion-status-indicator [status]="config.state"></arion-status-indicator></td>
+          <ng-container *ngIf="!compact && config.orgConfig">
               <td>{{ config.orgConfig.configuratorParams.configuratorName }}</td>
-              <td>{{ config.id }}</td>
-              <td><arion-status-indicator [status]="config.state"></arion-status-indicator></td>
               <td class="text-right">{{ config.days }}</td>
               <td class="text-right">{{ config.runCount }}</td>
               <td class="text-right">{{ config.orgConfig.agentCount }}</td>
@@ -54,11 +56,11 @@
               <td>
                   {{ config.orgConfig.configuratorParams.data.matrixInit.incentive }}
               </td>
-              <td class="text-right">{{ config.stdDevPerformance | number: "1.0-0" }}</td>
-              <td class="text-right">
-                  <strong>{{ config.avgPerformance | number: "1.0-0" }}</strong>
-              </td>
-          </ng-template>
+          </ng-container>
+          <td class="text-right">{{ config.stdDevPerformance | number: "1.0-0" }}</td>
+          <td class="text-right">
+              <strong>{{ config.avgPerformance | number: "1.0-0" }}</strong>
+          </td>
       </tr>
   </tbody>
 </table>

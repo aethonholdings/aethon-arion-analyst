@@ -3,7 +3,7 @@
         No optimisation data found
     </div>
 
-    <table *ngIf="baselineColumn || deltaColumns.length > 0" class="table table-sm">
+    <table *ngIf="baselineColumn || deltaColumns.length > 0" class="table table-xs">
         <thead>
             <tr class="bg-base-200">
                 <th scope="col" class="sticky left-0 bg-base-200 z-10">Variable</th>
@@ -16,7 +16,13 @@
             </tr>
             <tr class="bg-base-300">
                 <th scope="col" class="sticky left-0 bg-base-300 z-10"></th>
-                <th class="bg-base-300" scope="col" *ngIf="baselineColumn"></th>
+                <th *ngIf="baselineColumn"
+                    class="min-w-[140px] text-right bg-base-300 cursor-pointer hover:bg-base-200"
+                    scope="col"
+                    (click)="toggleColumn(baselineColumn)">
+                    <span class="font-mono text-xs">x</span>
+                    <span class="ml-1">{{ baselineColumn.expanded ? '▼' : '▶' }}</span>
+                </th>
                 <th *ngFor="let column of deltaColumns"
                     class="min-w-[140px] text-right bg-base-300 cursor-pointer hover:bg-base-200"
                     scope="col"
@@ -85,27 +91,31 @@
     </table>
 
     <!-- Expanded OrgConfig Details -->
-    <div *ngFor="let column of deltaColumns" class="mt-6">
-        <div *ngIf="column.expanded" class="border-l-4 border-primary pl-4">
+    <div *ngIf="baselineColumn?.expanded" class="mt-6">
+        <div class="border-l-4 border-primary pl-4">
             <h4 class="text-md font-semibold mb-3">
-                {{ column.id }} - OrgConfigs ({{ column.parameterPath }})
+                x (Baseline) - OrgConfigs ({{ baselineColumn!.parameterPath }})
             </h4>
-            <table class="table table-sm table-zebra">
+            <table class="table table-xs">
                 <thead>
                     <tr>
                         <th scope="col">OrgConfig ID</th>
+                        <th scope="col">State</th>
                         <th scope="col">Config Hash</th>
                         <th scope="col" class="text-right">Avg Performance</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let orgConfig of column.orgConfigs"
-                        class="hover:bg-base-200 cursor-pointer"
+                    <tr *ngFor="let orgConfig of baselineColumn!.orgConfigs"
+                        class="clickable-row"
                         (click)="navigateToOrgConfig(orgConfig.id, $event)">
                         <td>
                             <span class="font-medium">{{ orgConfig.id }}</span>
                         </td>
-                        <td class="font-mono text-sm">
+                        <td>
+                            <arion-status-indicator [status]="orgConfig.state"></arion-status-indicator>
+                        </td>
+                        <td class="font-mono">
                             {{ orgConfig.hash }}
                         </td>
                         <td class="text-right">
@@ -121,30 +131,31 @@
             </table>
         </div>
     </div>
-
-    <!-- Baseline OrgConfigs (expandable) -->
-    <div *ngIf="baselineColumn" class="mt-6">
-        <button class="btn btn-sm btn-ghost" (click)="toggleColumn(baselineColumn)">
-            <span class="mr-2">{{ baselineColumn.expanded ? '▼' : '▶' }}</span>
-            Baseline OrgConfigs ({{ baselineColumn.orgConfigs.length }})
-        </button>
-        <div *ngIf="baselineColumn.expanded" class="border-l-4 border-secondary pl-4 mt-3">
-            <table class="table table-sm table-zebra">
+    <div *ngFor="let column of deltaColumns" class="mt-6">
+        <div *ngIf="column.expanded" class="border-l-4 border-primary pl-4">
+            <h4 class="text-md font-semibold mb-3">
+                {{ column.id }} - OrgConfigs ({{ column.parameterPath }})
+            </h4>
+            <table class="table table-xs">
                 <thead>
                     <tr>
                         <th scope="col">OrgConfig ID</th>
+                        <th scope="col">State</th>
                         <th scope="col">Config Hash</th>
                         <th scope="col" class="text-right">Avg Performance</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let orgConfig of baselineColumn.orgConfigs"
-                        class="hover:bg-base-200 cursor-pointer"
+                    <tr *ngFor="let orgConfig of column.orgConfigs"
+                        class="clickable-row"
                         (click)="navigateToOrgConfig(orgConfig.id, $event)">
                         <td>
                             <span class="font-medium">{{ orgConfig.id }}</span>
                         </td>
-                        <td class="font-mono text-sm">
+                        <td>
+                            <arion-status-indicator [status]="orgConfig.state"></arion-status-indicator>
+                        </td>
+                        <td class="font-mono">
                             {{ orgConfig.hash }}
                         </td>
                         <td class="text-right">

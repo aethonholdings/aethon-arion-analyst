@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SimSetDTO } from "aethon-arion-pipeline";
+import { SimSetDTO, StateType } from "aethon-arion-pipeline";
 import { Observable, Subject, interval, map, mergeMap, takeUntil, tap } from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
@@ -22,7 +22,7 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
     stepsData$!: Observable<StepData[]>;
     refreshing: boolean = false;
     views = Views;
-    activeTab: string = 'summary';
+    activeTab: string = 'optimiser-steps';
     secondsUntilRefresh: number = 60;
     private destroy$ = new Subject<void>();
     breadcrumbs: Breadcrumb[] = [];
@@ -98,17 +98,26 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
                                                 orgConfigId: orgConfigId,
                                                 orgConfig: simConfig.orgConfig,
                                                 configuratorParams: configuratorParams,
+                                                state: 'pending',
                                                 simConfigs: []
                                             });
                                         }
 
                                         orgConfigMap.get(orgConfigId)!.simConfigs.push({
                                             id: simConfig.id,
-                                            avgPerformance: simConfig.avgPerformance || null
+                                            avgPerformance: simConfig.avgPerformance || null,
+                                            state: simConfig.state || 'pending'
                                         });
                                     }
                                 }
                             }
+                        }
+
+                        // Derive aggregate state for each orgConfig group
+                        const statePriority: StateType[] = ['failed', 'running', 'pending', 'completed'];
+                        for (const group of orgConfigMap.values()) {
+                            const states = group.simConfigs.map(sc => sc.state);
+                            group.state = statePriority.find(s => states.includes(s)) || 'pending';
                         }
 
                         stepsData.push({

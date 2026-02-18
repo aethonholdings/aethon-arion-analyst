@@ -2,9 +2,39 @@
 <div *ngIf="orgConfig$ | async as orgConfig">
     <h2>OrgConfig {{ orgConfig.id }}</h2>
     <div class="content-block">
-        <arion-org-config
-            [dataInstance]="orgConfig"
-            [view]="views.VIEW"
-        ></arion-org-config>
+        <div role="tablist" class="tabs tabs-bordered">
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'config'"
+                (click)="activeTab = 'config'"
+            >
+                Configuration
+            </button>
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'sim-configs'"
+                (click)="activeTab = 'sim-configs'"
+            >
+                SimConfigs
+            </button>
+        </div>
+    </div>
+    <div class="content-block">
+        <div [hidden]="activeTab !== 'config'">
+            <arion-org-config
+                [dataInstance]="orgConfig"
+                [view]="views.VIEW"
+            ></arion-org-config>
+        </div>
+        <div [hidden]="activeTab !== 'sim-configs'">
+            <arion-sim-config-index
+                *ngIf="orgConfig.simConfigs"
+                [simConfigs]="orgConfig.simConfigs"
+                [compact]="true"
+                (selected)="onSimConfigSelected($event)"
+            ></arion-sim-config-index>
+        </div>
     </div>
 </div>

@@ -3,6 +3,7 @@
         <a
             *ngIf="orgConfigId"
             [routerLink]="['/org-config', orgConfigId]"
+            [queryParams]="{ optimiserStateId: optimiserState.id, simSetId: optimiserState.simSet.id }"
             class="btn btn-sm btn-ghost">
             View Baseline OrgConfig
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -19,20 +20,32 @@
             Gradient Table
         </button>
         <button role="tab" class="tab"
-            [class.tab-active]="activeTab === 'orgconfigs'"
-            (click)="activeTab = 'orgconfigs'">
+            [class.tab-active]="activeTab === 'org-configs'"
+            (click)="activeTab = 'org-configs'">
+            Org configs
+        </button>
+        <button role="tab" class="tab"
+            [class.tab-active]="activeTab === 'orgconfig-exploration'"
+            (click)="activeTab = 'orgconfig-exploration'">
             OrgConfig Exploration
         </button>
     </div>
 
     <div class="content-block">
-        <div [hidden]="activeTab !== 'gradient-table'">
+        <div *ngIf="activeTab === 'gradient-table'">
             <arion-c1-optimiser-state
                 *ngIf="optimiserState.modelName === c1ModelName"
                 [optimiserState]="optimiserState"
             ></arion-c1-optimiser-state>
         </div>
-        <div [hidden]="activeTab !== 'orgconfigs'">
+        <div *ngIf="activeTab === 'org-configs'">
+            <arion-org-config-table
+                [rows]="orgConfigRows"
+                (orgConfigClick)="navigateToOrgConfig($event)"
+                (simConfigClick)="navigateToSimConfig($event)"
+            ></arion-org-config-table>
+        </div>
+        <div *ngIf="activeTab === 'orgconfig-exploration'">
             <arion-optimiser-state-orgconfig-view
                 *ngIf="optimiserState.modelName === c1ModelName"
                 [optimiserState]="optimiserState"

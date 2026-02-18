@@ -1,3 +1,14 @@
-<ul>
-  <li>Initial state: {{ plantDTO.initialState | json }}</li>
-</ul>
+<table class="table table-xs">
+    <thead>
+        <tr>
+            <th class="w-1/3">Parameter</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Initial state</td>
+            <td>{{ plantDTO.initialState | json }}</td>
+        </tr>
+    </tbody>
+</table>

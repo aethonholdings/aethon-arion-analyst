@@ -1,0 +1,152 @@
+<arion-histogram [data]="performanceValues"></arion-histogram>
+
+<!-- Step-grouped table -->
+<ng-container *ngIf="showStepColumn && sortedSteps.length > 0">
+    <div class="overflow-x-auto w-full">
+        <table class="table table-xs">
+            <thead>
+                <tr>
+                    <th scope="col" class="w-24">Step</th>
+                    <th scope="col" class="w-32 cursor-pointer select-none" (click)="sortBy('orgConfigId')">
+                        OrgConfig ID
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'orgConfigId' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                    <th scope="col" class="w-32">Config Hash</th>
+                    <th scope="col" class="w-16 cursor-pointer select-none" (click)="sortBy('state')">
+                        State
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'state' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                    <th scope="col" class="w-32">SimConfig ID</th>
+                    <th scope="col" class="w-32 text-right cursor-pointer select-none" (click)="sortBy('avgPerformance')">
+                        Avg Performance
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'avgPerformance' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let step of sortedSteps">
+                    <ng-container *ngFor="let orgConfig of step.rows; first as isFirstOrgConfig">
+                        <ng-container *ngFor="let simConfig of orgConfig.simConfigs; first as isFirstSimConfig">
+                            <tr class="clickable-row">
+                                <td
+                                    *ngIf="isFirstOrgConfig && isFirstSimConfig"
+                                    [attr.rowspan]="step.totalSimConfigs"
+                                    class="align-top border-r-2 border-base-300"
+                                    (click)="stepClick.emit(step.optimiserStateId)"
+                                >
+                                    <span class="font-medium">{{ step.stepCount }}</span>
+                                </td>
+                                <td
+                                    *ngIf="isFirstSimConfig"
+                                    [attr.rowspan]="orgConfig.simConfigs.length"
+                                    class="align-top border-r-2 border-base-300"
+                                    (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
+                                >
+                                    <span class="font-medium">{{ orgConfig.orgConfigId }}</span>
+                                </td>
+                                <td
+                                    *ngIf="isFirstSimConfig"
+                                    [attr.rowspan]="orgConfig.simConfigs.length"
+                                    class="align-top border-r-2 border-base-300 font-mono"
+                                    (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
+                                >
+                                    {{ orgConfig.configHash }}
+                                </td>
+                                <td
+                                    *ngIf="isFirstSimConfig"
+                                    [attr.rowspan]="orgConfig.simConfigs.length"
+                                    class="align-top border-r-2 border-base-300"
+                                >
+                                    <arion-status-indicator [status]="orgConfig.state"></arion-status-indicator>
+                                </td>
+                                <td (click)="onSimConfigClick(simConfig.id, orgConfig)">
+                                    {{ simConfig.id }}
+                                </td>
+                                <td class="text-right" (click)="onSimConfigClick(simConfig.id, orgConfig)">
+                                    <span *ngIf="simConfig.avgPerformance !== null">
+                                        {{ simConfig.avgPerformance | number: '1.0-0' }}
+                                    </span>
+                                    <span *ngIf="simConfig.avgPerformance === null" class="opacity-50">
+                                        -
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+
+<!-- Flat table (no step column) -->
+<ng-container *ngIf="!showStepColumn && sortedRows.length > 0">
+    <div class="overflow-x-auto w-full">
+        <table class="table table-xs">
+            <thead>
+                <tr>
+                    <th scope="col" class="w-32 cursor-pointer select-none" (click)="sortBy('orgConfigId')">
+                        OrgConfig ID
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'orgConfigId' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                    <th scope="col" class="w-32">Config Hash</th>
+                    <th scope="col" class="w-16 cursor-pointer select-none" (click)="sortBy('state')">
+                        State
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'state' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                    <th scope="col" class="w-32">SimConfig ID</th>
+                    <th scope="col" class="w-32 text-right cursor-pointer select-none" (click)="sortBy('avgPerformance')">
+                        Avg Performance
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'avgPerformance' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let orgConfig of sortedRows">
+                    <ng-container *ngFor="let simConfig of orgConfig.simConfigs; first as isFirst">
+                        <tr class="clickable-row">
+                            <td
+                                *ngIf="isFirst"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top border-r-2 border-base-300"
+                                (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
+                            >
+                                <span class="font-medium">{{ orgConfig.orgConfigId }}</span>
+                            </td>
+                            <td
+                                *ngIf="isFirst"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top border-r-2 border-base-300 font-mono"
+                                (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
+                            >
+                                {{ orgConfig.configHash }}
+                            </td>
+                            <td
+                                *ngIf="isFirst"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top border-r-2 border-base-300"
+                            >
+                                <arion-status-indicator [status]="orgConfig.state"></arion-status-indicator>
+                            </td>
+                            <td (click)="onSimConfigClick(simConfig.id, orgConfig)">
+                                {{ simConfig.id }}
+                            </td>
+                            <td class="text-right" (click)="onSimConfigClick(simConfig.id, orgConfig)">
+                                <span *ngIf="simConfig.avgPerformance !== null">
+                                    {{ simConfig.avgPerformance | number: '1.0-0' }}
+                                </span>
+                                <span *ngIf="simConfig.avgPerformance === null" class="opacity-50">
+                                    -
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+
+<div *ngIf="rows.length === 0" class="text-center py-8 opacity-70">
+    No org configs available
+</div>

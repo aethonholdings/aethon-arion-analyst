@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ResultDTO } from "aethon-arion-pipeline";
-import { Observable, map } from "rxjs";
+import { Observable } from "rxjs";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
@@ -15,9 +15,8 @@ export class ResultViewContainerComponent {
     @Input() result$: Observable<ResultDTO>;
     views = Views;
     activeTab: string = 'reporting';
-    breadcrumbs$!: Observable<Breadcrumb[]>;
+    breadcrumbs: Breadcrumb[] = [];
     resultId: number;
-    // stateSpace$: Observable<StateSpace> | undefined;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -26,21 +25,61 @@ export class ResultViewContainerComponent {
         this.resultId = this.activatedRoute.snapshot.paramMap.get("id") as unknown as number;
         this.result$ = this.analystService.getResult$(this.resultId);
 
-        this.breadcrumbs$ = this.result$.pipe(
-            map(result => {
-                const simSetId = (result as any).simSetId;
-                const simConfigId = (result as any).simConfigId;
-                return [
-                    { label: 'SimSets', route: ['/sim-set'] },
-                    { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
-                    { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId] },
-                    { label: `Result ${this.resultId}` }
-                ];
-            })
-        );
-    }
+        const simSetId = this.activatedRoute.snapshot.queryParamMap.get("simSetId");
+        const optimiserStateId = this.activatedRoute.snapshot.queryParamMap.get("optimiserStateId");
+        const orgConfigId = this.activatedRoute.snapshot.queryParamMap.get("orgConfigId");
+        const simConfigId = this.activatedRoute.snapshot.queryParamMap.get("simConfigId");
 
-    // getStateSpace$(resultId: number | undefined): void {
-    //     resultId ? (this.stateSpace$ = this.analystService.getStateSpace$(resultId)) : undefined;
-    // }
+        const simConfigQueryParams: any = {};
+        if (simSetId) simConfigQueryParams.simSetId = simSetId;
+        if (optimiserStateId) simConfigQueryParams.optimiserStateId = optimiserStateId;
+        if (orgConfigId) simConfigQueryParams.orgConfigId = orgConfigId;
+
+        const orgConfigQueryParams: any = {};
+        if (simSetId) orgConfigQueryParams.simSetId = simSetId;
+        if (optimiserStateId) orgConfigQueryParams.optimiserStateId = optimiserStateId;
+
+        if (simSetId && optimiserStateId && orgConfigId && simConfigId) {
+            this.breadcrumbs = [
+                { label: 'SimSets', route: ['/sim-set'] },
+                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: `Optimiser State ${optimiserStateId}`, route: ['/optimiser-state', optimiserStateId] },
+                { label: `OrgConfig ${orgConfigId}`, route: ['/org-config', orgConfigId], queryParams: orgConfigQueryParams },
+                { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId], queryParams: simConfigQueryParams },
+                { label: `Result ${this.resultId}` }
+            ];
+        } else if (simSetId && optimiserStateId && simConfigId) {
+            this.breadcrumbs = [
+                { label: 'SimSets', route: ['/sim-set'] },
+                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: `Optimiser State ${optimiserStateId}`, route: ['/optimiser-state', optimiserStateId] },
+                { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId], queryParams: simConfigQueryParams },
+                { label: `Result ${this.resultId}` }
+            ];
+        } else if (simSetId && orgConfigId && simConfigId) {
+            this.breadcrumbs = [
+                { label: 'SimSets', route: ['/sim-set'] },
+                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: `OrgConfig ${orgConfigId}`, route: ['/org-config', orgConfigId], queryParams: orgConfigQueryParams },
+                { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId], queryParams: simConfigQueryParams },
+                { label: `Result ${this.resultId}` }
+            ];
+        } else if (simSetId && simConfigId) {
+            this.breadcrumbs = [
+                { label: 'SimSets', route: ['/sim-set'] },
+                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId], queryParams: simConfigQueryParams },
+                { label: `Result ${this.resultId}` }
+            ];
+        } else if (simConfigId) {
+            this.breadcrumbs = [
+                { label: `SimConfig ${simConfigId}`, route: ['/sim-config', simConfigId] },
+                { label: `Result ${this.resultId}` }
+            ];
+        } else {
+            this.breadcrumbs = [
+                { label: `Result ${this.resultId}` }
+            ];
+        }
+    }
 }

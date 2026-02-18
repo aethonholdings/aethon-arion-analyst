@@ -9,6 +9,7 @@ import { FormsModule } from "@angular/forms";
 import { ModelsModule } from "../../models/models.module";
 import { SimSetStateTransitionsComponent } from "./subcomponents/sim-set-state-transitions/sim-set-state-transitions.component";
 import { SimSetOrgConfigViewComponent } from "./views/org-config/sim-set-org-config-view.component";
+import { OrgConfigModule } from "../org-config/org-config.module";
 
 @NgModule({
     declarations: [
@@ -19,7 +20,7 @@ import { SimSetOrgConfigViewComponent } from "./views/org-config/sim-set-org-con
         SimSetStateTransitionsComponent,
         SimSetOrgConfigViewComponent
     ],
-    imports: [CommonModule, ModelsModule, FormsModule, WidgetsModule],
+    imports: [CommonModule, ModelsModule, FormsModule, WidgetsModule, OrgConfigModule],
     exports: [SimSetComponent, SimSetStateTransitionsComponent, SimSetOrgConfigViewComponent]
 })
 export class SimSetModule {}

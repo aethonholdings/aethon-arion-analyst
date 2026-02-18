@@ -10,6 +10,7 @@ import { BoardComponent } from "./subcomponents/board/board.component";
 import { ReportingComponent } from "./subcomponents/reporting/reporting.component";
 import { ModelsModule } from "../../models/models.module";
 import { ConfiguratorParamsModule } from "../configurator-params/configurator-params.module";
+import { OrgConfigTableComponent } from "./views/table/org-config-table.component";
 
 @NgModule({
     declarations: [
@@ -19,9 +20,10 @@ import { ConfiguratorParamsModule } from "../configurator-params/configurator-pa
         AgentSetTensorsComponent,
         PlantComponent,
         ReportingComponent,
-        BoardComponent
+        BoardComponent,
+        OrgConfigTableComponent
     ],
     imports: [CommonModule, WidgetsModule, ModelsModule, ConfiguratorParamsModule],
-    exports: [OrgConfigComponent]
+    exports: [OrgConfigComponent, OrgConfigTableComponent]
 })
 export class OrgConfigModule {}

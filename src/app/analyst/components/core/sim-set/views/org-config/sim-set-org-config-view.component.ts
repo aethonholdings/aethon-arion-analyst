@@ -1,22 +1,42 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { Router } from "@angular/router";
 import { StepData } from "src/app/analyst/containers/sim-set/org-config/sim-set-org-config-container.component";
+import { OrgConfigTableRow, SimConfigClickEvent } from "../../../org-config/views/table/org-config-table.component";
 
 @Component({
     selector: "arion-sim-set-org-config-view",
     templateUrl: "./sim-set-org-config-view.component.html",
     styleUrls: ["./sim-set-org-config-view.component.scss"]
 })
-export class SimSetOrgConfigViewComponent {
+export class SimSetOrgConfigViewComponent implements OnChanges {
     @Input() stepsData!: StepData[];
     @Input() simSetId!: number;
+    tableRows: OrgConfigTableRow[] = [];
 
     constructor(private router: Router) {}
 
-    navigateToSimConfig(simConfigId: number) {
-        this.router.navigate(['/sim-config', simConfigId], {
-            queryParams: { simSetId: this.simSetId }
-        });
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['stepsData'] && this.stepsData) {
+            this.tableRows = this.stepsData.flatMap(step =>
+                step.orgConfigs.map(oc => ({
+                    stepCount: step.stepCount,
+                    optimiserStateId: step.optimiserStateId,
+                    orgConfigId: oc.orgConfigId,
+                    configHash: this.getOrgConfigHash(oc.orgConfig),
+                    state: oc.state,
+                    simConfigs: oc.simConfigs
+                }))
+            );
+        }
+    }
+
+    navigateToSimConfig(event: SimConfigClickEvent) {
+        const queryParams: any = {
+            simSetId: this.simSetId,
+            orgConfigId: event.orgConfigId
+        };
+        if (event.optimiserStateId) queryParams.optimiserStateId = event.optimiserStateId;
+        this.router.navigate(['/sim-config', event.simConfigId], { queryParams });
     }
 
     navigateToOrgConfig(orgConfigId: number) {
@@ -29,25 +49,10 @@ export class SimSetOrgConfigViewComponent {
         this.router.navigate(['/optimiser-state', optimiserStateId]);
     }
 
-    getTotalSimConfigsForStep(step: StepData): number {
-        return step.orgConfigs.reduce((total, orgConfig) => total + orgConfig.simConfigs.length, 0);
-    }
-
-    getHash(str: string): string {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32-bit integer
-        }
-        return Math.abs(hash).toString(16).padStart(8, '0');
-    }
-
-    getOrgConfigHash(orgConfig: any): string {
+    private getOrgConfigHash(orgConfig: any): string {
         if (!orgConfig) {
             return '00000000';
         }
-        // Stringify the entire orgConfig object (handling circular references)
         const seen = new WeakSet();
         const jsonStr = JSON.stringify(orgConfig, (key, value) => {
             if (typeof value === 'object' && value !== null) {
@@ -58,6 +63,12 @@ export class SimSetOrgConfigViewComponent {
             }
             return value;
         });
-        return this.getHash(jsonStr);
+        let hash = 0;
+        for (let i = 0; i < jsonStr.length; i++) {
+            const char = jsonStr.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash).toString(16).padStart(8, '0');
     }
 }

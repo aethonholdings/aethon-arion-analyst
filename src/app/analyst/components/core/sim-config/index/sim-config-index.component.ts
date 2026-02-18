@@ -8,6 +8,7 @@ import { SimConfigDTO, StateType } from "aethon-arion-pipeline";
 })
 export class SimConfigIndexComponent {
     @Input() simConfigs!: SimConfigDTO[];
+    @Input() compact: boolean = false;
     @Output() selected: EventEmitter<number> = new EventEmitter<number>();
 
     simState(simConfig: SimConfigDTO): StateType {

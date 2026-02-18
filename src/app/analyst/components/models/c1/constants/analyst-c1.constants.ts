@@ -54,9 +54,10 @@ export const batchParamsInit: BatchParams = {
 
 export const C1GradientAscentDefaultOptimiserParams: GradientAscentParameters = {
     iterations: {
-        learningRate: 0.001,
+        learningRate: 0.0000001,
         tolerance: 0.001,
-        max: 1000
+        max: 1000,
+        maxStepFraction: 0.05
     },
     init: { type: "random" },
     parameterSpace: [
@@ -82,7 +83,7 @@ export const C1GradientAscentDefaultOptimiserParams: GradientAscentParameters = 
                 type: DomainTypes.CONTINUOUS,
                 optimise: true,
                 min: 0,
-                max: 0.0001,
+                max: 0.01,
                 derivativeStepSize: 0.00001
             }
         },

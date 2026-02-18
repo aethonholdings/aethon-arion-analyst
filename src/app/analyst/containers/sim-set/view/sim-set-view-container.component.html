@@ -23,14 +23,6 @@
             <button
                 role="tab"
                 class="tab"
-                [class.tab-active]="activeTab === 'summary'"
-                (click)="activeTab = 'summary'"
-            >
-                Summary
-            </button>
-            <button
-                role="tab"
-                class="tab"
                 [class.tab-active]="activeTab === 'optimiser-steps'"
                 (click)="activeTab = 'optimiser-steps'"
             >
@@ -43,6 +35,14 @@
                 (click)="activeTab = 'org-configs'"
             >
                 Org configs
+            </button>
+            <button
+                role="tab"
+                class="tab"
+                [class.tab-active]="activeTab === 'summary'"
+                (click)="activeTab = 'summary'"
+            >
+                Summary
             </button>
         </div>
     </div>

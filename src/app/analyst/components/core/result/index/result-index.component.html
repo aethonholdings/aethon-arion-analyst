@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let result of results" (click)="selected.emit(result.id)">
+            <tr *ngFor="let result of results" class="clickable-row" (click)="selected.emit(result.id)">
                 <td>{{ result.id }}</td>
                 <td class="text-right">{{ result.durationSec }}</td>
                 <td class="text-right">{{ result.performance | number: "1.1-1" }}</td>

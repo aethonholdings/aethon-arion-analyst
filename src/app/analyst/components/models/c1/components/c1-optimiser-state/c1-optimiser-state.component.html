@@ -1,10 +1,12 @@
 <div class="overflow-x-auto w-full">
-    <table *ngIf="optimiserState && x && del" class="table table-zebra table-sm">
+    <table *ngIf="optimiserState && x && del" class="table table-xs">
         <thead>
             <tr class="bg-base-200">
                 <th scope="col" class="sticky left-0 bg-base-200 z-10">Variable</th>
                 <th scope="col" class="text-right bg-base-200 min-w-[140px]">Baseline (x)</th>
-                <th scope="col" class="text-center bg-base-200" [attr.colspan]="del.length">Optimization Delta Values (∂)</th>
+                <th scope="col" class="text-center bg-base-200" [attr.colspan]="del.length">
+                    Optimization Delta Values (∂)
+                </th>
             </tr>
             <tr class="bg-base-300">
                 <th scope="col" class="sticky left-0 bg-base-300 z-10"></th>
@@ -15,17 +17,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-primary/10">
-                <td class="heading sticky left-0 bg-primary/10 z-10">OUTPUTS</td>
-                <td class="text-right bg-primary/10"></td>
-                <td *ngFor="let parameter of del" class="text-right bg-primary/10" scope="col"></td>
-            </tr>
             <tr>
                 <td class="sticky left-0 bg-base-100">Optimisation variable value</td>
                 <td class="text-right font-mono">—</td>
                 <td *ngFor="let parameter of del" scope="col" class="text-right font-mono">
                     {{ parameter.data.outputs.configuratorParameterValue }}
                 </td>
+            </tr>
+            <tr class="bg-primary/10">
+                <td class="heading sticky left-0 bg-primary/10 z-10">OUTPUTS</td>
+                <td class="text-right bg-primary/10"></td>
+                <td *ngFor="let parameter of del" class="text-right bg-primary/10" scope="col"></td>
             </tr>
             <tr>
                 <td class="sticky left-0 bg-base-100">Performance</td>

@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 export interface Breadcrumb {
     label: string;
     route?: string[];
+    queryParams?: { [key: string]: string };
 }
 
 @Component({
