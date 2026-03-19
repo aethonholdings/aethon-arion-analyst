@@ -11,6 +11,14 @@ import {
     StateSpacePointDTO
 } from "aethon-arion-pipeline";
 import { Observable, catchError, concatMap, finalize, from, map, of, shareReplay, switchMap, timer } from "rxjs";
+
+export interface OrgConfigSummaryDTO {
+    agentCount: number;
+    orgConfigCount: number;
+    avgPerformance: number | null;
+    bestPerformance: number | null;
+    stdDevPerformance: number | null;
+}
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
 import { API, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
@@ -113,6 +121,22 @@ export class AnalystService {
         const operation: string = "ResultController_view";
         const options: APIRequestOptions = { params: { id: id } };
         return this.apiService.request$<ResultDTO>(operation, options);
+    }
+
+    getOrgConfigSummary$(): Observable<OrgConfigSummaryDTO[]> {
+        const operation: string = "OrgConfigController_summary";
+        return this.apiService.request$<OrgConfigSummaryDTO[]>(operation, {});
+    }
+
+    getRunningOrgConfigs$(): Observable<OrgConfigDTO[]> {
+        const operation: string = "OrgConfigController_running";
+        return this.apiService.request$<OrgConfigDTO[]>(operation, {});
+    }
+
+    getOrgConfigsByAgentCount$(agentCount: number): Observable<OrgConfigDTO[]> {
+        const operation: string = "OrgConfigController_byAgentCount";
+        const options: APIRequestOptions = { params: { agentCount } };
+        return this.apiService.request$<OrgConfigDTO[]>(operation, options);
     }
 
     getOrgConfigs$(query?: PaginateQuery): Observable<OrgConfigDTO[]> {

@@ -1,4 +1,4 @@
-<arion-histogram [data]="performanceValues"></arion-histogram>
+<arion-histogram *ngIf="showHistogram" [data]="performanceValues"></arion-histogram>
 
 <!-- Step-grouped table -->
 <ng-container *ngIf="showStepColumn && sortedSteps.length > 0">
@@ -20,6 +20,10 @@
                     <th scope="col" class="w-32 text-right cursor-pointer select-none" (click)="sortBy('avgPerformance')">
                         Avg Performance
                         <span class="ml-1 opacity-50">{{ sortColumn === 'avgPerformance' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
+                    <th scope="col" class="w-24 text-right cursor-pointer select-none" (click)="sortBy('percentile')">
+                        Percentile
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'percentile' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
                     </th>
                 </tr>
             </thead>
@@ -70,6 +74,16 @@
                                         -
                                     </span>
                                 </td>
+                                <td
+                                    *ngIf="isFirstSimConfig"
+                                    [attr.rowspan]="orgConfig.simConfigs.length"
+                                    class="align-top text-right"
+                                >
+                                    <span *ngIf="percentileMap.get(orgConfig.orgConfigId) != null">
+                                        {{ percentileMap.get(orgConfig.orgConfigId) }}%
+                                    </span>
+                                    <span *ngIf="percentileMap.get(orgConfig.orgConfigId) == null" class="opacity-50">—</span>
+                                </td>
                             </tr>
                         </ng-container>
                     </ng-container>
@@ -99,6 +113,10 @@
                         Avg Performance
                         <span class="ml-1 opacity-50">{{ sortColumn === 'avgPerformance' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
                     </th>
+                    <th scope="col" class="w-24 text-right cursor-pointer select-none" (click)="sortBy('percentile')">
+                        Percentile
+                        <span class="ml-1 opacity-50">{{ sortColumn === 'percentile' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +126,7 @@
                             <td
                                 *ngIf="isFirst"
                                 [attr.rowspan]="orgConfig.simConfigs.length"
-                                class="align-top border-r-2 border-base-300"
+                                class="align-top"
                                 (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
                             >
                                 <span class="font-medium">{{ orgConfig.orgConfigId }}</span>
@@ -116,7 +134,7 @@
                             <td
                                 *ngIf="isFirst"
                                 [attr.rowspan]="orgConfig.simConfigs.length"
-                                class="align-top border-r-2 border-base-300 font-mono"
+                                class="align-top font-mono"
                                 (click)="orgConfigClick.emit(orgConfig.orgConfigId)"
                             >
                                 {{ orgConfig.configHash }}
@@ -124,7 +142,7 @@
                             <td
                                 *ngIf="isFirst"
                                 [attr.rowspan]="orgConfig.simConfigs.length"
-                                class="align-top border-r-2 border-base-300"
+                                class="align-top"
                             >
                                 <arion-status-indicator [status]="orgConfig.state"></arion-status-indicator>
                             </td>
@@ -138,6 +156,16 @@
                                 <span *ngIf="simConfig.avgPerformance === null" class="opacity-50">
                                     -
                                 </span>
+                            </td>
+                            <td
+                                *ngIf="isFirst"
+                                [attr.rowspan]="orgConfig.simConfigs.length"
+                                class="align-top text-right"
+                            >
+                                <span *ngIf="percentileMap.get(orgConfig.orgConfigId) != null">
+                                    {{ percentileMap.get(orgConfig.orgConfigId) }}%
+                                </span>
+                                <span *ngIf="percentileMap.get(orgConfig.orgConfigId) == null" class="opacity-50">—</span>
                             </td>
                         </tr>
                     </ng-container>

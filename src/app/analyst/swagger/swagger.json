@@ -415,6 +415,85 @@
         ]
       }
     },
+    "/arion/org-config/running": {
+      "get": {
+        "operationId": "OrgConfigController_running",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All OrgConfig objects that have at least one SimConfig in the running state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/OrgConfigDTOGet" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["OrgConfig"]
+      }
+    },
+    "/arion/org-config/agent-count/{agentCount}": {
+      "get": {
+        "operationId": "OrgConfigController_byAgentCount",
+        "parameters": [
+          {
+            "name": "agentCount",
+            "required": true,
+            "in": "path",
+            "description": "The agent count to filter OrgConfigs by",
+            "schema": { "example": 13, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All OrgConfig objects with the specified agent count, including their SimConfigs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/OrgConfigDTOGet" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["OrgConfig"]
+      }
+    },
+    "/arion/org-config/summary": {
+      "get": {
+        "operationId": "OrgConfigController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Avg, best and stdDev performance grouped by agent count across all org configs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "agentCount": { "type": "number" },
+                      "orgConfigCount": { "type": "number" },
+                      "avgPerformance": { "type": "number", "nullable": true },
+                      "bestPerformance": { "type": "number", "nullable": true },
+                      "stdDevPerformance": { "type": "number", "nullable": true }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "OrgConfig"
+        ]
+      }
+    },
     "/arion/org-config/{id}": {
       "get": {
         "operationId": "OrgConfigController_view",

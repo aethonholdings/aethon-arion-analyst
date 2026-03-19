@@ -27,8 +27,8 @@ export interface SimConfigClickEvent {
     optimiserStateId?: number;
 }
 
-type SortColumn = 'orgConfigId' | 'state' | 'avgPerformance';
-type SortDirection = 'asc' | 'desc';
+export type SortColumn = 'orgConfigId' | 'state' | 'avgPerformance' | 'percentile';
+export type SortDirection = 'asc' | 'desc';
 
 @Component({
     selector: 'arion-org-config-table',
@@ -38,19 +38,32 @@ type SortDirection = 'asc' | 'desc';
 export class OrgConfigTableComponent implements OnChanges {
     @Input() rows: OrgConfigTableRow[] = [];
     @Input() showStepColumn: boolean = false;
+    @Input() showHistogram: boolean = true;
+    @Input() initialSortColumn: SortColumn = 'orgConfigId';
+    @Input() initialSortDirection: SortDirection = 'asc';
     @Output() orgConfigClick = new EventEmitter<number>();
     @Output() simConfigClick = new EventEmitter<SimConfigClickEvent>();
     @Output() stepClick = new EventEmitter<number>();
+    @Output() sortChange = new EventEmitter<{ column: SortColumn; direction: SortDirection }>();
 
     performanceValues: number[] = [];
     steps: OrgConfigTableStep[] = [];
     sortedRows: OrgConfigTableRow[] = [];
     sortedSteps: OrgConfigTableStep[] = [];
+    percentileMap: Map<number, number | null> = new Map();
 
     sortColumn: SortColumn = 'orgConfigId';
     sortDirection: SortDirection = 'asc';
 
     ngOnChanges(changes: SimpleChanges) {
+        let needsSort = false;
+
+        if (changes['initialSortColumn'] || changes['initialSortDirection']) {
+            this.sortColumn = this.initialSortColumn;
+            this.sortDirection = this.initialSortDirection;
+            needsSort = true;
+        }
+
         if (changes['rows']) {
             this.performanceValues = this.rows
                 .flatMap(row => row.simConfigs)
@@ -60,6 +73,10 @@ export class OrgConfigTableComponent implements OnChanges {
             if (this.showStepColumn) {
                 this.buildSteps();
             }
+            needsSort = true;
+        }
+
+        if (needsSort) {
             this.applySort();
         }
     }
@@ -72,6 +89,7 @@ export class OrgConfigTableComponent implements OnChanges {
             this.sortDirection = 'desc';
         }
         this.applySort();
+        this.sortChange.emit({ column: this.sortColumn, direction: this.sortDirection });
     }
 
     onSimConfigClick(simConfigId: number, orgConfig: OrgConfigTableRow) {
@@ -83,14 +101,43 @@ export class OrgConfigTableComponent implements OnChanges {
     }
 
     private applySort() {
+        this.percentileMap = new Map();
+
         if (this.showStepColumn) {
-            this.sortedSteps = this.steps.map(step => ({
-                ...step,
-                rows: this.sortRows([...step.rows])
-            }));
+            this.sortedSteps = this.steps.map(step => {
+                const stepPercentiles = this.computePercentiles(step.rows);
+                stepPercentiles.forEach((v, k) => this.percentileMap.set(k, v));
+                return {
+                    ...step,
+                    rows: this.sortRows([...step.rows])
+                };
+            });
         } else {
+            this.percentileMap = this.computePercentiles(this.rows);
             this.sortedRows = this.sortRows([...this.rows]);
         }
+    }
+
+    private computePercentiles(rows: OrgConfigTableRow[]): Map<number, number | null> {
+        const map = new Map<number, number | null>();
+        const entries = rows.map(row => ({
+            orgConfigId: row.orgConfigId,
+            bestPerf: Math.max(...row.simConfigs.map(sc => sc.avgPerformance ?? -Infinity))
+        }));
+
+        const validEntries = entries.filter(e => e.bestPerf !== -Infinity);
+        const total = validEntries.length;
+
+        for (const { orgConfigId, bestPerf } of entries) {
+            if (bestPerf === -Infinity || total === 0) {
+                map.set(orgConfigId, null);
+            } else {
+                const rank = validEntries.filter(e => e.bestPerf <= bestPerf).length;
+                map.set(orgConfigId, Math.round((rank / total) * 100));
+            }
+        }
+
+        return map;
     }
 
     private sortRows(rows: OrgConfigTableRow[]): OrgConfigTableRow[] {
@@ -101,7 +148,8 @@ export class OrgConfigTableComponent implements OnChanges {
                     return (a.orgConfigId - b.orgConfigId) * dir;
                 case 'state':
                     return a.state.localeCompare(b.state) * dir;
-                case 'avgPerformance': {
+                case 'avgPerformance':
+                case 'percentile': {
                     const aPerf = Math.max(...a.simConfigs.map(sc => sc.avgPerformance ?? -Infinity));
                     const bPerf = Math.max(...b.simConfigs.map(sc => sc.avgPerformance ?? -Infinity));
                     if (aPerf === -Infinity && bPerf === -Infinity) return 0;

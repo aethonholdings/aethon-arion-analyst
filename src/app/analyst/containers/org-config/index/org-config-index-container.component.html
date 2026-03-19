@@ -1,0 +1,39 @@
+<arion-breadcrumbs [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
+<div class="flex items-center gap-2 mb-4">
+    <h2>Org Configs</h2>
+    <span *ngIf="refreshing" class="loading loading-spinner loading-xs opacity-50"></span>
+</div>
+
+<div *ngIf="runningRows$ | async as runningRows" class="mb-8">
+    <div class="divider">Currently running ({{ runningRows.length }})</div>
+    <arion-org-config-running
+        [rows]="runningRows"
+        (orgConfigClick)="navigateToOrgConfig($event)"
+        (simConfigClick)="navigateToSimConfig($event)">
+    </arion-org-config-running>
+</div>
+
+<div class="divider">Summary - All org configs</div>
+
+<div *ngIf="summary$ | async as summary" class="mb-8">
+    <arion-org-config-index
+        [summary]="summary"
+        [selectedAgentCount]="selectedAgentCount"
+        (agentCountClick)="selectAgentCount($event)">
+    </arion-org-config-index>
+</div>
+
+<ng-container *ngIf="selectedAgentCount !== null">
+    <div class="divider">{{ selectedAgentCount }} Agents</div>
+    <div *ngIf="tableRows$ | async as rows" class="mb-8">
+        <arion-org-config-table
+            [rows]="rows"
+            [showStepColumn]="false"
+            [initialSortColumn]="initialSortColumn"
+            [initialSortDirection]="initialSortDirection"
+            (orgConfigClick)="navigateToOrgConfig($event)"
+            (simConfigClick)="navigateToSimConfig($event)"
+            (sortChange)="onSortChange($event)">
+        </arion-org-config-table>
+    </div>
+</ng-container>

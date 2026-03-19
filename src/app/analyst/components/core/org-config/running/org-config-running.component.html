@@ -1,0 +1,15 @@
+<div *ngIf="rows.length > 0; else noRunning">
+    <arion-org-config-table
+        [rows]="rows"
+        [showStepColumn]="false"
+        [showHistogram]="false"
+        [initialSortColumn]="'orgConfigId'"
+        [initialSortDirection]="'asc'"
+        (orgConfigClick)="orgConfigClick.emit($event)"
+        (simConfigClick)="simConfigClick.emit($event)">
+    </arion-org-config-table>
+</div>
+
+<ng-template #noRunning>
+    <p class="opacity-50 text-sm">No org configs currently running.</p>
+</ng-template>

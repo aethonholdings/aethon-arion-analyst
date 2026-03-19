@@ -1,0 +1,41 @@
+<div *ngIf="summary.length > 0; else empty" class="overflow-x-auto w-full">
+    <table class="table table-xs">
+        <thead>
+            <tr>
+                <th scope="col">Agent Count</th>
+                <th scope="col" class="text-right">Org Configs</th>
+                <th scope="col" class="text-right">Avg Performance</th>
+                <th scope="col" class="text-right">Best Performance</th>
+                <th scope="col" class="text-right">Std Deviation</th>
+                <th scope="col" class="text-right">Avg Performance/ agent</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of summary"
+                class="clickable-row"
+                [class.bg-base-200]="row.agentCount === selectedAgentCount"
+                (click)="agentCountClick.emit(row.agentCount)">
+                <td class="font-medium">{{ row.agentCount }}</td>
+                <td class="text-right">{{ row.orgConfigCount }}</td>
+                <td class="text-right">
+                    <span *ngIf="row.avgPerformance !== null; else dash">{{ row.avgPerformance | number:'1.0-0' }}</span>
+                </td>
+                <td class="text-right">
+                    <span *ngIf="row.bestPerformance !== null; else dash">{{ row.bestPerformance | number:'1.0-0' }}</span>
+                </td>
+                <td class="text-right">
+                    <span *ngIf="row.stdDevPerformance !== null; else dash">{{ row.stdDevPerformance | number:'1.0-0' }}</span>
+                </td>
+                <td class="text-right">
+                    <span *ngIf="row.avgPerformance !== null; else dash">{{ row.avgPerformance / row.agentCount | number:'1.0-0' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #empty>
+    <div class="text-center py-8 opacity-70">No org config data available</div>
+</ng-template>
+
+<ng-template #dash><span class="opacity-50">—</span></ng-template>

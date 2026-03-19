@@ -7,6 +7,7 @@ import { SimSetCreateContainerComponent } from "src/app/analyst/containers/sim-s
 import { SimSetIndexContainerComponent } from "src/app/analyst/containers/sim-set/index/sim-set-index-container.component";
 import { SimSetViewContainerComponent } from "src/app/analyst/containers/sim-set/view/sim-set-view-container.component";
 import { OrgConfigViewContainerComponent } from "src/app/analyst/containers/org-config/view/org-config-view-container.component";
+import { OrgConfigIndexContainerComponent } from "src/app/analyst/containers/org-config/index/org-config-index-container.component";
 import { SimSetOrgConfigContainerComponent } from "src/app/analyst/containers/sim-set/org-config/sim-set-org-config-container.component";
 
 const routes: Routes = [
@@ -35,7 +36,10 @@ const routes: Routes = [
     },
     {
         path: "org-config",
-        children: [{ path: ":id", component: OrgConfigViewContainerComponent }]
+        children: [
+            { path: ":id", component: OrgConfigViewContainerComponent },
+            { path: "", component: OrgConfigIndexContainerComponent }
+        ]
     },
     { path: "", redirectTo: "sim-set", pathMatch: "full" } // Default route
 ];

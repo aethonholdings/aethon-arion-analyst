@@ -11,6 +11,8 @@ import { ReportingComponent } from "./subcomponents/reporting/reporting.componen
 import { ModelsModule } from "../../models/models.module";
 import { ConfiguratorParamsModule } from "../configurator-params/configurator-params.module";
 import { OrgConfigTableComponent } from "./views/table/org-config-table.component";
+import { OrgConfigIndexComponent } from "./index/org-config-index.component";
+import { OrgConfigRunningComponent } from "./running/org-config-running.component";
 
 @NgModule({
     declarations: [
@@ -21,9 +23,11 @@ import { OrgConfigTableComponent } from "./views/table/org-config-table.componen
         PlantComponent,
         ReportingComponent,
         BoardComponent,
-        OrgConfigTableComponent
+        OrgConfigTableComponent,
+        OrgConfigIndexComponent,
+        OrgConfigRunningComponent
     ],
     imports: [CommonModule, WidgetsModule, ModelsModule, ConfiguratorParamsModule],
-    exports: [OrgConfigComponent, OrgConfigTableComponent]
+    exports: [OrgConfigComponent, OrgConfigTableComponent, OrgConfigIndexComponent, OrgConfigRunningComponent]
 })
 export class OrgConfigModule {}
