@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, combineLatest, map, mergeMap, Observable, tap } from "rxjs";
+import { BehaviorSubject, catchError, combineLatest, finalize, map, mergeMap, Observable, of, switchMap, tap } from "rxjs";
 import { OrgConfigDTO, StateType } from "aethon-arion-pipeline";
 import { AnalystService, OrgConfigSummaryDTO } from "src/app/analyst/services/analyst.service";
 import { OrgConfigTableRow, SimConfigClickEvent, SortColumn, SortDirection } from "src/app/analyst/components/core/org-config/views/table/org-config-table.component";
@@ -55,16 +55,18 @@ export class OrgConfigIndexContainerComponent implements OnInit {
             this.analystService.getRefeshTimer$(),
             this.agentCountSubject
         ]).pipe(
-            tap(([_, agentCount]) => {
-                if (agentCount !== null) {
-                    setTimeout(() => this.spinnerService.show('Loading org configs...'));
-                }
-            }),
-            mergeMap(([_, agentCount]) => {
-                if (agentCount === null) return [];
+            // switchMap: a newer selection cancels the request for an older one, so a slow response for a
+            // previously clicked agent count can never overwrite the current table
+            switchMap(([_, agentCount]) => {
+                if (agentCount === null) return of([]);
+                this.spinnerService.show("Loading org configs...");
                 return this.analystService.getOrgConfigsByAgentCount$(agentCount).pipe(
-                    map(orgConfigs => this.mapToTableRows(orgConfigs)),
-                    tap(() => setTimeout(() => this.spinnerService.hide()))
+                    map((orgConfigs) => this.mapToTableRows(orgConfigs)),
+                    catchError((error) => {
+                        console.error(error);
+                        return of([]);
+                    }),
+                    finalize(() => this.spinnerService.hide())
                 );
             })
         );

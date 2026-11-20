@@ -43,7 +43,12 @@
                     }}</span>
                     <span
                         *ngIf="domain.domain.type !== domainTypes.CONTINUOUS && domain.domain.type !== domainTypes.DISCRETE"
-                        >{{ toNumber(del[i][domain.id].value) | number: "1.0-0" }}</span
+                        >{{ toNumber(del[i][domain.id].value) | number: "1.0-0" }}<span
+                            *ngIf="del[i][domain.id].label"
+                            class="text-xs opacity-70"
+                        >
+                            ({{ del[i][domain.id].label }})</span
+                        ></span
                     >
                 </td>
                 <td *ngIf="domainCount > 0" class="text-right border-l-2 border-base-300">{{ optimiserState.optimiserData.moduloDel | number: "1.0-0" }}</td>

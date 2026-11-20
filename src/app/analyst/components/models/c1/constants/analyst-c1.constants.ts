@@ -52,9 +52,11 @@ export const batchParamsInit: BatchParams = {
     }
 };
 
-export const C1GradientAscentDefaultOptimiserParams: GradientAscentParameters = {
+// The single source of the default C1 gradient ascent parameters (previously duplicated, with different values, in
+// C1Service). Treat as read-only; use c1GradientAscentDefaultOptimiserParams() for a mutable copy.
+export const C1GradientAscentDefaultOptimiserParams: Readonly<GradientAscentParameters> = {
     iterations: {
-        learningRate: 0.0000001,
+        learningRate: 0.001,
         tolerance: 0.001,
         max: 1000,
         maxStepFraction: 0.05
@@ -83,7 +85,7 @@ export const C1GradientAscentDefaultOptimiserParams: GradientAscentParameters = 
                 type: DomainTypes.CONTINUOUS,
                 optimise: true,
                 min: 0,
-                max: 0.01,
+                max: 0.0001,
                 derivativeStepSize: 0.00001
             }
         },
@@ -137,6 +139,11 @@ export const C1GradientAscentDefaultOptimiserParams: GradientAscentParameters = 
         }
     ]
 };
+
+/** Returns a deep, mutable copy of the default C1 gradient ascent parameters. */
+export function c1GradientAscentDefaultOptimiserParams(): GradientAscentParameters {
+    return JSON.parse(JSON.stringify(C1GradientAscentDefaultOptimiserParams));
+}
 
 export const C1DomainDefinitions: DomainDefinition[] = [
     {

@@ -49,8 +49,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                     error: error.error
                 });
 
-                // Return user-friendly error
-                return throwError(() => new Error(errorMessage));
+                // rethrow the original HttpErrorResponse so callers keep the status code and the server's error
+                // body (a plain Error dropped both)
+                return throwError(() => error);
             })
         );
     }

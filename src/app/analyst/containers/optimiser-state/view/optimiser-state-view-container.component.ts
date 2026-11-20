@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ConfiguratorParamData, OptimiserStateDTO } from "aethon-arion-pipeline";
-import { Observable, Subject, interval, map, mergeMap, takeUntil, tap } from "rxjs";
+import { EMPTY, Observable, Subject, catchError, finalize, interval, map, merge, shareReplay, switchMap, takeUntil } from "rxjs";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { SpinnerService } from "src/app/root/components/spinner/spinner.service";
@@ -21,6 +21,7 @@ export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
     refreshing: boolean = false;
     secondsUntilRefresh: number = 60;
     private destroy$ = new Subject<void>();
+    private manualRefresh$ = new Subject<void>();
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -40,23 +41,28 @@ export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
         });
 
         // Auto-refresh timer (every 60 seconds)
-        this.optimiserStateRefresh$ = this.analystService.getRefeshTimer$().pipe(
-            tap(() => {
+        // auto refresh every 60 s plus manual refreshes; switchMap drops a stale in-flight request, errors are
+        // contained so the refresh stream survives, and shareReplay makes every template subscriber share one request
+        this.optimiserStateRefresh$ = merge(this.analystService.getRefeshTimer$(), this.manualRefresh$).pipe(
+            switchMap(() => {
                 setTimeout(() => {
                     this.refreshing = true;
                     this.secondsUntilRefresh = 60;
-                    this.spinnerService.show();
                 });
+                this.spinnerService.show();
+                return this.analystService.getOptimiserState$(this.optimiserStateId).pipe(
+                    catchError((error) => {
+                        console.error(error);
+                        return EMPTY;
+                    }),
+                    finalize(() => {
+                        this.spinnerService.hide();
+                        setTimeout(() => (this.refreshing = false));
+                    })
+                );
             }),
-            mergeMap(() => {
-                return this.analystService.getOptimiserState$(this.optimiserStateId);
-            }),
-            tap(() => {
-                setTimeout(() => {
-                    this.refreshing = false;
-                    this.spinnerService.hide();
-                });
-            })
+            shareReplay({ bufferSize: 1, refCount: true }),
+            takeUntil(this.destroy$)
         );
 
         this.optimiserState$ = this.optimiserStateRefresh$;
@@ -80,9 +86,6 @@ export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
 
     manualRefresh() {
         this.secondsUntilRefresh = 60;
-        // Navigate to trigger a reload
-        this.router.navigate(['/optimiser-state', this.optimiserStateId], {
-            queryParams: { refresh: Date.now() }
-        });
+        this.manualRefresh$.next();
     }
 }

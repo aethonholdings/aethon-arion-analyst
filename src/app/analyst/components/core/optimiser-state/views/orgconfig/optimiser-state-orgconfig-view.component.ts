@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 import { Router } from "@angular/router";
 import { OptimiserStateDTO, ConfiguratorParamData, DataPoint, StateType } from "aethon-arion-pipeline";
 
@@ -22,14 +22,17 @@ export interface DimensionColumn {
     templateUrl: "./optimiser-state-orgconfig-view.component.html",
     styleUrls: ["./optimiser-state-orgconfig-view.component.scss"]
 })
-export class OptimiserStateOrgconfigViewComponent implements OnInit {
+export class OptimiserStateOrgconfigViewComponent implements OnChanges {
     @Input() optimiserState!: OptimiserStateDTO<ConfiguratorParamData>;
     baselineColumn?: DimensionColumn;
     deltaColumns: DimensionColumn[] = [];
 
     constructor(private router: Router) {}
 
-    ngOnInit() {
+    // rebuilt on every input change: the container replaces optimiserState on each refresh
+    ngOnChanges() {
+        this.baselineColumn = undefined;
+        this.deltaColumns = [];
         this.processColumns();
     }
 

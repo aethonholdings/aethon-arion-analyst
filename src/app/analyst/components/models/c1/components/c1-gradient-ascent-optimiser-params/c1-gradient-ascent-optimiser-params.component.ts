@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { GradientAscentParameters } from "aethon-arion-pipeline";
 import { DomainDefinition } from "src/app/analyst/widgets/domain/domain.component";
-import { C1DomainDefinitions, C1GradientAscentDefaultOptimiserParams } from "../../constants/analyst-c1.constants";
+import { C1DomainDefinitions, c1GradientAscentDefaultOptimiserParams } from "../../constants/analyst-c1.constants";
 
 @Component({
     selector: "arion-c1-gradient-ascent-optimiser-params",
@@ -22,6 +22,6 @@ export class C1GradientAscentOptimiserParamsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (!this.gradientAscentParameters) this.gradientAscentParameters = C1GradientAscentDefaultOptimiserParams;
+        if (!this.gradientAscentParameters) this.gradientAscentParameters = c1GradientAscentDefaultOptimiserParams();
     }
 }

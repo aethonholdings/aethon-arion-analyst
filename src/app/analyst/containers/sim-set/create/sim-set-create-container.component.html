@@ -8,6 +8,12 @@
     </div>
 </div>
 
+<div *ngIf="errors.length > 0" class="alert alert-error mt-6" role="alert">
+    <ul>
+        <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+</div>
+
 <div class="mt-6 flex justify-end">
     <button class="btn btn-success" (click)="createSimSet()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

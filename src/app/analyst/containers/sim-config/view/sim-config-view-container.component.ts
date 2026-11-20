@@ -78,7 +78,10 @@ export class SimConfigViewContainerComponent {
     }
 
     getResults$(simConfigId: number | undefined): void {
-        if (simConfigId && !this.results$) {
+        if (!simConfigId) throw new Error("simConfigId is undefined");
+        // results already loaded (e.g. the tab is clicked a second time): nothing to do
+        if (this.results$) return;
+        {
             this.results$ = this.analystService.getSimConfigResultSet$(simConfigId).pipe(
                 tap(results => {
                     this.performanceValues = results
@@ -86,8 +89,6 @@ export class SimConfigViewContainerComponent {
                         .filter((v): v is number => v !== null && v !== undefined);
                 })
             );
-        } else {
-            throw new Error("simConfigId is undefined");
         }
     }
 

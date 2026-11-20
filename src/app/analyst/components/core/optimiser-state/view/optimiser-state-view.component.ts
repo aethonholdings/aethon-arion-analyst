@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { C1ModelName } from 'aethon-arion-c1';
 import { ConfiguratorParamData, OptimiserStateDTO, StateType } from 'aethon-arion-pipeline';
@@ -9,7 +9,7 @@ import { OrgConfigTableRow, SimConfigClickEvent } from '../../org-config/views/t
   templateUrl: './optimiser-state-view.component.html',
   styleUrls: ['./optimiser-state-view.component.scss']
 })
-export class OptimiserStateViewComponent implements OnInit {
+export class OptimiserStateViewComponent implements OnChanges {
       @Input() optimiserState!: OptimiserStateDTO<ConfiguratorParamData>;
       @Output() optimiserStateChange = new EventEmitter<OptimiserStateDTO<ConfiguratorParamData>>();
       c1ModelName = C1ModelName;
@@ -19,7 +19,10 @@ export class OptimiserStateViewComponent implements OnInit {
 
       constructor(private router: Router) {}
 
-      ngOnInit() {
+      // rebuilt on every input change: the container replaces optimiserState on each refresh
+      ngOnChanges() {
+          this.orgConfigId = undefined;
+          this.orgConfigRows = [];
           const convergenceTests = (this.optimiserState as any).convergenceTests;
           if (!convergenceTests?.length) return;
 

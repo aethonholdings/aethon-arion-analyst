@@ -11,8 +11,12 @@ export class SpinnerService {
 
     constructor(private ngxSpinnerService: NgxSpinnerService) {}
 
+    // number of outstanding show() calls; the spinner is hidden only when all of them have been matched by hide()
+    private _pending: number = 0;
+
     show(text?: string) {
         if (text) this.textSubscriber.next(text);
+        this._pending++;
         this.ngxSpinnerService.show();
     }
 
@@ -21,7 +25,8 @@ export class SpinnerService {
     }
 
     hide() {
-        this.ngxSpinnerService.hide();
+        this._pending = Math.max(0, this._pending - 1);
+        if (this._pending === 0) this.ngxSpinnerService.hide();
     }
 
     getProgress$(): Observable<string> {

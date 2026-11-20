@@ -10,7 +10,9 @@ import {
 } from "aethon-arion-pipeline";
 
 const flatten = require("flat");
-type TableEntries = { [id: string]: { domainType: DomainType; value: number | string | boolean | undefined } };
+type TableEntries = {
+    [id: string]: { domainType: DomainType; value: number | string | boolean | undefined; label?: string };
+};
 
 @Component({
     selector: "arion-c1-optimiser-state-transitions",
@@ -84,10 +86,17 @@ export class C1OptimiserStateTransitionsComponent implements OnInit {
                                 value: dataPoint.data.outputs.slope
                             };
                         } else {
-                            delTableEntries[dataPoint.id] = {
-                                domainType: dataPoint.data.outputs.domain.type,
-                                value: dataPoint.data.outputs.performanceDelta
-                            };
+                            // categorical parameters have one data point per alternative category, all with the same
+                            // id: show the best alternative (the one the optimiser would move to) and name it
+                            const delta = dataPoint.data.outputs.performanceDelta;
+                            const current = delTableEntries[dataPoint.id]?.value as number | undefined;
+                            if (current === undefined || (delta !== undefined && delta > current)) {
+                                delTableEntries[dataPoint.id] = {
+                                    domainType: dataPoint.data.outputs.domain.type,
+                                    value: delta,
+                                    label: String(dataPoint.data.outputs.configuratorParameterValue)
+                                };
+                            }
                         }
                     }
                 }

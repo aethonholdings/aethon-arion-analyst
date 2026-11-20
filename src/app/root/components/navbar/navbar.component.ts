@@ -15,7 +15,4 @@ export class NavbarComponent {
         this.isMenuOpen = !this.isMenuOpen;
     }
 
-    onChange$(selectedConfiguration: string): void {
-        this.routerService.navigate(["/sim-configs"], { queryParams: { configurator: selectedConfiguration } });
-    }
 }

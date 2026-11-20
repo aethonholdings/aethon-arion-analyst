@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
+import { ModelService } from "src/app/analyst/services/model.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
@@ -18,11 +19,13 @@ export class SimSetCreateContainerComponent implements OnInit {
         { label: 'Create New SimSet' }
     ];
     isCloning: boolean = false;
+    errors: string[] = [];
 
     constructor(
         private analystService: AnalystService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private modelService: ModelService
     ) {}
 
     ngOnInit() {
@@ -51,8 +54,22 @@ export class SimSetCreateContainerComponent implements OnInit {
     }
 
     createSimSet(): void {
-        this.analystService.createSimSet$(this.simSet).subscribe((response) => {
-            this.router.navigate(["/sim-set", response.id]);
+        // validate with the same optimiser rules the server applies, before submitting
+        this.errors = this.validate();
+        if (this.errors.length > 0) return;
+        this.analystService.createSimSet$(this.simSet).subscribe({
+            next: (response) => this.router.navigate(["/sim-set", response.id]),
+            error: (error) => (this.errors = [error?.error?.error?.message || error?.message || "SimSet creation failed"])
         });
+    }
+
+    /** Problems with the current optimiser parameters (empty when valid). */
+    validate(): string[] {
+        const model = this.modelService.getModels().find((m) => m.name === this.simSet.modelName);
+        if (!model) return [`Unknown model ${this.simSet.modelName}`];
+        const optimiser = this.simSet.optimiserName
+            ? model.getOptimiser(this.simSet.optimiserName)
+            : model.getDefaultOptimiser();
+        return optimiser.validateParameters(this.simSet.optimiserParams);
     }
 }

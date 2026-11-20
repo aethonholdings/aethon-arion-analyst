@@ -47,8 +47,7 @@ export class DomainComponent implements OnInit {
                 let optimise: boolean = false,
                     defaultValue: boolean = false;
                 if (this.values.optimise) {
-                    let found = this.values.categories.find((valueCategory) => valueCategory === category);
-                    if (found) optimise = true;
+                    optimise = (this.values.categories ?? []).includes(category);
                 }
                 if (category === this.definition.domain.default) defaultValue = true;
                 this.selectionFlags.push([optimise, defaultValue]);
@@ -66,77 +65,77 @@ export class DomainComponent implements OnInit {
         this.modalText = "";
         if (this.values.type !== this.definition.domain.type)
             throw new Error(`DomainComponent: Incompatible domain type for parameter ${this.definition.id}`);
+        const definition = this.definition.domain;
         if (
-            (this.values.type === this.domainTypes.CONTINUOUS &&
-                this.definition.domain.type === this.domainTypes.CONTINUOUS) ||
-            (this.definition.domain.type === this.domainTypes.DISCRETE &&
-                this.values.type === this.domainTypes.DISCRETE)
+            (definition.type === DomainTypes.CONTINUOUS || definition.type === DomainTypes.DISCRETE) &&
+            (this.values.type === DomainTypes.CONTINUOUS || this.values.type === DomainTypes.DISCRETE)
         ) {
             if (this.values.optimise) {
-                if (this.values.max < this.values.min)
-                    this.modalText += `<p>Max value must be greater than min value<p>`;
-                if (this.values.derivativeStepSize > this.values.max - this.values.min)
-                    this.modalText += `<p>Domain derivative step size must be smaller than interval between max and min</p>`;
-                if (!this.modalText) {
-                    if (this.values.type === this.domainTypes.DISCRETE) {
-                        this.values.max = Math.round(this.values.max);
-                        this.values.min = Math.round(this.values.min);
-                        this.values.derivativeStepSize = Math.round(this.values.derivativeStepSize);
-                    }
-                    this.values = {
-                        type: this.definition.domain.type,
-                        optimise: true,
-                        max: this.values.max || this.definition.domain.max,
-                        min: this.values.min || this.definition.domain.min,
-                        derivativeStepSize: this.values.derivativeStepSize || this.definition.domain.derivativeStepSize
-                    };
+                // ?? rather than ||: a value of 0 is a legitimate entry, only an empty field takes the default
+                const values: any = this.values;
+                let min: number = values.min ?? definition.min;
+                let max: number = values.max ?? definition.max;
+                let step: number = values.derivativeStepSize ?? definition.derivativeStepSize;
+                if (this.values.type === DomainTypes.DISCRETE) {
+                    min = Math.round(min);
+                    max = Math.round(max);
+                    step = Math.round(step);
                 }
+                if (![min, max, step].every((v) => Number.isFinite(v))) this.modalText += `<p>Enter numbers for min, max and step size</p>`;
+                if (max < min) this.modalText += `<p>Max value must not be less than min value</p>`;
+                if (max > min && !(step > 0)) this.modalText += `<p>Derivative step size must be positive</p>`;
+                if (max > min && step > max - min)
+                    this.modalText += `<p>Derivative step size must not exceed the interval between max and min</p>`;
+                this.values = {
+                    type: definition.type,
+                    optimise: true,
+                    max: max,
+                    min: min,
+                    derivativeStepSize: step
+                };
             } else {
                 this.values = {
-                    type: this.definition.domain.type,
+                    type: definition.type,
                     optimise: false,
-                    default: this.values.default || this.definition.domain.default
+                    default: (this.values as any).default ?? definition.default
                 };
             }
         }
-        if (
-            this.values.type === this.domainTypes.CATEGORICAL &&
-            this.definition.domain.type === this.domainTypes.CATEGORICAL
-        ) {
+        if (definition.type === DomainTypes.CATEGORICAL && this.values.type === DomainTypes.CATEGORICAL) {
             if (this.values.optimise) {
-                if (this.selectionFlags.filter((flags) => flags[0]).length < 2)
+                // the categories array is rebuilt from the selection flags: toggling optimise on creates a values
+                // object without categories
+                if (!this.selectionFlags.some((flags) => flags[0])) {
+                    this.selectionFlags.forEach((flags) => (flags[0] = true));
+                }
+                this.values = {
+                    type: definition.type,
+                    optimise: true,
+                    categories: definition.categories.filter((_, i) => this.selectionFlags[i]?.[0])
+                };
+                if (this.values.categories.length < 2)
                     this.modalText += `<p>Optimisation requires two or more categories</p>`;
             } else {
                 this.values = {
-                    type: this.definition.domain.type,
+                    type: definition.type,
                     optimise: false,
-                    default: this.values.default || this.definition.domain.default
+                    default: (this.values as any).default ?? definition.default
                 };
             }
         }
-        if (this.modalText) {
-            this.ok = false;
-        } else {
-            this.ok = true;
-            this.valuesChange.emit(this.values);
+        if (definition.type === DomainTypes.BOOLEAN && this.values.type === DomainTypes.BOOLEAN) {
+            this.values = this.values.optimise
+                ? { type: definition.type, optimise: true }
+                : { type: definition.type, optimise: false, default: (this.values as any).default ?? definition.default };
         }
+        this.ok = !this.modalText;
+        // always propagate: the parent validates the whole parameter space before submitting
+        this.valuesChange.emit(this.values);
         this.check.emit(this.ok);
     }
 
     $clickInclusive(category: string) {
-        if (this.values.optimise) {
-            if (
-                this.definition.domain.type === DomainTypes.CATEGORICAL &&
-                this.values.type === DomainTypes.CATEGORICAL
-            ) {
-                let found = this.values.categories.find((categoryValue) => categoryValue === category);
-                found
-                    ? (this.values.categories = this.values.categories.filter(
-                          (categoryValue) => categoryValue !== category
-                      ))
-                    : this.values.categories.push(category);
-            }
-        }
+        // selectionFlags[i][0] is bound with ngModel; $check rebuilds values.categories from it
         this.$check();
     }
 
