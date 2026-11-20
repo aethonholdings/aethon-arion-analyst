@@ -73,7 +73,8 @@ export const C1GradientAscentDefaultOptimiserParams: Readonly<GradientAscentPara
         },
         {
             id: "gains.influence",
-            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0, max: 0.1, derivativeStepSize: 0.01 }
+            // stability limit: gain * clock tick (300 s) <= 1, i.e. at most 1/300 per second
+            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0, max: 0.003, derivativeStepSize: 0.0003 }
         },
         {
             id: "gains.judgment",
@@ -156,7 +157,7 @@ export const C1DomainDefinitions: DomainDefinition[] = [
     },
     {
         id: "gains.influence",
-        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.1, default: 0.003, derivativeStepSize: 0.0001 }
+        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.003, default: 0.00001, derivativeStepSize: 0.0001 }
     },
     {
         id: "gains.judgment",
