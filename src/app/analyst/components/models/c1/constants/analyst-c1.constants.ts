@@ -47,7 +47,7 @@ export const batchParamsInit: BatchParams = {
                 hybrid: true,
                 purposeful: true
             },
-            gains: [0.00000001]
+            gains: [0.00001] // per second, applied to the relative incentive gap
         }
     }
 };
@@ -168,7 +168,7 @@ export const C1DomainDefinitions: DomainDefinition[] = [
             type: DomainTypes.CONTINUOUS,
             min: 0,
             max: 0.0001,
-            default: 0.0001,
+            default: 0.00001,
             derivativeStepSize: 0.00001
         }
     },
