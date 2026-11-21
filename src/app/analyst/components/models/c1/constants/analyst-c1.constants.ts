@@ -29,7 +29,7 @@ export const batchParamsInit: BatchParams = {
                 hybrid: true,
                 purposeful: true
             },
-            gains: [0.000001]
+            gains: [0.00003] // calibrated defaults (see C1BaseConfiguratorDefaultData)
         },
         judgment: {
             matrix: {
@@ -38,7 +38,7 @@ export const batchParamsInit: BatchParams = {
                 hybrid: true,
                 purposeful: false
             },
-            gains: [0.00001]
+            gains: [0.00003]
         },
         incentive: {
             matrix: {
@@ -71,30 +71,20 @@ export const C1GradientAscentDefaultOptimiserParams: Readonly<GradientAscentPara
             id: "layers",
             domain: { type: DomainTypes.DISCRETE, optimise: true, min: 1, max: 3, derivativeStepSize: 1 }
         },
+        // gain ranges span the responsive part of each response curve (see the C1 defaults: influence 3e-5,
+        // judgment 3e-5, incentive 1e-5 per second); below them performance is flat, above them saturated. The
+        // influence maximum respects the stability limit gain x connections (<= 2 x spans) x 300 s <= 1 for spans 5
         {
             id: "gains.influence",
-            // not optimised: influence is set by the consensus time target below (gains.influence is ignored while
-            // influenceConsensusHours is set); stability limit 1/300 per second
-            domain: { type: DomainTypes.CONTINUOUS, optimise: false, default: 0.00001 }
-        },
-        {
-            id: "influenceConsensusHours",
-            // target e-folding time of disagreement between agents, in simulated working hours
-            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 4, max: 80, derivativeStepSize: 4 }
+            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0.000003, max: 0.0001, derivativeStepSize: 0.000003 }
         },
         {
             id: "gains.judgment",
-            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0, max: 0.1, derivativeStepSize: 0.01 }
+            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0.000003, max: 0.0001, derivativeStepSize: 0.000003 }
         },
         {
             id: "gains.incentive",
-            domain: {
-                type: DomainTypes.CONTINUOUS,
-                optimise: true,
-                min: 0,
-                max: 0.0001,
-                derivativeStepSize: 0.00001
-            }
+            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0.000001, max: 0.0001, derivativeStepSize: 0.000001 }
         },
         {
             id: "actionStateProbability",
@@ -163,15 +153,11 @@ export const C1DomainDefinitions: DomainDefinition[] = [
     },
     {
         id: "gains.influence",
-        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.003, default: 0.00001, derivativeStepSize: 0.0001 }
-    },
-    {
-        id: "influenceConsensusHours",
-        domain: { type: DomainTypes.CONTINUOUS, min: 1, max: 200, default: 24, derivativeStepSize: 4 }
+        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.0003, default: 0.00003, derivativeStepSize: 0.000003 }
     },
     {
         id: "gains.judgment",
-        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.1, default: 0.06, derivativeStepSize: 0.001 }
+        domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.001, default: 0.00003, derivativeStepSize: 0.000003 }
     },
     {
         id: "gains.incentive",
@@ -180,7 +166,7 @@ export const C1DomainDefinitions: DomainDefinition[] = [
             min: 0,
             max: 0.0001,
             default: 0.00001,
-            derivativeStepSize: 0.00001
+            derivativeStepSize: 0.000001
         }
     },
     {
