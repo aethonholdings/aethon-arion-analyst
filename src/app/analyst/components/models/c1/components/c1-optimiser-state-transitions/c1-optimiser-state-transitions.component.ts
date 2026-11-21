@@ -33,6 +33,7 @@ export class C1OptimiserStateTransitionsComponent implements OnInit {
         "spans",
         "layers",
         "gains.influence",
+        "influenceConsensusHours",
         "gains.judgment",
         "gains.incentive",
         "actionStateProbability",

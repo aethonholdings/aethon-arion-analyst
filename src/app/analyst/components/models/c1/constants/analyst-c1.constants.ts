@@ -73,8 +73,14 @@ export const C1GradientAscentDefaultOptimiserParams: Readonly<GradientAscentPara
         },
         {
             id: "gains.influence",
-            // stability limit: gain * clock tick (300 s) <= 1, i.e. at most 1/300 per second
-            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 0, max: 0.003, derivativeStepSize: 0.0003 }
+            // not optimised: influence is set by the consensus time target below (gains.influence is ignored while
+            // influenceConsensusHours is set); stability limit 1/300 per second
+            domain: { type: DomainTypes.CONTINUOUS, optimise: false, default: 0.00001 }
+        },
+        {
+            id: "influenceConsensusHours",
+            // target e-folding time of disagreement between agents, in simulated working hours
+            domain: { type: DomainTypes.CONTINUOUS, optimise: true, min: 4, max: 80, derivativeStepSize: 4 }
         },
         {
             id: "gains.judgment",
@@ -158,6 +164,10 @@ export const C1DomainDefinitions: DomainDefinition[] = [
     {
         id: "gains.influence",
         domain: { type: DomainTypes.CONTINUOUS, min: 0, max: 0.003, default: 0.00001, derivativeStepSize: 0.0001 }
+    },
+    {
+        id: "influenceConsensusHours",
+        domain: { type: DomainTypes.CONTINUOUS, min: 1, max: 200, default: 24, derivativeStepSize: 4 }
     },
     {
         id: "gains.judgment",
