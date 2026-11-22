@@ -23,7 +23,9 @@ jobs:
       - run: npm run test:ci
       - run: npx ng build --configuration development
       - name: Smoke test against a stubbed API
+        # Playwright is installed outside the project: installing it into the project would re-resolve the
+        # project's dependency tree (aethon-arion-c1 declares an rxjs ~7.8 peer, the app pins ~7.5)
         run: |
-          npm install --no-save --no-audit --no-fund playwright
-          npx playwright install --with-deps chromium
-          npm run test:smoke
+          npm install --prefix "$RUNNER_TEMP/playwright" --no-audit --no-fund playwright@1.49.1
+          "$RUNNER_TEMP/playwright/node_modules/.bin/playwright" install --with-deps chromium
+          NODE_PATH="$RUNNER_TEMP/playwright/node_modules" npm run test:smoke
