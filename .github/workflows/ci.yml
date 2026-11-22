@@ -8,6 +8,8 @@ on:
 # private: add a repository secret ARION_REPOS_TOKEN with read access to the aethon-arion repositories.
 env:
   ARION_REPOS_TOKEN: ${{ secrets.ARION_REPOS_TOKEN }}
+  # packed sibling builds keyed by sibling commit, restored and saved by actions/cache
+  ARION_SIBLINGS_CACHE: /home/runner/.arion-siblings
 
 jobs:
   test:
@@ -17,12 +19,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Restore the npm download cache and the packed sibling builds
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            /home/runner/.arion-siblings
+            ~/.cache/ms-playwright
+          key: arion-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.run_id }}
+          restore-keys: |
+            arion-${{ runner.os }}-${{ hashFiles('package.json') }}-
+            arion-${{ runner.os }}-
       - run: bash ci/link-siblings.sh core pipeline c1
       - name: Environment files from the example
         run: for e in environment environment.dev environment.prod environment.test; do cp src/env/environment.example.ts src/env/$e.ts; done
       - run: npm run test:ci
       - run: npx ng build --configuration development
-      - name: Smoke test against a stubbed API
+      - name: Smoke test of every route against recorded API responses (e2e/fixtures, re-record with npm run test:smoke:record)
         # Playwright is installed outside the project: installing it into the project would re-resolve the
         # project's dependency tree (aethon-arion-c1 declares an rxjs ~7.8 peer, the app pins ~7.5)
         run: |

@@ -12,6 +12,7 @@
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:smoke": "node e2e/smoke.js",
+    "test:smoke:record": "node e2e/record.js",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox"
   },
   "private": true,

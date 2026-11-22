@@ -1,63 +1,56 @@
-// Smoke test: serves the built app (npm run build -- --configuration development) and drives it in Chromium
-// against a stubbed API. Run with: npm run test:smoke
-const http = require("http");
-const fs = require("fs");
+// Smoke test: serves the built app (npm run build -- --configuration development) and drives every route in
+// e2e/routes.js in Chromium, replaying the API responses recorded by e2e/record.js from a seeded server.
+// Fails on a page error, a console error, an API request without a recorded response, or missing page text.
+// Run with: npm run test:smoke
 const path = require("path");
 const { chromium } = require("playwright");
-
-const dist = path.resolve(__dirname, "..", "dist", "arion", "analyst");
-const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".ico": "image/x-icon", ".svg": "image/svg+xml" };
-const envelope = (payload) => JSON.stringify({ requestId: "smoke", responseTimeMs: 1, success: true, payload });
-const simSets = [{ id: 1, description: "Smoke test set", modelName: "C1", optimiserName: "C1GradientAscentOptimiser", configuratorName: "C1BaseConfigurator", state: "running" }];
-
-function serve() {
-    return new Promise((resolve) => {
-        const server = http.createServer((req, res) => {
-            let file = path.join(dist, decodeURIComponent(req.url.split("?")[0]));
-            if (!file.startsWith(dist) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(dist, "index.html"); // SPA fallback
-            res.writeHead(200, { "Content-Type": types[path.extname(file)] || "application/octet-stream" });
-            fs.createReadStream(file).pipe(res);
-        });
-        server.listen(0, "127.0.0.1", () => resolve(server));
-    });
-}
+const { serve, key, visit } = require("./harness");
+const routes = require("./routes");
+const fixtures = require(path.join(__dirname, "fixtures", "api.json"));
 
 async function main() {
-    if (!fs.existsSync(path.join(dist, "index.html"))) throw new Error(`build the app first: ${dist} not found`);
     const server = await serve();
     const base = `http://127.0.0.1:${server.address().port}`;
     const browser = await chromium.launch();
     const failures = [];
+    const used = new Set();
     try {
         const page = await browser.newPage();
-        page.on("pageerror", (error) => failures.push(`page error: ${error.message}`));
-        const apiCalls = [];
-        await page.route("http://localhost:3000/arion/**", (route) => {
-            const url = new URL(route.request().url());
-            apiCalls.push(`${route.request().method()} ${url.pathname}`);
-            if (url.pathname === "/arion/sim-set") return route.fulfill({ status: 200, contentType: "application/json", body: envelope(simSets) });
-            return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ success: false, error: { status: 404, message: "Not Found" } }) });
+        let current = "";
+        page.on("pageerror", (error) => failures.push(`${current}: page error: ${error.message}`));
+        page.on("console", (message) => {
+            if (message.type() === "error") failures.push(`${current}: console error: ${message.text()}`);
         });
-
-        await page.goto(base + "/");
-        await page.waitForURL(/\/sim-set$/, { timeout: 15000 });
-        await page.getByText("Smoke test set").waitFor({ timeout: 15000 });
-        if (!apiCalls.includes("GET /arion/sim-set")) failures.push("the SimSet index did not request GET /arion/sim-set");
-
-        await page.goto(base + "/sim-set/create");
-        await page.getByText("Create New SimSet").first().waitFor({ timeout: 15000 });
-        await page.getByText("Parameter Space").first().waitFor({ timeout: 15000 });
-    } catch (error) {
-        failures.push(error.message);
+        await page.route("http://localhost:3000/arion/**", (route) => {
+            const request = route.request();
+            const k = key(request.method(), new URL(request.url()));
+            const fixture = fixtures[k];
+            if (!fixture) {
+                failures.push(`${current}: no recorded response for ${k}`);
+                return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ success: false }) });
+            }
+            used.add(k);
+            return route.fulfill({ status: fixture.status, contentType: "application/json", body: JSON.stringify(fixture.body) });
+        });
+        for (const route of routes) {
+            current = route.path;
+            try {
+                await visit(page, base, route);
+            } catch (error) {
+                failures.push(`${route.path}: ${error.message.split("\n")[0]}`);
+            }
+        }
     } finally {
         await browser.close();
         server.close();
     }
+    const unused = Object.keys(fixtures).filter((k) => !used.has(k));
+    if (unused.length > 0) failures.push(`recorded responses no route requested (re-record?): ${unused.join(", ")}`);
     if (failures.length > 0) {
         console.error("Smoke test failed:\n  " + failures.join("\n  "));
         process.exit(1);
     }
-    console.log("Smoke test passed: SimSet index and create pages render against the stubbed API");
+    console.log(`Smoke test passed: ${routes.length} routes rendered against ${used.size} recorded API responses`);
 }
 
 main().catch((error) => {
