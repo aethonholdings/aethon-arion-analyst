@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OrgConfigSummaryDTO } from 'src/app/analyst/services/analyst.service';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
+import { OrgConfigSummaryDTO } from "src/app/analyst/services/analyst.service";
 
 @Component({
-    selector: 'arion-org-config-index',
-    templateUrl: './org-config-index.component.html',
-    styleUrls: ['./org-config-index.component.scss']
+    standalone: false,
+    selector: "arion-org-config-index",
+    templateUrl: "./org-config-index.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ["./org-config-index.component.scss"]
 })
 export class OrgConfigIndexComponent {
     @Input() summary: OrgConfigSummaryDTO[] = [];

@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { GraphService } from "../../services/graph.service";
 import * as cytoscape from "cytoscape";
 
 @Component({
+    standalone: false,
     selector: "arion-graph",
     templateUrl: "./graph.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./graph.component.scss"]
 })
 export class GraphComponent implements OnInit, AfterViewInit {

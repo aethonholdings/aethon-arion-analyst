@@ -1,8 +1,10 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
+    standalone: false,
     selector: "arion-matrix",
     templateUrl: "./matrix.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./matrix.component.scss"]
 })
 export class MatrixComponent {

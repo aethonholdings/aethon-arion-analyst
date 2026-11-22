@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { Views } from "../../../../../constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set",
     templateUrl: "./sim-set.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set.component.scss"]
 })
 export class SimSetComponent {

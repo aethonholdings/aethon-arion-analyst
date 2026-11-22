@@ -1,8 +1,10 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
+    standalone: false,
     selector: "arion-regression",
     templateUrl: "./regression.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./regression.component.scss"]
 })
 export class RegressionComponent {

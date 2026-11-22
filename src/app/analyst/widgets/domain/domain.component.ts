@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { Domain, DomainTypes } from "aethon-arion-pipeline";
 
 export type DomainDefinition = {
@@ -23,8 +23,10 @@ export type DomainDefinition = {
 };
 
 @Component({
+    standalone: false,
     selector: "arion-domain",
     templateUrl: "./domain.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./domain.component.scss"]
 })
 export class DomainComponent implements OnInit {
@@ -81,7 +83,8 @@ export class DomainComponent implements OnInit {
                     max = Math.round(max);
                     step = Math.round(step);
                 }
-                if (![min, max, step].every((v) => Number.isFinite(v))) this.modalText += `<p>Enter numbers for min, max and step size</p>`;
+                if (![min, max, step].every((v) => Number.isFinite(v)))
+                    this.modalText += `<p>Enter numbers for min, max and step size</p>`;
                 if (max < min) this.modalText += `<p>Max value must not be less than min value</p>`;
                 if (max > min && !(step > 0)) this.modalText += `<p>Derivative step size must be positive</p>`;
                 if (max > min && step > max - min)
@@ -126,7 +129,11 @@ export class DomainComponent implements OnInit {
         if (definition.type === DomainTypes.BOOLEAN && this.values.type === DomainTypes.BOOLEAN) {
             this.values = this.values.optimise
                 ? { type: definition.type, optimise: true }
-                : { type: definition.type, optimise: false, default: (this.values as any).default ?? definition.default };
+                : {
+                      type: definition.type,
+                      optimise: false,
+                      default: (this.values as any).default ?? definition.default
+                  };
         }
         this.ok = !this.modalText;
         // always propagate: the parent validates the whole parameter space before submitting

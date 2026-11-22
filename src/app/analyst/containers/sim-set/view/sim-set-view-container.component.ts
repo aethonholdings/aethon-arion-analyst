@@ -1,7 +1,19 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SimSetDTO, StateType } from "aethon-arion-pipeline";
-import { EMPTY, Observable, Subject, catchError, finalize, interval, map, merge, shareReplay, switchMap, takeUntil } from "rxjs";
+import {
+    EMPTY,
+    Observable,
+    Subject,
+    catchError,
+    finalize,
+    interval,
+    map,
+    merge,
+    shareReplay,
+    switchMap,
+    takeUntil
+} from "rxjs";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 import { Views } from "src/app/analyst/constants/analyst.constants";
@@ -10,8 +22,10 @@ import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.comp
 import { StepData, OrgConfigGroup } from "../org-config/sim-set-org-config-container.component";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-view-container",
     templateUrl: "./sim-set-view-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-view-container.component.scss"]
 })
 export class SimSetViewContainerComponent implements OnInit, OnDestroy {
@@ -22,7 +36,7 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
     stepsData$!: Observable<StepData[]>;
     refreshing: boolean = false;
     views = Views;
-    activeTab: string = 'optimiser-steps';
+    activeTab: string = "optimiser-steps";
     secondsUntilRefresh: number = 60;
     private destroy$ = new Subject<void>();
     private manualRefresh$ = new Subject<void>();
@@ -41,19 +55,16 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
             throw new Error("No simSetId provided");
         }
 
-        this.breadcrumbs = [
-            { label: 'SimSets', route: ['/sim-set'] },
-            { label: `SimSet ${this.simSetId}` }
-        ];
+        this.breadcrumbs = [{ label: "SimSets", route: ["/sim-set"] }, { label: `SimSet ${this.simSetId}` }];
     }
 
     ngOnInit() {
         // Countdown timer (updates every second)
-        interval(1000).pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(() => {
-            this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
-        });
+        interval(1000)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+                this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
+            });
 
         // Auto-refresh timer (every 60 seconds)
         // auto refresh every 60 s plus manual refreshes; switchMap drops a stale in-flight request, errors are
@@ -82,7 +93,7 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
 
         // Process sim-set data for org-config view
         this.stepsData$ = this.simSetRefresh$.pipe(
-            map(simSet => {
+            map((simSet) => {
                 const stepsData: StepData[] = [];
 
                 if (simSet.optimiserStates) {
@@ -97,14 +108,14 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
                                         const orgConfigId = simConfig.orgConfigId || simConfig.orgConfig?.id;
                                         const configuratorParams = simConfig.orgConfig?.configuratorParams
                                             ? JSON.stringify(simConfig.orgConfig.configuratorParams)
-                                            : 'No params';
+                                            : "No params";
 
                                         if (!orgConfigMap.has(orgConfigId)) {
                                             orgConfigMap.set(orgConfigId, {
                                                 orgConfigId: orgConfigId,
                                                 orgConfig: simConfig.orgConfig,
                                                 configuratorParams: configuratorParams,
-                                                state: 'pending',
+                                                state: "pending",
                                                 simConfigs: []
                                             });
                                         }
@@ -112,7 +123,7 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
                                         orgConfigMap.get(orgConfigId)!.simConfigs.push({
                                             id: simConfig.id,
                                             avgPerformance: simConfig.avgPerformance ?? null,
-                                            state: simConfig.state || 'pending'
+                                            state: simConfig.state || "pending"
                                         });
                                     }
                                 }
@@ -120,10 +131,10 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
                         }
 
                         // Derive aggregate state for each orgConfig group
-                        const statePriority: StateType[] = ['failed', 'running', 'pending', 'completed'];
+                        const statePriority: StateType[] = ["failed", "running", "pending", "completed"];
                         for (const group of orgConfigMap.values()) {
-                            const states = group.simConfigs.map(sc => sc.state);
-                            group.state = statePriority.find(s => states.includes(s)) || 'pending';
+                            const states = group.simConfigs.map((sc) => sc.state);
+                            group.state = statePriority.find((s) => states.includes(s)) || "pending";
                         }
 
                         stepsData.push({
@@ -156,6 +167,6 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
     }
 
     onSelect(optimiserStateId: number) {
-        this.router.navigate(["/optimiser-state", optimiserStateId])
+        this.router.navigate(["/optimiser-state", optimiserStateId]);
     }
 }

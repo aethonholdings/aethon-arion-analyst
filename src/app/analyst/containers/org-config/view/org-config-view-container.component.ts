@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
 import { Observable, tap } from "rxjs";
@@ -7,8 +7,10 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
+    standalone: false,
     selector: "arion-org-config-view-container",
     templateUrl: "./org-config-view-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./org-config-view-container.component.scss"]
 })
 export class OrgConfigViewContainerComponent {
@@ -16,7 +18,7 @@ export class OrgConfigViewContainerComponent {
     views = Views;
     breadcrumbs: Breadcrumb[] = [];
     orgConfigId: number;
-    activeTab: string = 'config';
+    activeTab: string = "config";
     private simSetId: string | null;
     private optimiserStateId: string | null;
 
@@ -27,9 +29,9 @@ export class OrgConfigViewContainerComponent {
     ) {
         this.orgConfigId = this.activatedRoute.snapshot.paramMap.get("id") as unknown as number;
         this.orgConfig$ = this.analystService.getOrgConfig$(this.orgConfigId).pipe(
-            tap(orgConfig => {
+            tap((orgConfig) => {
                 if (orgConfig.simConfigs) {
-                    orgConfig.simConfigs.forEach(sc => (sc as any).orgConfig = orgConfig);
+                    orgConfig.simConfigs.forEach((sc) => ((sc as any).orgConfig = orgConfig));
                 }
             })
         );
@@ -42,21 +44,19 @@ export class OrgConfigViewContainerComponent {
 
         if (simSetId && optimiserStateId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
-                { label: `Optimiser State ${optimiserStateId}`, route: ['/optimiser-state', optimiserStateId] },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
+                { label: `Optimiser State ${optimiserStateId}`, route: ["/optimiser-state", optimiserStateId] },
                 { label: `OrgConfig ${this.orgConfigId}` }
             ];
         } else if (simSetId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
                 { label: `OrgConfig ${this.orgConfigId}` }
             ];
         } else {
-            this.breadcrumbs = [
-                { label: `OrgConfig ${this.orgConfigId}` }
-            ];
+            this.breadcrumbs = [{ label: `OrgConfig ${this.orgConfigId}` }];
         }
     }
 
@@ -64,6 +64,6 @@ export class OrgConfigViewContainerComponent {
         const queryParams: any = { orgConfigId: this.orgConfigId };
         if (this.simSetId) queryParams.simSetId = this.simSetId;
         if (this.optimiserStateId) queryParams.optimiserStateId = this.optimiserStateId;
-        this.router.navigate(['/sim-config', simConfigId], { queryParams });
+        this.router.navigate(["/sim-config", simConfigId], { queryParams });
     }
 }

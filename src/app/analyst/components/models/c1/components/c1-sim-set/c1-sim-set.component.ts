@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { C1Service } from "../../services/c1.service";
 import { OptimiserParameters, SimSetDTO } from "aethon-arion-pipeline";
 import { C1OptimiserNames } from "aethon-arion-c1";
 
 @Component({
+    standalone: false,
     selector: "arion-c1-sim-set",
     templateUrl: "./c1-sim-set.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./c1-sim-set.component.scss"]
 })
 export class C1SimSetComponent implements OnInit {
@@ -28,6 +30,6 @@ export class C1SimSetComponent implements OnInit {
 
     onSelect() {
         let optimiser = this.optimisers.find((optimiser) => this.selected === optimiser.name);
-        if(optimiser) this.simSet.optimiserParams = optimiser.defaults;
+        if (optimiser) this.simSet.optimiserParams = optimiser.defaults;
     }
 }

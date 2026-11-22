@@ -1,9 +1,11 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { StateType } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-status-indicator",
     templateUrl: "./status-indicator.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./status-indicator.component.scss"]
 })
 export class StatusIndicatorComponent {

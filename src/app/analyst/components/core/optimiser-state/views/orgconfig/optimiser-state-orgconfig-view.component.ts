@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { OptimiserStateDTO, ConfiguratorParamData, DataPoint, StateType } from "aethon-arion-pipeline";
 
@@ -18,8 +18,10 @@ export interface DimensionColumn {
 }
 
 @Component({
+    standalone: false,
     selector: "arion-optimiser-state-orgconfig-view",
     templateUrl: "./optimiser-state-orgconfig-view.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./optimiser-state-orgconfig-view.component.scss"]
 })
 export class OptimiserStateOrgconfigViewComponent implements OnChanges {
@@ -48,12 +50,15 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
         }
 
         // Build a map of configuratorParams.hash -> orgConfigs
-        const hashToOrgConfigs = new Map<string, Array<{
-            id: number;
-            paramsHash: string;
-            avgPerformance: number | null;
-            state: StateType;
-        }>>();
+        const hashToOrgConfigs = new Map<
+            string,
+            Array<{
+                id: number;
+                paramsHash: string;
+                avgPerformance: number | null;
+                state: StateType;
+            }>
+        >();
 
         for (const convergenceTest of convergenceTests) {
             const ctHash = convergenceTest.configuratorParams?.hash;
@@ -69,7 +74,7 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
                     id: simConfig.orgConfig.id,
                     paramsHash: ctHash,
                     avgPerformance: simConfig.avgPerformance,
-                    state: simConfig.state || 'pending'
+                    state: simConfig.state || "pending"
                 });
             }
         }
@@ -78,7 +83,7 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
         for (const dataPoint of dataPoints) {
             const column = this.createColumnFromDataPoint(dataPoint, hashToOrgConfigs);
 
-            if (dataPoint.id === 'x') {
+            if (dataPoint.id === "x") {
                 this.baselineColumn = column;
             } else {
                 this.deltaColumns.push(column);
@@ -88,21 +93,23 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
 
     createColumnFromDataPoint(
         dataPoint: any,
-        hashToOrgConfigs: Map<string, Array<{ id: number; paramsHash: string; avgPerformance: number | null; state: StateType }>>
+        hashToOrgConfigs: Map<
+            string,
+            Array<{ id: number; paramsHash: string; avgPerformance: number | null; state: StateType }>
+        >
     ): DimensionColumn {
-        const parameterPath = dataPoint.data?.inputs?.configuratorName || 'Unknown';
+        const parameterPath = dataPoint.data?.inputs?.configuratorName || "Unknown";
         const parameterValue = dataPoint.data?.outputs?.configuratorParameterValue;
         const dataPointHash = dataPoint.data?.inputs?.hash;
 
-        const matchingOrgConfigs = dataPointHash ? (hashToOrgConfigs.get(dataPointHash) || []) : [];
+        const matchingOrgConfigs = dataPointHash ? hashToOrgConfigs.get(dataPointHash) || [] : [];
 
         const performances = matchingOrgConfigs
-            .map(oc => oc.avgPerformance)
+            .map((oc) => oc.avgPerformance)
             .filter((p): p is number => p !== null && p !== undefined);
 
-        const avgPerformance = performances.length > 0
-            ? performances.reduce((sum, p) => sum + p, 0) / performances.length
-            : 0;
+        const avgPerformance =
+            performances.length > 0 ? performances.reduce((sum, p) => sum + p, 0) / performances.length : 0;
 
         return {
             id: dataPoint.id,
@@ -110,7 +117,7 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
             parameterValue,
             avgPerformance,
             stdDevPerformance: this.calculateStdDev(performances),
-            orgConfigs: matchingOrgConfigs.map(oc => ({
+            orgConfigs: matchingOrgConfigs.map((oc) => ({
                 id: oc.id,
                 hash: oc.paramsHash.substring(0, 8),
                 avgPerformance: oc.avgPerformance,
@@ -125,7 +132,7 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
             return 0;
         }
         const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
-        const squaredDiffs = values.map(val => Math.pow(val - avg, 2));
+        const squaredDiffs = values.map((val) => Math.pow(val - avg, 2));
         const variance = squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;
         return Math.sqrt(variance);
     }
@@ -136,7 +143,7 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
 
     navigateToOrgConfig(orgConfigId: number, event: Event) {
         event.stopPropagation();
-        this.router.navigate(['/org-config', orgConfigId], {
+        this.router.navigate(["/org-config", orgConfigId], {
             queryParams: {
                 optimiserStateId: this.optimiserState.id,
                 simSetId: (this.optimiserState as any).simSet?.id
@@ -145,11 +152,11 @@ export class OptimiserStateOrgconfigViewComponent implements OnChanges {
     }
 
     formatValue(value: any): string {
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
             return value.toFixed(6);
         }
         if (value === null || value === undefined) {
-            return '—';
+            return "—";
         }
         return String(value);
     }

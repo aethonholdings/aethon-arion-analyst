@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SimConfigDTO, ResultDTO } from "aethon-arion-pipeline";
 import { Observable, tap } from "rxjs";
@@ -7,8 +7,10 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-config-view-container",
     templateUrl: "./sim-config-view-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-config-view-container.component.scss"]
 })
 export class SimConfigViewContainerComponent {
@@ -16,7 +18,7 @@ export class SimConfigViewContainerComponent {
     results$: Observable<ResultDTO[]> | undefined;
     performanceValues: number[] = [];
     views = Views;
-    activeTab: string = 'summary';
+    activeTab: string = "summary";
     breadcrumbs: Breadcrumb[] = [];
     simConfigId: number;
     private simSetId: string | null;
@@ -44,36 +46,42 @@ export class SimConfigViewContainerComponent {
 
         if (simSetId && optimiserStateId && orgConfigId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
-                { label: `Optimiser State ${optimiserStateId}`, route: ['/optimiser-state', optimiserStateId] },
-                { label: `OrgConfig ${orgConfigId}`, route: ['/org-config', orgConfigId], queryParams: orgConfigQueryParams },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
+                { label: `Optimiser State ${optimiserStateId}`, route: ["/optimiser-state", optimiserStateId] },
+                {
+                    label: `OrgConfig ${orgConfigId}`,
+                    route: ["/org-config", orgConfigId],
+                    queryParams: orgConfigQueryParams
+                },
                 { label: `SimConfig ${this.simConfigId}` }
             ];
         } else if (simSetId && optimiserStateId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
-                { label: `Optimiser State ${optimiserStateId}`, route: ['/optimiser-state', optimiserStateId] },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
+                { label: `Optimiser State ${optimiserStateId}`, route: ["/optimiser-state", optimiserStateId] },
                 { label: `SimConfig ${this.simConfigId}` }
             ];
         } else if (simSetId && orgConfigId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
-                { label: `OrgConfig ${orgConfigId}`, route: ['/org-config', orgConfigId], queryParams: orgConfigQueryParams },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
+                {
+                    label: `OrgConfig ${orgConfigId}`,
+                    route: ["/org-config", orgConfigId],
+                    queryParams: orgConfigQueryParams
+                },
                 { label: `SimConfig ${this.simConfigId}` }
             ];
         } else if (simSetId) {
             this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                { label: "SimSets", route: ["/sim-set"] },
+                { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
                 { label: `SimConfig ${this.simConfigId}` }
             ];
         } else {
-            this.breadcrumbs = [
-                { label: `SimConfig ${this.simConfigId}` }
-            ];
+            this.breadcrumbs = [{ label: `SimConfig ${this.simConfigId}` }];
         }
     }
 
@@ -83,9 +91,9 @@ export class SimConfigViewContainerComponent {
         if (this.results$) return;
         {
             this.results$ = this.analystService.getSimConfigResultSet$(simConfigId).pipe(
-                tap(results => {
+                tap((results) => {
                     this.performanceValues = results
-                        .map(r => r.performance)
+                        .map((r) => r.performance)
                         .filter((v): v is number => v !== null && v !== undefined);
                 })
             );

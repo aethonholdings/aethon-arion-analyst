@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { C1ConfiguratorParamData } from "aethon-arion-c1";
 import {
     Domain,
@@ -15,8 +15,10 @@ type TableEntries = {
 };
 
 @Component({
+    standalone: false,
     selector: "arion-c1-optimiser-state-transitions",
     templateUrl: "./c1-optimiser-state-transitions.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./c1-optimiser-state-transitions.component.scss"]
 })
 export class C1OptimiserStateTransitionsComponent implements OnInit {

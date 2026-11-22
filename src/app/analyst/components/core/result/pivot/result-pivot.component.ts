@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ResultDTO } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-result-pivot",
     templateUrl: "./result-pivot.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./result-pivot.component.scss"]
 })
 export class ResultPivotComponent {

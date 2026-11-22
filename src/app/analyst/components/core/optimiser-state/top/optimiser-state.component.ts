@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ConfiguratorParamData, OptimiserStateDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-optimiser-state",
     templateUrl: "./optimiser-state.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./optimiser-state.component.scss"]
 })
 export class OptimiserStateComponent {

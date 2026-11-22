@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-org-config",
     templateUrl: "./org-config.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./org-config.component.scss"]
 })
 export class OrgConfigComponent {

@@ -1,15 +1,29 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ConfiguratorParamData, OptimiserStateDTO } from "aethon-arion-pipeline";
-import { EMPTY, Observable, Subject, catchError, finalize, interval, map, merge, shareReplay, switchMap, takeUntil } from "rxjs";
+import {
+    EMPTY,
+    Observable,
+    Subject,
+    catchError,
+    finalize,
+    interval,
+    map,
+    merge,
+    shareReplay,
+    switchMap,
+    takeUntil
+} from "rxjs";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { SpinnerService } from "src/app/root/components/spinner/spinner.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
+    standalone: false,
     selector: "arion-optimiser-state-view-container",
     templateUrl: "./optimiser-state-view-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./optimiser-state-view-container.component.scss"]
 })
 export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
@@ -34,11 +48,11 @@ export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // Countdown timer (updates every second)
-        interval(1000).pipe(
-            takeUntil(this.destroy$)
-        ).subscribe(() => {
-            this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
-        });
+        interval(1000)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+                this.secondsUntilRefresh = this.secondsUntilRefresh > 0 ? this.secondsUntilRefresh - 1 : 60;
+            });
 
         // Auto-refresh timer (every 60 seconds)
         // auto refresh every 60 s plus manual refreshes; switchMap drops a stale in-flight request, errors are
@@ -68,11 +82,11 @@ export class OptimiserStateViewContainerComponent implements OnInit, OnDestroy {
         this.optimiserState$ = this.optimiserStateRefresh$;
 
         this.breadcrumbs$ = this.optimiserState$.pipe(
-            map(optimiserState => {
+            map((optimiserState) => {
                 const simSetId = (optimiserState as any).simSet?.id;
                 return [
-                    { label: 'SimSets', route: ['/sim-set'] },
-                    { label: `SimSet ${simSetId}`, route: ['/sim-set', simSetId] },
+                    { label: "SimSets", route: ["/sim-set"] },
+                    { label: `SimSet ${simSetId}`, route: ["/sim-set", simSetId] },
                     { label: `OptimiserState ${this.optimiserStateId}` }
                 ];
             })

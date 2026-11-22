@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ResultDTO } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-result-index",
     templateUrl: "./result-index.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./result-index.component.scss"]
 })
 export class ResultIndexComponent implements OnInit {

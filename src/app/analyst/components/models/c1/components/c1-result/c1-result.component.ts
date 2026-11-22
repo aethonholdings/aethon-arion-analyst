@@ -1,11 +1,13 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { C1 } from "aethon-arion-c1";
 import { KPIFactoryIndex } from "aethon-arion-c1/dist/constants/c1.model.constants";
 import { KPIDTO, PlanVsActualsKPIs, ResultDTO } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-c1-result",
     templateUrl: "./c1-result.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./c1-result.component.scss"]
 })
 export class C1ResultComponent {

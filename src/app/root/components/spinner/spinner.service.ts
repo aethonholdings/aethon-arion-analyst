@@ -6,7 +6,7 @@ import { Observable, Subscriber } from "rxjs";
     providedIn: "root"
 })
 export class SpinnerService {
-    progressSubscriber: Subscriber<string> = new Subscriber<string>();
+    progressSubscriber: Subscriber<string | undefined> = new Subscriber<string | undefined>();
     textSubscriber: Subscriber<string> = new Subscriber<string>();
 
     constructor(private ngxSpinnerService: NgxSpinnerService) {}

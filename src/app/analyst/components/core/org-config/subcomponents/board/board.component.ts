@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { OrgConfigDTO } from "aethon-arion-pipeline";
 import { ModelNames } from "../../../../../constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-board",
     templateUrl: "./board.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./board.component.scss"]
 })
 export class BoardComponent implements OnInit {

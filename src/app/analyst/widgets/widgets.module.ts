@@ -12,12 +12,13 @@ import { DomainComponent } from './domain/domain.component';
 import { FormsModule } from "@angular/forms";
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { RouterModule } from "@angular/router";
-import { NgChartsModule } from "ng2-charts";
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from "ng2-charts";
 import { HistogramComponent } from "./histogram/histogram.component";
 
 @NgModule({
     declarations: [StatusIndicatorComponent, PaginationComponent, PivotTableComponent, RegressionComponent, DomainComponent, BreadcrumbsComponent, HistogramComponent],
-    imports: [CommonModule, MatrixModule, GraphModule, FormsModule, RouterModule, NgChartsModule],
+    imports: [CommonModule, MatrixModule, GraphModule, FormsModule, RouterModule, BaseChartDirective],
+    providers: [provideCharts(withDefaultRegisterables())],
     exports: [MatrixComponent, GraphComponent, StatusIndicatorComponent, PaginationComponent, PivotTableComponent, DomainComponent, BreadcrumbsComponent, HistogramComponent]
 })
 export class WidgetsModule {}

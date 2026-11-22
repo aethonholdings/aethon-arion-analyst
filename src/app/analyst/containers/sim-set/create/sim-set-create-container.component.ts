@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
@@ -7,17 +7,16 @@ import { ModelService } from "src/app/analyst/services/model.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-create-container",
     templateUrl: "./sim-set-create-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-create-container.component.scss"]
 })
 export class SimSetCreateContainerComponent implements OnInit {
     simSet: SimSetDTO = {} as SimSetDTO;
     views = Views;
-    breadcrumbs: Breadcrumb[] = [
-        { label: 'SimSets', route: ['/sim-set'] },
-        { label: 'Create New SimSet' }
-    ];
+    breadcrumbs: Breadcrumb[] = [{ label: "SimSets", route: ["/sim-set"] }, { label: "Create New SimSet" }];
     isCloning: boolean = false;
     errors: string[] = [];
 
@@ -33,10 +32,7 @@ export class SimSetCreateContainerComponent implements OnInit {
 
         if (cloneId) {
             this.isCloning = true;
-            this.breadcrumbs = [
-                { label: 'SimSets', route: ['/sim-set'] },
-                { label: `Clone SimSet ${cloneId}` }
-            ];
+            this.breadcrumbs = [{ label: "SimSets", route: ["/sim-set"] }, { label: `Clone SimSet ${cloneId}` }];
 
             // Load the simSet to clone
             this.analystService.getSimSet$(Number(cloneId)).subscribe((simSet) => {
@@ -46,8 +42,8 @@ export class SimSetCreateContainerComponent implements OnInit {
                 // Update description to indicate it's a clone
                 this.simSet = {
                     ...simSetWithoutId,
-                    description: `Clone of SimSet ${cloneId}: ${simSet.description || ''}`,
-                    state: 'pending' // Reset state
+                    description: `Clone of SimSet ${cloneId}: ${simSet.description || ""}`,
+                    state: "pending" // Reset state
                 } as SimSetDTO;
             });
         }
@@ -59,7 +55,8 @@ export class SimSetCreateContainerComponent implements OnInit {
         if (this.errors.length > 0) return;
         this.analystService.createSimSet$(this.simSet).subscribe({
             next: (response) => this.router.navigate(["/sim-set", response.id]),
-            error: (error) => (this.errors = [error?.error?.error?.message || error?.message || "SimSet creation failed"])
+            error: (error) =>
+                (this.errors = [error?.error?.error?.message || error?.message || "SimSet creation failed"])
         });
     }
 

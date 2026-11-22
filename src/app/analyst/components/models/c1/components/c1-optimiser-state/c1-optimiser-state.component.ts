@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from "@angular/core";
 import { C1ConfiguratorParamData } from "aethon-arion-c1";
 import {
     ConfiguratorParamsDTO,
@@ -9,8 +9,10 @@ import {
 } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-c1-optimiser-state",
     templateUrl: "./c1-optimiser-state.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./c1-optimiser-state.component.scss"]
 })
 export class C1OptimiserStateComponent implements OnChanges {

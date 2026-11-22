@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 
 export interface Breadcrumb {
     label: string;
@@ -7,9 +7,11 @@ export interface Breadcrumb {
 }
 
 @Component({
-    selector: 'arion-breadcrumbs',
-    templateUrl: './breadcrumbs.component.html',
-    styleUrls: ['./breadcrumbs.component.scss']
+    standalone: false,
+    selector: "arion-breadcrumbs",
+    templateUrl: "./breadcrumbs.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ["./breadcrumbs.component.scss"]
 })
 export class BreadcrumbsComponent {
     @Input() breadcrumbs: Breadcrumb[] = [];

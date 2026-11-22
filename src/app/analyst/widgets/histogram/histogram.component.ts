@@ -1,19 +1,30 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Chart, ChartConfiguration, BarController, BarElement, CategoryScale, LinearScale, Tooltip, Title } from 'chart.js';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
+import {
+    Chart,
+    ChartConfiguration,
+    BarController,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Title
+} from "chart.js";
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Title);
 
 @Component({
-    selector: 'arion-histogram',
-    templateUrl: './histogram.component.html',
-    styleUrls: ['./histogram.component.scss']
+    standalone: false,
+    selector: "arion-histogram",
+    templateUrl: "./histogram.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ["./histogram.component.scss"]
 })
 export class HistogramComponent implements OnChanges {
     @Input() data: number[] = [];
     @Input() binCount: number = 20;
 
-    chartData?: ChartConfiguration<'bar'>['data'];
-    chartOptions: ChartConfiguration<'bar'>['options'] = {
+    chartData?: ChartConfiguration<"bar">["data"];
+    chartOptions: ChartConfiguration<"bar">["options"] = {
         responsive: true,
         maintainAspectRatio: false,
         animation: false,
@@ -22,22 +33,22 @@ export class HistogramComponent implements OnChanges {
         },
         scales: {
             x: {
-                title: { display: true, text: 'Avg Performance' },
+                title: { display: true, text: "Avg Performance" },
                 ticks: { maxRotation: 0 }
             },
             y: {
-                title: { display: true, text: 'Count' },
+                title: { display: true, text: "Count" },
                 beginAtZero: true,
                 ticks: { stepSize: 1 }
             }
         }
     };
 
-    private lastDataKey = '';
+    private lastDataKey = "";
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['data']) {
-            const key = this.data ? this.data.join(',') : '';
+        if (changes["data"]) {
+            const key = this.data ? this.data.join(",") : "";
             if (key !== this.lastDataKey) {
                 this.lastDataKey = key;
                 this.buildHistogram();
@@ -57,10 +68,12 @@ export class HistogramComponent implements OnChanges {
         if (min === max) {
             this.chartData = {
                 labels: [min.toFixed(0)],
-                datasets: [{
-                    data: [this.data.length],
-                    backgroundColor: 'oklch(0.65 0.15 250)'
-                }]
+                datasets: [
+                    {
+                        data: [this.data.length],
+                        backgroundColor: "oklch(0.65 0.15 250)"
+                    }
+                ]
             };
             return;
         }
@@ -82,10 +95,12 @@ export class HistogramComponent implements OnChanges {
 
         this.chartData = {
             labels,
-            datasets: [{
-                data: bins,
-                backgroundColor: 'oklch(0.65 0.15 250)'
-            }]
+            datasets: [
+                {
+                    data: bins,
+                    backgroundColor: "oklch(0.65 0.15 250)"
+                }
+            ]
         };
     }
 }

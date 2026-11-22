@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, map } from "rxjs";
 import { StateType } from "aethon-arion-pipeline";
@@ -24,8 +24,10 @@ export interface StepData {
 }
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-org-config-container",
     templateUrl: "./sim-set-org-config-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-org-config-container.component.scss"]
 })
 export class SimSetOrgConfigContainerComponent implements OnInit {
@@ -45,15 +47,15 @@ export class SimSetOrgConfigContainerComponent implements OnInit {
         }
 
         this.breadcrumbs = [
-            { label: 'SimSets', route: ['/sim-set'] },
-            { label: `SimSet ${this.simSetId}`, route: ['/sim-set', this.simSetId.toString()] },
-            { label: 'OrgConfig Analysis' }
+            { label: "SimSets", route: ["/sim-set"] },
+            { label: `SimSet ${this.simSetId}`, route: ["/sim-set", this.simSetId.toString()] },
+            { label: "OrgConfig Analysis" }
         ];
     }
 
     ngOnInit() {
         this.stepsData$ = this.analystService.getSimSet$(this.simSetId).pipe(
-            map(simSet => {
+            map((simSet) => {
                 const stepsData: StepData[] = [];
 
                 if (simSet.optimiserStates) {
@@ -68,14 +70,14 @@ export class SimSetOrgConfigContainerComponent implements OnInit {
                                         const orgConfigId = simConfig.orgConfigId || simConfig.orgConfig?.id;
                                         const configuratorParams = simConfig.orgConfig?.configuratorParams
                                             ? JSON.stringify(simConfig.orgConfig.configuratorParams)
-                                            : 'No params';
+                                            : "No params";
 
                                         if (!orgConfigMap.has(orgConfigId)) {
                                             orgConfigMap.set(orgConfigId, {
                                                 orgConfigId: orgConfigId,
                                                 orgConfig: simConfig.orgConfig,
                                                 configuratorParams: configuratorParams,
-                                                state: 'pending',
+                                                state: "pending",
                                                 simConfigs: []
                                             });
                                         }
@@ -83,7 +85,7 @@ export class SimSetOrgConfigContainerComponent implements OnInit {
                                         orgConfigMap.get(orgConfigId)!.simConfigs.push({
                                             id: simConfig.id,
                                             avgPerformance: simConfig.avgPerformance || null,
-                                            state: simConfig.state || 'pending'
+                                            state: simConfig.state || "pending"
                                         });
                                     }
                                 }
@@ -91,10 +93,10 @@ export class SimSetOrgConfigContainerComponent implements OnInit {
                         }
 
                         // Derive aggregate state for each orgConfig group
-                        const statePriority: StateType[] = ['failed', 'running', 'pending', 'completed'];
+                        const statePriority: StateType[] = ["failed", "running", "pending", "completed"];
                         for (const group of orgConfigMap.values()) {
-                            const states = group.simConfigs.map(sc => sc.state);
-                            group.state = statePriority.find(s => states.includes(s)) || 'pending';
+                            const states = group.simConfigs.map((sc) => sc.state);
+                            group.state = statePriority.find((s) => states.includes(s)) || "pending";
                         }
 
                         stepsData.push({

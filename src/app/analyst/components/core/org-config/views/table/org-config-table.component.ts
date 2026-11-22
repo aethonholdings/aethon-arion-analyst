@@ -1,5 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { StateType } from 'aethon-arion-pipeline';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges,
+    ChangeDetectionStrategy
+} from "@angular/core";
+import { StateType } from "aethon-arion-pipeline";
 
 export interface OrgConfigTableRow {
     stepCount?: number;
@@ -27,20 +35,22 @@ export interface SimConfigClickEvent {
     optimiserStateId?: number;
 }
 
-export type SortColumn = 'orgConfigId' | 'state' | 'avgPerformance' | 'percentile';
-export type SortDirection = 'asc' | 'desc';
+export type SortColumn = "orgConfigId" | "state" | "avgPerformance" | "percentile";
+export type SortDirection = "asc" | "desc";
 
 @Component({
-    selector: 'arion-org-config-table',
-    templateUrl: './org-config-table.component.html',
-    styleUrls: ['./org-config-table.component.scss']
+    standalone: false,
+    selector: "arion-org-config-table",
+    templateUrl: "./org-config-table.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ["./org-config-table.component.scss"]
 })
 export class OrgConfigTableComponent implements OnChanges {
     @Input() rows: OrgConfigTableRow[] = [];
     @Input() showStepColumn: boolean = false;
     @Input() showHistogram: boolean = true;
-    @Input() initialSortColumn: SortColumn = 'orgConfigId';
-    @Input() initialSortDirection: SortDirection = 'asc';
+    @Input() initialSortColumn: SortColumn = "orgConfigId";
+    @Input() initialSortDirection: SortDirection = "asc";
     @Output() orgConfigClick = new EventEmitter<number>();
     @Output() simConfigClick = new EventEmitter<SimConfigClickEvent>();
     @Output() stepClick = new EventEmitter<number>();
@@ -52,22 +62,22 @@ export class OrgConfigTableComponent implements OnChanges {
     sortedSteps: OrgConfigTableStep[] = [];
     percentileMap: Map<number, number | null> = new Map();
 
-    sortColumn: SortColumn = 'orgConfigId';
-    sortDirection: SortDirection = 'asc';
+    sortColumn: SortColumn = "orgConfigId";
+    sortDirection: SortDirection = "asc";
 
     ngOnChanges(changes: SimpleChanges) {
         let needsSort = false;
 
-        if (changes['initialSortColumn'] || changes['initialSortDirection']) {
+        if (changes["initialSortColumn"] || changes["initialSortDirection"]) {
             this.sortColumn = this.initialSortColumn;
             this.sortDirection = this.initialSortDirection;
             needsSort = true;
         }
 
-        if (changes['rows']) {
+        if (changes["rows"]) {
             this.performanceValues = this.rows
-                .flatMap(row => row.simConfigs)
-                .map(sc => sc.avgPerformance)
+                .flatMap((row) => row.simConfigs)
+                .map((sc) => sc.avgPerformance)
                 .filter((v): v is number => v !== null);
 
             if (this.showStepColumn) {
@@ -83,10 +93,10 @@ export class OrgConfigTableComponent implements OnChanges {
 
     sortBy(column: SortColumn) {
         if (this.sortColumn === column) {
-            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
         } else {
             this.sortColumn = column;
-            this.sortDirection = 'desc';
+            this.sortDirection = "desc";
         }
         this.applySort();
         this.sortChange.emit({ column: this.sortColumn, direction: this.sortDirection });
@@ -104,7 +114,7 @@ export class OrgConfigTableComponent implements OnChanges {
         this.percentileMap = new Map();
 
         if (this.showStepColumn) {
-            this.sortedSteps = this.steps.map(step => {
+            this.sortedSteps = this.steps.map((step) => {
                 const stepPercentiles = this.computePercentiles(step.rows);
                 stepPercentiles.forEach((v, k) => this.percentileMap.set(k, v));
                 return {
@@ -120,19 +130,19 @@ export class OrgConfigTableComponent implements OnChanges {
 
     private computePercentiles(rows: OrgConfigTableRow[]): Map<number, number | null> {
         const map = new Map<number, number | null>();
-        const entries = rows.map(row => ({
+        const entries = rows.map((row) => ({
             orgConfigId: row.orgConfigId,
-            bestPerf: Math.max(...row.simConfigs.map(sc => sc.avgPerformance ?? -Infinity))
+            bestPerf: Math.max(...row.simConfigs.map((sc) => sc.avgPerformance ?? -Infinity))
         }));
 
-        const validEntries = entries.filter(e => e.bestPerf !== -Infinity);
+        const validEntries = entries.filter((e) => e.bestPerf !== -Infinity);
         const total = validEntries.length;
 
         for (const { orgConfigId, bestPerf } of entries) {
             if (bestPerf === -Infinity || total === 0) {
                 map.set(orgConfigId, null);
             } else {
-                const rank = validEntries.filter(e => e.bestPerf <= bestPerf).length;
+                const rank = validEntries.filter((e) => e.bestPerf <= bestPerf).length;
                 map.set(orgConfigId, Math.round((rank / total) * 100));
             }
         }
@@ -141,17 +151,17 @@ export class OrgConfigTableComponent implements OnChanges {
     }
 
     private sortRows(rows: OrgConfigTableRow[]): OrgConfigTableRow[] {
-        const dir = this.sortDirection === 'asc' ? 1 : -1;
+        const dir = this.sortDirection === "asc" ? 1 : -1;
         return rows.sort((a, b) => {
             switch (this.sortColumn) {
-                case 'orgConfigId':
+                case "orgConfigId":
                     return (a.orgConfigId - b.orgConfigId) * dir;
-                case 'state':
+                case "state":
                     return a.state.localeCompare(b.state) * dir;
-                case 'avgPerformance':
-                case 'percentile': {
-                    const aPerf = Math.max(...a.simConfigs.map(sc => sc.avgPerformance ?? -Infinity));
-                    const bPerf = Math.max(...b.simConfigs.map(sc => sc.avgPerformance ?? -Infinity));
+                case "avgPerformance":
+                case "percentile": {
+                    const aPerf = Math.max(...a.simConfigs.map((sc) => sc.avgPerformance ?? -Infinity));
+                    const bPerf = Math.max(...b.simConfigs.map((sc) => sc.avgPerformance ?? -Infinity));
                     if (aPerf === -Infinity && bPerf === -Infinity) return 0;
                     if (aPerf === -Infinity) return 1;
                     if (bPerf === -Infinity) return -1;

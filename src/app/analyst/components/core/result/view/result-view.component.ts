@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ResultDTO } from "aethon-arion-pipeline";
 import { ModelNames } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-result-view",
     templateUrl: "./result-view.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./result-view.component.scss"]
 })
 export class ResultViewComponent implements OnInit {

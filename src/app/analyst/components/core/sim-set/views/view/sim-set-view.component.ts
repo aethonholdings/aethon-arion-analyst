@@ -1,10 +1,12 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { Domain, SimSetDTO } from "aethon-arion-pipeline";
 import { AnalystService } from "src/app/analyst/services/analyst.service";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-view",
     templateUrl: "./sim-set-view.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-view.component.scss"]
 })
 export class SimSetViewComponent {

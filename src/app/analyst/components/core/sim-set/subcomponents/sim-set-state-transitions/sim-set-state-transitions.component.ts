@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { C1ModelName } from "aethon-arion-c1";
 import { SimSetDTO } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-state-transition",
     templateUrl: "./sim-set-state-transitions.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-state-transitions.component.scss"]
 })
 export class SimSetStateTransitionsComponent {

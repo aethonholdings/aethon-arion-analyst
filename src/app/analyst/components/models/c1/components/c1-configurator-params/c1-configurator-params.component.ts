@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { C1ConfiguratorParamData } from "aethon-arion-c1";
 import { ConfiguratorParamData, ConfiguratorParamsDTO } from "aethon-arion-pipeline";
 
 @Component({
+    standalone: false,
     selector: "arion-c1-configurator-params",
     templateUrl: "./c1-configurator-params.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./c1-configurator-params.component.scss"]
 })
 export class C1ConfiguratorParamsComponent<T extends ConfiguratorParamData> implements OnInit {

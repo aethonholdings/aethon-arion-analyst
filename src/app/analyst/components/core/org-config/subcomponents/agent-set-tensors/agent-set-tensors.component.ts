@@ -1,11 +1,13 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { OrgConfigDTO, Utils } from "aethon-arion-pipeline";
 import { AgentSetReportData } from "src/app/analyst/types/analyst.types";
 import { ModelService } from "src/app/analyst/services/model.service";
 
 @Component({
+    standalone: false,
     selector: "arion-agent-set-tensors",
     templateUrl: "./agent-set-tensors.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./agent-set-tensors.component.scss"]
 })
 export class AgentSetTensorsComponent {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 
 type Position = "row" | "column";
 type Pivotable<T> = T[];
@@ -14,8 +14,10 @@ interface Segment<T> {
 }
 
 @Component({
+    standalone: false,
     selector: "arion-pivot-table",
     templateUrl: "./pivot-table.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./pivot-table.component.scss"]
 })
 export class PivotTableComponent implements OnInit {

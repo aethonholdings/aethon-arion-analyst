@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { Paginated } from "aethon-paginate-types";
 
 @Component({
+    standalone: false,
     selector: "arion-pagination",
     templateUrl: "./pagination.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./pagination.component.scss"]
 })
 export class PaginationComponent implements OnInit {

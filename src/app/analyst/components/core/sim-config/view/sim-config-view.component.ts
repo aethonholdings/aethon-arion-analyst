@@ -1,11 +1,13 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { SimConfigDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 import { Summary } from "src/app/analyst/types/analyst.types";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-config-view",
     templateUrl: "./sim-config-view.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-config-view.component.scss"]
 })
 export class SimConfigViewComponent {

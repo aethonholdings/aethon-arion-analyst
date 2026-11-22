@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { C1ModelName } from "aethon-arion-c1";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { ModelService } from "src/app/analyst/services/model.service";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-create",
     templateUrl: "./sim-set-create.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-create.component.scss"]
 })
 export class SimSetCreateComponent implements OnInit {

@@ -1,10 +1,12 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs";
 import { SpinnerService } from "./spinner.service";
 
 @Component({
+    standalone: false,
     selector: "arion-spinner",
     templateUrl: "./spinner.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./spinner.component.scss"]
 })
 export class SpinnerComponent {

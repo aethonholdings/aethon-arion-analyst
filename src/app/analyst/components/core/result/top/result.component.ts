@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ResultDTO } from "aethon-arion-pipeline";
 import { Views } from "src/app/analyst/constants/analyst.constants";
 
 @Component({
+    standalone: false,
     selector: "arion-result",
     templateUrl: "./result.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./result.component.scss"]
 })
 export class ResultComponent {

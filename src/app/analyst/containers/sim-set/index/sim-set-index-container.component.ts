@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { SimSetDTO } from "aethon-arion-pipeline";
 import { map, mergeMap, Observable, tap } from "rxjs";
@@ -7,17 +7,17 @@ import { AnalystService } from "src/app/analyst/services/analyst.service";
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 @Component({
+    standalone: false,
     selector: "arion-sim-set-index-container",
     templateUrl: "./sim-set-index-container.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ["./sim-set-index-container.component.scss"]
 })
 export class SimSetIndexContainerComponent implements OnInit {
     @Input() simSets$!: Observable<SimSetDTO[]>;
     refreshing: boolean = false;
     views = Views;
-    breadcrumbs: Breadcrumb[] = [
-        { label: 'SimSets' }
-    ];
+    breadcrumbs: Breadcrumb[] = [{ label: "SimSets" }];
 
     constructor(
         private analystService: AnalystService,
