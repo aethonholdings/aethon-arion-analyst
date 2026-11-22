@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Unpublished sibling packages are built from the matching branch by ci/link-siblings.sh. The repositories are
+# private: add a repository secret ARION_REPOS_TOKEN with read access to the aethon-arion repositories.
+env:
+  ARION_REPOS_TOKEN: ${{ secrets.ARION_REPOS_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bash ci/link-siblings.sh core pipeline c1
+      - name: Environment files from the example
+        run: for e in environment environment.dev environment.prod environment.test; do cp src/env/environment.example.ts src/env/$e.ts; done
+      - run: npm run test:ci
+      - run: npx ng build --configuration development
+      - name: Smoke test against a stubbed API
+        run: |
+          npm install --no-save --no-audit --no-fund playwright
+          npx playwright install --with-deps chromium
+          npm run test:smoke
