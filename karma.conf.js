@@ -30,6 +30,10 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: false,
         browsers: ["ChromeHeadless"],
+        // for containers and CI runners, where Chrome's sandbox is unavailable (npm run test:ci)
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: { base: "ChromeHeadless", flags: ["--no-sandbox"] }
+        },
         singleRun: true,
         restartOnFileChange: false
     });

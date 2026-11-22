@@ -53,3 +53,6 @@ yalc.lock
 /src/env/environment.test.ts
 /src/env/environment.prod.ts
 /src/env/environment.ts
+
+# sibling packages built by ci/link-siblings.sh
+/.siblings
