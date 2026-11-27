@@ -82,4 +82,18 @@ describe("AnalystService", () => {
             done();
         });
     });
+
+    describe("apiHost", () => {
+        const location = { protocol: "http:", hostname: "localhost", port: "8080" };
+        it("uses the configured host when one is named", () => {
+            const host = { protocol: "https", name: "arion.example.com", port: 443, basePath: "arion" } as any;
+            expect(AnalystService.apiHost(host, location)).toBe(host);
+        });
+        it("uses the analyst's own address when the host name is empty", () => {
+            expect(AnalystService.apiHost({ protocol: "http", name: "", basePath: "arion" } as any, location)).toEqual(
+                jasmine.objectContaining({ protocol: "http", name: "localhost", port: 8080, basePath: "arion" })
+            );
+            expect(AnalystService.apiHost({ name: "", basePath: "arion" } as any, { protocol: "https:", hostname: "a.b", port: "" }).port).toBeUndefined();
+        });
+    });
 });

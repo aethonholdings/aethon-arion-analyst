@@ -20,7 +20,7 @@ export interface OrgConfigSummaryDTO {
     stdDevPerformance: number | null;
 }
 import { Paginated, PaginateQuery } from "aethon-paginate-types";
-import { API, APIRequestOptions } from "aethon-api-types";
+import { API, APIHost, APIRequestOptions } from "aethon-api-types";
 import { environment } from "src/env/environment";
 import * as openApi from "../swagger/swagger.json";
 import { ApiService } from "src/app/root/services/api.service";
@@ -37,9 +37,24 @@ export class AnalystService {
         private apiService: ApiService,
         private spinnerService: SpinnerService
     ) {
-        const host = environment.host;
+        const host = AnalystService.apiHost(environment.host, window.location);
         const api = new API(host.protocol, host.name, openApi, host?.port, host?.basePath);
         this.apiService.setAPI(api);
+    }
+
+    /**
+     * The API host: as configured, or, when the configured host name is empty, the address the analyst itself was
+     * loaded from (the API served behind the same nginx, reachable however the browser reached the analyst, e.g. a
+     * port forward).
+     */
+    static apiHost(configured: APIHost, location: Pick<Location, "protocol" | "hostname" | "port">): APIHost {
+        if (configured?.name) return configured;
+        return {
+            ...configured,
+            protocol: location.protocol.replace(":", "") as APIHost["protocol"],
+            name: location.hostname,
+            port: location.port ? Number(location.port) : undefined
+        } as APIHost;
     }
 
     getRefeshTimer$(): Observable<number> {
