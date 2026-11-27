@@ -10,5 +10,6 @@ module.exports = [
     { path: "/sim-config/1", text: ["SimConfig 1"], tabs: ["Results"] },
     { path: "/result/46", text: ["Result 46", "Operating profit"], tabs: ["SimConfig", "OrgConfig"] },
     { path: "/org-config", text: ["Summary - All org configs", "Avg Performance/ agent"] },
-    { path: "/org-config/1", text: ["OrgConfig 1", "Agent set tensors"], tabs: ["SimConfigs"] }
+    { path: "/org-config/1", text: ["OrgConfig 1", "Agent set tensors"], tabs: ["SimConfigs"] },
+    { path: "/monitor", text: ["Monitor", "Results / min", "Runs in flight", "Sim configs converged", "0 / 6", "http", "active"] }
 ];

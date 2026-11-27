@@ -5,6 +5,8 @@ import { OrgConfigIndexContainerComponent } from "./org-config/index/org-config-
 import { SimSetCreateContainerComponent } from "./sim-set/create/sim-set-create-container.component";
 import { OptimiserStateViewComponent } from "../components/core/optimiser-state/view/optimiser-state-view.component";
 import { C1 } from "aethon-arion-c1";
+import { MonitorContainerComponent, MONITOR_REFRESH_MS } from "./monitor/monitor-container.component";
+import { discardPeriodicTasks, fakeAsync, tick } from "@angular/core/testing";
 import { c1GradientAscentDefaultOptimiserParams } from "../components/models/c1/constants/analyst-c1.constants";
 
 const route = (id = "5") => ({ snapshot: { paramMap: { get: () => id }, queryParamMap: { get: () => null } } }) as any;
@@ -135,5 +137,50 @@ describe("OptimiserStateViewComponent", () => {
         expect(c.orgConfigRows.length).toBe(1);
         expect(c.orgConfigRows[0].simConfigs[0].avgPerformance).toBe(20);
         expect(c.orgConfigRows[0].configHash).toBe("abcdef12");
+    });
+});
+
+describe("MonitorContainerComponent", () => {
+    const progress = (results: number): any => ({
+        generatedAt: "2026-01-01T00:10:00.000Z",
+        activity: { windowMinutes: 5, dispatchedRuns: 10, results, failedRuns: 0, resultsPerMinute: results / 5, resultsLastHour: 99, inFlightRuns: 4, activeInstances: 4 },
+        nodes: [],
+        simSets: []
+    });
+
+    it("refreshes every 10 s and on demand, and keeps going after a failed request", fakeAsync(() => {
+        let calls = 0, fail = false;
+        const service: any = { getProgress$: () => { calls++; return fail ? throwError(() => new Error("down")) : of(progress(calls)); } };
+        const c = new MonitorContainerComponent(service);
+        c.ngOnInit();
+        const seen: any[] = [];
+        const sub = c.progress$.subscribe((p) => seen.push(p));
+        tick(0);
+        expect(calls).toBe(1); // first load straight away
+        fail = true;
+        c.refresh();
+        expect(c.error).toBe("down");
+        fail = false;
+        c.refresh();
+        expect(c.error).toBeNull();
+        expect(seen.map((p) => p.activity.results)).toEqual([1, 3]);
+        tick(MONITOR_REFRESH_MS);
+        expect(calls).toBe(4);
+        sub.unsubscribe();
+        c.ngOnDestroy();
+        discardPeriodicTasks();
+    }));
+
+    it("formats convergence, ages and machine ids", () => {
+        const c = new MonitorContainerComponent({} as any);
+        expect(c.convergedPercent({ simConfigs: 30, convergedSimConfigs: 13 } as any)).toBe(43);
+        expect(c.convergedPercent({ simConfigs: 0, convergedSimConfigs: 0 } as any)).toBe(0);
+        const now = "2026-01-01T12:00:00.000Z";
+        expect(c.ago(null, now)).toBe("never");
+        expect(c.ago("2026-01-01T11:59:48.000Z", now)).toBe("12 s ago");
+        expect(c.ago("2026-01-01T11:56:00.000Z", now)).toBe("4 min ago");
+        expect(c.ago("2026-01-01T09:00:00.000Z", now)).toBe("3 h ago");
+        expect(c.shortId("aws-fleet")).toBe("aws-fleet");
+        expect(c.shortId("a0a011aeb8aa6aa058232c58143fe66cdd80f55cda6c7e1005e9079b92a53b4d")).toBe("a0a011aeb8aa…");
     });
 });

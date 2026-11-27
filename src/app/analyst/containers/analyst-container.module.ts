@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
+import { MonitorContainerComponent } from "./monitor/monitor-container.component";
 import { SimSetIndexContainerComponent } from "./sim-set/index/sim-set-index-container.component";
 import { AnalystComponentModule } from "../components/analyst-component.module";
 import { SimSetViewContainerComponent } from "./sim-set/view/sim-set-view-container.component";
@@ -23,9 +25,10 @@ import { SimSetOrgConfigContainerComponent } from './sim-set/org-config/sim-set-
         OptimiserStateViewContainerComponent,
         OrgConfigViewContainerComponent,
         OrgConfigIndexContainerComponent,
-        SimSetOrgConfigContainerComponent
+        SimSetOrgConfigContainerComponent,
+        MonitorContainerComponent
     ],
-    imports: [CommonModule, WidgetsModule, AnalystComponentModule, ResultModule],
+    imports: [CommonModule, RouterModule, WidgetsModule, AnalystComponentModule, ResultModule],
     exports: [SimSetIndexContainerComponent, SimSetViewContainerComponent, ResultViewContainerComponent]
 })
 export class AnalystContainerModule {}

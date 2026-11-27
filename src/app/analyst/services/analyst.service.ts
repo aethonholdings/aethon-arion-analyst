@@ -12,6 +12,47 @@ import {
 } from "aethon-arion-pipeline";
 import { Observable, catchError, concatMap, finalize, from, map, of, shareReplay, switchMap, timer } from "rxjs";
 
+/** GET /arion/progress: a snapshot of the work in progress. */
+export interface ProgressDTO {
+    generatedAt: string;
+    activity: {
+        windowMinutes: number;
+        dispatchedRuns: number;
+        results: number;
+        failedRuns: number;
+        resultsPerMinute: number;
+        resultsLastHour: number;
+        inFlightRuns: number;
+        activeInstances: number;
+    };
+    nodes: {
+        id: string;
+        hostname: string | null;
+        lastSeenAt: string | null;
+        active: boolean;
+        instances: number;
+        results: number;
+        revoked: boolean;
+    }[];
+    simSets: ProgressSimSetDTO[];
+}
+
+export interface ProgressSimSetDTO {
+    id: number;
+    description: string;
+    state: string;
+    steps: number;
+    currentStepId: number | null;
+    currentStepStatus: string | null;
+    currentStepPercentComplete: number | null;
+    simConfigs: number;
+    convergedSimConfigs: number;
+    runningSimConfigs: number;
+    failedSimConfigs: number;
+    results: number;
+    lastResultAt: string | null;
+}
+
 export interface OrgConfigSummaryDTO {
     agentCount: number;
     orgConfigCount: number;
@@ -141,6 +182,10 @@ export class AnalystService {
     getOrgConfigSummary$(): Observable<OrgConfigSummaryDTO[]> {
         const operation: string = "OrgConfigController_summary";
         return this.apiService.request$<OrgConfigSummaryDTO[]>(operation, {});
+    }
+
+    getProgress$(): Observable<ProgressDTO> {
+        return this.apiService.request$<ProgressDTO>("ProgressController_index", {});
     }
 
     getRunningOrgConfigs$(): Observable<OrgConfigDTO[]> {

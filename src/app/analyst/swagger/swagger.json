@@ -426,13 +426,17 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/OrgConfigDTOGet" }
+                  "items": {
+                    "$ref": "#/components/schemas/OrgConfigDTOGet"
+                  }
                 }
               }
             }
           }
         },
-        "tags": ["OrgConfig"]
+        "tags": [
+          "OrgConfig"
+        ]
       }
     },
     "/arion/org-config/agent-count/{agentCount}": {
@@ -444,7 +448,10 @@
             "required": true,
             "in": "path",
             "description": "The agent count to filter OrgConfigs by",
-            "schema": { "example": 13, "type": "number" }
+            "schema": {
+              "example": 13,
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -454,13 +461,17 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/OrgConfigDTOGet" }
+                  "items": {
+                    "$ref": "#/components/schemas/OrgConfigDTOGet"
+                  }
                 }
               }
             }
           }
         },
-        "tags": ["OrgConfig"]
+        "tags": [
+          "OrgConfig"
+        ]
       }
     },
     "/arion/org-config/summary": {
@@ -477,11 +488,24 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "agentCount": { "type": "number" },
-                      "orgConfigCount": { "type": "number" },
-                      "avgPerformance": { "type": "number", "nullable": true },
-                      "bestPerformance": { "type": "number", "nullable": true },
-                      "stdDevPerformance": { "type": "number", "nullable": true }
+                      "agentCount": {
+                        "type": "number"
+                      },
+                      "orgConfigCount": {
+                        "type": "number"
+                      },
+                      "avgPerformance": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "bestPerformance": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "stdDevPerformance": {
+                        "type": "number",
+                        "nullable": true
+                      }
                     }
                   }
                 }
@@ -788,6 +812,20 @@
         },
         "tags": [
           "OpenAPI"
+        ]
+      }
+    },
+    "/arion/progress": {
+      "get": {
+        "operationId": "ProgressController_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Nodes, throughput and SimSet convergence progress"
+          }
+        },
+        "tags": [
+          "Progress"
         ]
       }
     }
@@ -1308,9 +1346,9 @@
                 "controlStep": true
               },
               "gains": {
-                "judgment": 0.00001,
-                "incentive": 1e-8,
-                "influence": 0.000001
+                "judgment": 1e-05,
+                "incentive": 1e-08,
+                "influence": 1e-06
               },
               "graph": "teams",
               "spans": 1,
@@ -2519,9 +2557,9 @@
                 "spans": 1,
                 "layers": 1,
                 "gains": {
-                  "influence": 0.000001,
-                  "judgment": 0.00001,
-                  "incentive": 1e-8
+                  "influence": 1e-06,
+                  "judgment": 1e-05,
+                  "incentive": 1e-08
                 },
                 "graph": "teams",
                 "actionStateProbability": 0.85,
@@ -3881,9 +3919,9 @@
                 "controlStep": false
               },
               "gains": {
-                "judgment": 0.00001,
-                "incentive": 1e-8,
-                "influence": 0.000001
+                "judgment": 1e-05,
+                "incentive": 1e-08,
+                "influence": 1e-06
               },
               "graph": "teams",
               "spans": 1,
@@ -3951,9 +3989,9 @@
                 "controlStep": true
               },
               "gains": {
-                "judgment": 0.00001,
-                "incentive": 1e-8,
-                "influence": 0.000001
+                "judgment": 1e-05,
+                "incentive": 1e-08,
+                "influence": 1e-06
               },
               "graph": "teams",
               "spans": 1,
