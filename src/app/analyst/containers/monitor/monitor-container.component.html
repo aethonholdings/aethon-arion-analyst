@@ -37,6 +37,36 @@
         </div>
     </div>
 
+    <ng-container *ngIf="fleet$ | async as fleet">
+        <ng-container *ngIf="fleet.enabled">
+            <div class="divider">Node fleet</div>
+            <div class="flex flex-wrap items-end gap-6 mb-2">
+                <div>
+                    <div class="text-sm opacity-70">Instances (target / running)</div>
+                    <div class="text-3xl font-bold">{{ fleet.desired }} / {{ (fleet.instances ?? []).length }}</div>
+                    <div class="text-xs opacity-70">{{ fleet.group }} · at most {{ fleet.max }}</div>
+                </div>
+                <div class="join">
+                    <button class="btn btn-sm join-item" [disabled]="scaling || (fleetTarget ?? 0) <= 0" (click)="fleetTarget = (fleetTarget ?? 0) - 1">−</button>
+                    <input class="input input-bordered input-sm join-item w-20 text-center" type="number" min="0" [max]="fleet.max ?? 0" step="1" [(ngModel)]="fleetTarget" />
+                    <button class="btn btn-sm join-item" [disabled]="scaling || (fleetTarget ?? 0) >= (fleet.max ?? 0)" (click)="fleetTarget = (fleetTarget ?? 0) + 1">+</button>
+                </div>
+                <button class="btn btn-sm btn-primary" [disabled]="scaling || fleetTarget === null || fleetTarget === fleet.desired" (click)="scaleFleet(fleet, $any(fleetTarget))">Set fleet size</button>
+                <button class="btn btn-sm btn-outline btn-error" [disabled]="scaling || fleet.desired === 0" (click)="scaleFleet(fleet, 0)">Stop all</button>
+                <span *ngIf="scaling" class="loading loading-spinner loading-sm"></span>
+            </div>
+            <p *ngIf="fleetMessage" class="text-sm mb-2">{{ fleetMessage }}</p>
+            <table *ngIf="(fleet.instances ?? []).length > 0" class="table table-xs max-w-2xl">
+                <thead><tr><th>Instance</th><th>Type</th><th>Zone</th><th>State</th></tr></thead>
+                <tbody>
+                    <tr *ngFor="let i of fleet.instances">
+                        <td class="font-mono">{{ i.id }}</td><td>{{ i.type }}</td><td>{{ i.availabilityZone }}</td><td>{{ i.state }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </ng-container>
+
     <div class="divider">SimSets</div>
     <p *ngIf="p.simSets.length === 0" class="opacity-60">No SimSet is running or finished in the last 24 hours.</p>
     <table *ngIf="p.simSets.length > 0" class="table table-sm">

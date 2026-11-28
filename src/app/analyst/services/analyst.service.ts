@@ -53,6 +53,16 @@ export interface ProgressSimSetDTO {
     lastResultAt: string | null;
 }
 
+/** GET/PUT /arion/fleet: the node fleet (an AWS Auto Scaling group), when the server manages one. */
+export interface FleetDTO {
+    enabled: boolean;
+    group?: string;
+    desired?: number;
+    min?: number;
+    max?: number;
+    instances?: { id: string; type: string; state: string; availabilityZone?: string }[];
+}
+
 export interface OrgConfigSummaryDTO {
     agentCount: number;
     orgConfigCount: number;
@@ -182,6 +192,14 @@ export class AnalystService {
     getOrgConfigSummary$(): Observable<OrgConfigSummaryDTO[]> {
         const operation: string = "OrgConfigController_summary";
         return this.apiService.request$<OrgConfigSummaryDTO[]>(operation, {});
+    }
+
+    getFleet$(): Observable<FleetDTO> {
+        return this.apiService.request$<FleetDTO>("FleetController_get", {});
+    }
+
+    scaleFleet$(desired: number): Observable<FleetDTO> {
+        return this.apiService.request$<FleetDTO>("FleetController_scale", { body: { desired } });
     }
 
     getProgress$(): Observable<ProgressDTO> {

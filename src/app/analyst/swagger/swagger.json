@@ -828,6 +828,42 @@
           "Progress"
         ]
       }
+    },
+    "/arion/fleet": {
+      "get": {
+        "operationId": "FleetController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The node fleet"
+          }
+        },
+        "tags": [
+          "Fleet"
+        ]
+      },
+      "put": {
+        "operationId": "FleetController_scale",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The node fleet after the change"
+          }
+        },
+        "tags": [
+          "Fleet"
+        ]
+      }
     }
   },
   "info": {

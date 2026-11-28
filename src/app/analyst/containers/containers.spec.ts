@@ -255,3 +255,40 @@ describe("ControlExperimentResultComponent", () => {
         expect(c.verdict({ ...base, delta: 1, ci95: [-3.9, 5.9], significant: false })).toContain("No detectable effect");
     });
 });
+
+describe("MonitorContainerComponent fleet scaling", () => {
+    const fleet = { enabled: true, group: "arion-nodes", desired: 2, min: 0, max: 8, instances: [] };
+    const setup = () => {
+        const calls: number[] = [];
+        const service: any = {
+            getProgress$: () => of(null),
+            scaleFleet$: (n: number) => { calls.push(n); return of({ ...fleet, desired: n }); }
+        };
+        return { c: new MonitorContainerComponent(service), calls };
+    };
+
+    it("scales after confirmation and states the start-up delay", () => {
+        const { c, calls } = setup();
+        c.ngOnInit();
+        let asked = "";
+        c.scaleFleet(fleet, 4, (m) => { asked = m; return true; });
+        expect(asked).toContain("Run 4 node instances (now 2)");
+        expect(calls).toEqual([4]);
+        expect(c.fleetTarget).toBe(4);
+        expect(c.fleetMessage).toContain("5 minutes");
+        c.scaleFleet(fleet, 0, (m) => { asked = m; return true; });
+        expect(asked).toContain("Stop every node instance");
+        expect(calls).toEqual([4, 0]);
+        c.ngOnDestroy();
+    });
+
+    it("does nothing without confirmation, for the current size, or out of range", () => {
+        const { c, calls } = setup();
+        c.scaleFleet(fleet, 3, () => false);
+        c.scaleFleet(fleet, 2, () => true);
+        c.scaleFleet(fleet, 9, () => true);
+        c.scaleFleet(fleet, -1, () => true);
+        c.scaleFleet({ enabled: false }, 1, () => true);
+        expect(calls).toEqual([]);
+    });
+});
