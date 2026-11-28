@@ -60,7 +60,9 @@ export interface FleetDTO {
     desired?: number;
     min?: number;
     max?: number;
-    instances?: { id: string; type: string; state: string; availabilityZone?: string }[];
+    counts?: { launching: number; building: number; running: number; stopping: number; pending: number };
+    instances?: { id: string; type: string; state: string; phase: "launching" | "building" | "running" | "stopping"; availabilityZone?: string; launchTime?: string }[];
+    lastError?: string | null;
 }
 
 export interface OrgConfigSummaryDTO {

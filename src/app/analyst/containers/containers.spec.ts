@@ -292,3 +292,24 @@ describe("MonitorContainerComponent fleet scaling", () => {
         expect(calls).toEqual([]);
     });
 });
+
+describe("MonitorContainerComponent fleet scaling, unchanged fleet", () => {
+    it("reports a change the fleet does not show instead of success", () => {
+        const fleet = { enabled: true, group: "arion-nodes", desired: 0, min: 0, max: 8, instances: [] };
+        const service: any = { getProgress$: () => of(null), scaleFleet$: () => of({ ...fleet, desired: 0 }) };
+        const c = new MonitorContainerComponent(service);
+        c.scaleFleet(fleet, 3, () => true);
+        expect(c.fleetMessage).toContain("was not changed");
+        expect(c.fleetTarget).toBe(0);
+    });
+});
+
+describe("API definition (swagger.json)", () => {
+    it("uses only methods the API client sends as such (it turns any other method, e.g. PUT, into GET)", () => {
+        const spec: any = require("../swagger/swagger.json");
+        const methods = new Set<string>();
+        for (const path of Object.keys(spec.paths)) for (const method of Object.keys(spec.paths[path])) methods.add(method.toLowerCase());
+        for (const method of methods) expect(["get", "post", "patch", "delete"]).toContain(method);
+        expect(spec.paths["/arion/fleet/scale"].post.operationId).toBe("FleetController_scale");
+    });
+});

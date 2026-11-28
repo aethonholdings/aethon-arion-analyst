@@ -42,9 +42,16 @@
             <div class="divider">Node fleet</div>
             <div class="flex flex-wrap items-end gap-6 mb-2">
                 <div>
-                    <div class="text-sm opacity-70">Instances (target / running)</div>
-                    <div class="text-3xl font-bold">{{ fleet.desired }} / {{ (fleet.instances ?? []).length }}</div>
+                    <div class="text-sm opacity-70">Target</div>
+                    <div class="text-3xl font-bold">{{ fleet.desired }}</div>
                     <div class="text-xs opacity-70">{{ fleet.group }} · at most {{ fleet.max }}</div>
+                </div>
+                <div class="flex gap-4 text-center" *ngIf="fleet.counts as n">
+                    <div><div class="text-sm opacity-70">Pending start</div><div class="text-3xl font-bold" [class.text-warning]="n.pending > 0">{{ n.pending }}</div></div>
+                    <div><div class="text-sm opacity-70">Launching</div><div class="text-xl">{{ n.launching }}</div></div>
+                    <div><div class="text-sm opacity-70">Building</div><div class="text-xl">{{ n.building }}</div></div>
+                    <div><div class="text-sm opacity-70">Running</div><div class="text-xl text-success">{{ n.running }}</div></div>
+                    <div><div class="text-sm opacity-70">Stopping</div><div class="text-xl">{{ n.stopping }}</div></div>
                 </div>
                 <div class="join">
                     <button class="btn btn-sm join-item" [disabled]="scaling || (fleetTarget ?? 0) <= 0" (click)="fleetTarget = (fleetTarget ?? 0) - 1">−</button>
@@ -55,12 +62,15 @@
                 <button class="btn btn-sm btn-outline btn-error" [disabled]="scaling || fleet.desired === 0" (click)="scaleFleet(fleet, 0)">Stop all</button>
                 <span *ngIf="scaling" class="loading loading-spinner loading-sm"></span>
             </div>
+            <div *ngIf="fleet.lastError" class="alert alert-warning text-sm mb-2">Instances are not starting: {{ fleet.lastError }}</div>
             <p *ngIf="fleetMessage" class="text-sm mb-2">{{ fleetMessage }}</p>
             <table *ngIf="(fleet.instances ?? []).length > 0" class="table table-xs max-w-2xl">
-                <thead><tr><th>Instance</th><th>Type</th><th>Zone</th><th>State</th></tr></thead>
+                <thead><tr><th>Instance</th><th>Type</th><th>Zone</th><th>Phase</th><th>Launched</th></tr></thead>
                 <tbody>
                     <tr *ngFor="let i of fleet.instances">
-                        <td class="font-mono">{{ i.id }}</td><td>{{ i.type }}</td><td>{{ i.availabilityZone }}</td><td>{{ i.state }}</td>
+                        <td class="font-mono">{{ i.id }}</td><td>{{ i.type }}</td><td>{{ i.availabilityZone }}</td>
+                        <td><span class="badge badge-sm" [ngClass]="phaseBadge(i.phase)" [title]="i.state">{{ i.phase }}</span></td>
+                        <td>{{ i.launchTime ? ago(i.launchTime, p.generatedAt) : "–" }}</td>
                     </tr>
                 </tbody>
             </table>

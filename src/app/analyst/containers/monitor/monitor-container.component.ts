@@ -69,8 +69,17 @@ export class MonitorContainerComponent implements OnInit, OnDestroy {
         this.analystService.scaleFleet$(desired).subscribe({
             next: (updated) => {
                 this.scaling = false;
-                this.fleetTarget = updated.desired ?? desired;
-                this.fleetMessage = desired > (fleet.desired ?? 0) ? "New nodes start taking work about 5 minutes after they launch." : null;
+                if (updated?.desired !== desired) {
+                    // never report success for a change the fleet does not show
+                    this.fleetMessage = `The fleet size was not changed (target ${updated?.desired ?? "unknown"}, requested ${desired}).`;
+                    this.fleetTarget = updated?.desired ?? this.fleetTarget;
+                } else {
+                    this.fleetTarget = desired;
+                    this.fleetMessage =
+                        desired > (fleet.desired ?? 0)
+                            ? `Starting ${desired - (fleet.desired ?? 0)} instance(s): each launches, then builds the node (about 5 minutes) before it takes work.`
+                            : null;
+                }
                 this.refresh();
             },
             error: (error) => {
@@ -92,6 +101,11 @@ export class MonitorContainerComponent implements OnInit, OnDestroy {
     /** Converged share of a SimSet's simulation configurations, 0 to 100. */
     convergedPercent(simSet: ProgressSimSetDTO): number {
         return simSet.simConfigs > 0 ? Math.round((100 * simSet.convergedSimConfigs) / simSet.simConfigs) : 0;
+    }
+
+    /** Label and badge style of an instance phase. */
+    phaseBadge(phase: string): string {
+        return { launching: "badge-info", building: "badge-warning", running: "badge-success", stopping: "badge-ghost" }[phase] ?? "badge-ghost";
     }
 
     /** "12 s ago", "4 min ago", "3 h ago", or "never". */

@@ -841,8 +841,10 @@
         "tags": [
           "Fleet"
         ]
-      },
-      "put": {
+      }
+    },
+    "/arion/fleet/scale": {
+      "post": {
         "operationId": "FleetController_scale",
         "parameters": [],
         "requestBody": {
