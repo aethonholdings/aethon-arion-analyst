@@ -1,6 +1,13 @@
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { catchError, EMPTY, map, merge, Observable, shareReplay, Subject, switchMap, takeUntil, timer } from "rxjs";
-import { AnalystService, FleetDTO, ProgressDTO, ProgressSimSetDTO } from "src/app/analyst/services/analyst.service";
+import { AnalystService, FleetDTO, ProgressDTO, ProgressProcessDTO, ProgressSimSetDTO } from "src/app/analyst/services/analyst.service";
+
+/** Node processes of one instance (an EC2 fleet instance, or a machine outside the fleet). */
+export interface ProcessGroup {
+    instance: string;
+    phase: string | null;
+    processes: ProgressProcessDTO[];
+}
 import { Breadcrumb } from "src/app/analyst/widgets/breadcrumbs/breadcrumbs.component";
 
 /** Refresh interval of the monitor (ms). */
@@ -101,6 +108,42 @@ export class MonitorContainerComponent implements OnInit, OnDestroy {
     /** Converged share of a SimSet's simulation configurations, 0 to 100. */
     convergedPercent(simSet: ProgressSimSetDTO): number {
         return simSet.simConfigs > 0 ? Math.round((100 * simSet.convergedSimConfigs) / simSet.simConfigs) : 0;
+    }
+
+    /**
+     * Processes grouped by instance, fleet instances first (with their phase), then other machines; within an
+     * instance by process index.
+     */
+    processGroups(processes: ProgressProcessDTO[] | undefined, fleet: FleetDTO | null): ProcessGroup[] {
+        const phases = new Map((fleet?.instances ?? []).map((i) => [i.id, i.phase as string]));
+        const groups = new Map<string, ProcessGroup>();
+        for (const process of processes ?? []) {
+            const instance = process.instance ?? process.machineId;
+            if (!groups.has(instance)) groups.set(instance, { instance, phase: phases.get(instance) ?? null, processes: [] });
+            groups.get(instance)!.processes.push(process);
+        }
+        const index = (p: ProgressProcessDTO) => p.id.split(":").pop() as string;
+        for (const group of groups.values()) group.processes.sort((a, b) => index(a).localeCompare(index(b), undefined, { numeric: true }));
+        return [...groups.values()].sort((a, b) => (a.phase === null ? 1 : 0) - (b.phase === null ? 1 : 0) || a.instance.localeCompare(b.instance));
+    }
+
+    /** The process index (last part of the node id). */
+    processIndex(process: ProgressProcessDTO): string {
+        return process.id.split(":").pop() as string;
+    }
+
+    /** Run progress, 0 to 100, or null when no run is in progress. */
+    runPercent(process: ProgressProcessDTO): number | null {
+        if (process.clockTick === null || !process.totalClockTicks) return null;
+        return Math.min(100, Math.round((100 * process.clockTick) / process.totalClockTicks));
+    }
+
+    /** "45 s", "3.2 min" or "1.4 h". */
+    duration(ms: number | null | undefined): string {
+        if (ms === null || ms === undefined) return "–";
+        if (ms < 60000) return `${Math.round(ms / 1000)} s`;
+        if (ms < 3600000) return `${(ms / 60000).toFixed(1)} min`;
+        return `${(ms / 3600000).toFixed(1)} h`;
     }
 
     /** Label and badge style of an instance phase. */

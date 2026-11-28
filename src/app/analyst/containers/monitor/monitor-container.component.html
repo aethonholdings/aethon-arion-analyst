@@ -31,6 +31,11 @@
             <div class="stat-desc">dispatched, no result yet</div>
         </div>
         <div class="stat">
+            <div class="stat-title">Average run</div>
+            <div class="stat-value">{{ duration(p.activity.averageRunMs) }}</div>
+            <div class="stat-desc">per run and process</div>
+        </div>
+        <div class="stat">
             <div class="stat-title">Failed runs</div>
             <div class="stat-value" [class.text-error]="p.activity.failedRuns > 0">{{ p.activity.failedRuns }}</div>
             <div class="stat-desc">last {{ p.activity.windowMinutes }} min</div>
@@ -72,6 +77,44 @@
                         <td><span class="badge badge-sm" [ngClass]="phaseBadge(i.phase)" [title]="i.state">{{ i.phase }}</span></td>
                         <td>{{ i.launchTime ? ago(i.launchTime, p.generatedAt) : "–" }}</td>
                     </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="processGroups(p.processes, $any(fleet$ | async)) as groups">
+        <ng-container *ngIf="groups.length > 0">
+            <div class="divider">Processes</div>
+            <table class="table table-xs mb-2">
+                <thead>
+                    <tr><th>Process</th><th>State</th><th class="w-1/4">Current run</th><th class="text-right">Runs (failed)</th><th class="text-right">Average run</th><th class="text-right">Memory</th><th>Version</th><th>Heartbeat</th></tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let g of groups">
+                        <tr class="bg-base-200">
+                            <td colspan="8" class="font-mono">
+                                {{ g.instance }}
+                                <span *ngIf="g.phase" class="badge badge-sm ml-2" [ngClass]="phaseBadge(g.phase)">{{ g.phase }}</span>
+                                <span class="opacity-60 ml-2">{{ g.processes.length }} process{{ g.processes.length === 1 ? "" : "es" }}</span>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let proc of g.processes" [class.opacity-50]="proc.silent">
+                            <td class="font-mono" [title]="proc.id">#{{ processIndex(proc) }}</td>
+                            <td>{{ proc.state }}</td>
+                            <td>
+                                <ng-container *ngIf="runPercent(proc) as pct; else noRun">
+                                    <progress class="progress progress-info w-full" [value]="pct" max="100"></progress>
+                                    <div class="text-xs opacity-70">run {{ proc.runId }} · {{ pct }}%</div>
+                                </ng-container>
+                                <ng-template #noRun><span class="opacity-50">–</span></ng-template>
+                            </td>
+                            <td class="text-right">{{ proc.completedRuns }} <span *ngIf="proc.failedRuns > 0" class="text-error" [title]="proc.lastError ?? ''">({{ proc.failedRuns }})</span></td>
+                            <td class="text-right">{{ duration(proc.averageRunMs) }}</td>
+                            <td class="text-right">{{ proc.memoryMb === null ? "–" : proc.memoryMb + " MB" }}</td>
+                            <td class="font-mono">{{ proc.version ?? "–" }} <span *ngIf="proc.outdated" class="badge badge-warning badge-sm" [title]="'expected ' + p.expectedNodeVersion">outdated</span></td>
+                            <td>{{ ago(proc.lastHeartbeatAt, p.generatedAt) }} <span *ngIf="proc.silent" class="badge badge-error badge-sm">silent</span></td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </ng-container>

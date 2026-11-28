@@ -14,5 +14,5 @@ module.exports = [
     { path: "/sim-set/2", text: ["Experiment", "Effect of the step (test − control)", "-34.88", "excludes 0", "control better 8", "lowers performance by 34.88", "Run again with more org configs"] },
     { path: "/experiment/new?orgConfig=1", text: ["New control experiment", "Settings from OrgConfig 1", "Org configs per group", "Run experiment"] },
     { path: "/experiment/new?simSet=2", text: ["Settings from SimSet 2", "Run experiment"] },
-    { path: "/monitor", text: ["Node fleet", "Pending start", "Launching", "Building", "arion-nodes · at most 8", "i-0aaaabbbbccccdddd", "launching", "Set fleet size", "Stop all", "i-0fedcba9876543210", "Monitor", "Results / min", "Runs in flight", "Sim configs converged", "0 / 6", "http", "active"] }
+    { path: "/monitor", text: ["Processes", "Average run", "41 s", "run 16720 · 60%", "silent", "outdated", "mini-2.local", "4 processes", "Node fleet", "Pending start", "Launching", "Building", "arion-nodes · at most 8", "i-0aaaabbbbccccdddd", "launching", "Set fleet size", "Stop all", "i-0fedcba9876543210", "Monitor", "Results / min", "Runs in flight", "Sim configs converged", "0 / 6", "http", "active"] }
 ];

@@ -24,6 +24,7 @@ export interface ProgressDTO {
         resultsLastHour: number;
         inFlightRuns: number;
         activeInstances: number;
+        averageRunMs?: number | null;
     };
     nodes: {
         id: string;
@@ -35,6 +36,30 @@ export interface ProgressDTO {
         revoked: boolean;
     }[];
     simSets: ProgressSimSetDTO[];
+    processes?: ProgressProcessDTO[];
+    expectedNodeVersion?: string | null;
+}
+
+/** A node process as last reported by its heartbeat. */
+export interface ProgressProcessDTO {
+    id: string;
+    machineId: string;
+    instance: string | null;
+    state: string;
+    runId: number | null;
+    simConfigId: number | null;
+    clockTick: number | null;
+    totalClockTicks: number | null;
+    runStartedAt: string | null;
+    completedRuns: number;
+    failedRuns: number;
+    averageRunMs: number | null;
+    lastError: string | null;
+    memoryMb: number | null;
+    version: string | null;
+    lastHeartbeatAt: string;
+    silent: boolean;
+    outdated: boolean;
 }
 
 export interface ProgressSimSetDTO {

@@ -313,3 +313,29 @@ describe("API definition (swagger.json)", () => {
         expect(spec.paths["/arion/fleet/scale"].post.operationId).toBe("FleetController_scale");
     });
 });
+
+describe("MonitorContainerComponent processes", () => {
+    const proc = (id: string, instance: string | null, extra: any = {}): any => ({
+        id, machineId: id.split(":")[0], instance, state: "idle", runId: null, simConfigId: null, clockTick: null, totalClockTicks: null,
+        runStartedAt: null, completedRuns: 0, failedRuns: 0, averageRunMs: null, lastError: null, memoryMb: null, version: null,
+        lastHeartbeatAt: "2026-01-01T00:00:00Z", silent: false, outdated: false, ...extra
+    });
+    const c = new MonitorContainerComponent({} as any);
+
+    it("groups processes under their instance, fleet instances first, by process index", () => {
+        const fleet: any = { enabled: true, instances: [{ id: "i-1", phase: "running" }] };
+        const groups = c.processGroups([proc("m:mini:p9", "mini"), proc("f:i-1:10", "i-1"), proc("f:i-1:2", "i-1"), proc("x", null)], fleet);
+        expect(groups.map((g) => [g.instance, g.phase, g.processes.map((p) => c.processIndex(p))])).toEqual([
+            ["i-1", "running", ["2", "10"]],
+            ["mini", null, ["p9"]],
+            ["x", null, ["x"]]
+        ]);
+        expect(c.processGroups(undefined, null)).toEqual([]);
+    });
+
+    it("shows run progress and durations", () => {
+        expect(c.runPercent(proc("a", null, { clockTick: 1440, totalClockTicks: 5760 }))).toBe(25);
+        expect(c.runPercent(proc("a", null))).toBeNull();
+        expect([c.duration(null), c.duration(41000), c.duration(192000), c.duration(5400000)]).toEqual(["–", "41 s", "3.2 min", "1.5 h"]);
+    });
+});
