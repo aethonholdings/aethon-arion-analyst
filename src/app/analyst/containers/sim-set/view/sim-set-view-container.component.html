@@ -26,7 +26,7 @@
                 [class.tab-active]="activeTab === 'optimiser-steps'"
                 (click)="activeTab = 'optimiser-steps'"
             >
-                Optimiser steps
+                {{ experiment(simSetRefresh) ? "Experiment" : "Optimiser steps" }}
             </button>
             <button
                 role="tab"
@@ -51,7 +51,9 @@
             <arion-sim-set [dataInstance]="simSetRefresh" [view]="views.VIEW"></arion-sim-set>
         </div>
         <div [hidden]="activeTab !== 'optimiser-steps'">
+            <arion-control-experiment-result *ngIf="experiment(simSetRefresh)" [simSet]="simSetRefresh"></arion-control-experiment-result>
             <arion-sim-set-state-transition
+                *ngIf="!experiment(simSetRefresh)"
                 [simSet]="simSetRefresh"
                 (selected)="onSelect($event)"
             ></arion-sim-set-state-transition>

@@ -5,6 +5,8 @@ import { OrgConfigIndexContainerComponent } from "./org-config/index/org-config-
 import { SimSetCreateContainerComponent } from "./sim-set/create/sim-set-create-container.component";
 import { OptimiserStateViewComponent } from "../components/core/optimiser-state/view/optimiser-state-view.component";
 import { C1 } from "aethon-arion-c1";
+import { ExperimentCreateContainerComponent } from "./experiment/experiment-create-container.component";
+import { ControlExperimentResultComponent } from "./experiment/control-experiment-result.component";
 import { MonitorContainerComponent, MONITOR_REFRESH_MS } from "./monitor/monitor-container.component";
 import { discardPeriodicTasks, fakeAsync, tick } from "@angular/core/testing";
 import { c1GradientAscentDefaultOptimiserParams } from "../components/models/c1/constants/analyst-c1.constants";
@@ -182,5 +184,74 @@ describe("MonitorContainerComponent", () => {
         expect(c.ago("2026-01-01T09:00:00.000Z", now)).toBe("3 h ago");
         expect(c.shortId("aws-fleet")).toBe("aws-fleet");
         expect(c.shortId("a0a011aeb8aa6aa058232c58143fe66cdd80f55cda6c7e1005e9079b92a53b4d")).toBe("a0a011aeb8aa…");
+    });
+});
+
+describe("ExperimentCreateContainerComponent", () => {
+    const orgConfig = {
+        id: 7,
+        simConfigs: [{ days: 5 }],
+        configuratorParams: {
+            data: {
+                spans: 3, layers: 2, graph: "top-down", actionStateProbability: 0.85, hybridNoise: 0.5,
+                gains: { influence: 0.00005, judgment: 0.00004, incentive: 0.00009 },
+                matrixInit: { influence: "random", judgment: "random", incentive: "purposeful" },
+                reporting: { unitPrice: 1, unitPayroll: 1 },
+                board: { controlStep: true }
+            }
+        }
+    };
+    const create = (query: { [k: string]: string }, service: any) => {
+        const route: any = { snapshot: { queryParamMap: { get: (k: string) => query[k] ?? null } } };
+        return new ExperimentCreateContainerComponent(route, router(), service, spinner());
+    };
+
+    it("pre-fills from an org config, keeps unshown settings and leaves the control step to the experiment", () => {
+        const c = create({ orgConfig: "7" }, { getOrgConfig$: () => of(orgConfig) });
+        c.ngOnInit();
+        expect(c.source).toBe("OrgConfig 7");
+        expect(c.form!.days).toBe(5);
+        expect(c.form!.orgConfigs).toBe(100);
+        c.form!.gains.influence = 0.00001;
+        c.form!.matrixInit.influence = "purposeful";
+        const config = c.config();
+        expect(config.gains).toEqual({ influence: 0.00001, judgment: 0.00004, incentive: 0.00009 });
+        expect(config.matrixInit.influence).toBe("purposeful");
+        expect(config.hybridNoise).toBe(0.5);
+        expect(config.board).toBeUndefined();
+        expect(c.problems()).toEqual([]);
+    });
+
+    it("submits a control experiment SimSet and reports invalid input", () => {
+        let body: any = null;
+        const service: any = { getOrgConfig$: () => of(orgConfig), createSimSet$: (b: any) => { body = b; return of({ id: 42 }); } };
+        const c = create({ orgConfig: "7" }, service);
+        c.ngOnInit();
+        c.form!.orgConfigs = 1;
+        expect(c.problems().length).toBe(1);
+        c.submit();
+        expect(body).toBeNull(); // not submitted while invalid
+        c.form!.orgConfigs = 200;
+        c.submit();
+        expect(body.optimiserName).toBe("C1ControlExperimentOptimiser");
+        expect(body.optimiserParams.orgConfigs).toBe(200);
+        expect(body.simConfigParams).toEqual({ days: 5, randomStreamType: "random" });
+    });
+
+    it("doubles the org configs when re-running an earlier experiment", () => {
+        const simSet = { id: 3, description: "exp", simConfigParams: { days: 2 }, optimiserParams: { orgConfigs: 60, config: orgConfig.configuratorParams.data } };
+        const c = create({ simSet: "3" }, { getSimSet$: () => of(simSet) });
+        c.ngOnInit();
+        expect(c.source).toBe("SimSet 3");
+        expect(c.form!.orgConfigs).toBe(120);
+    });
+});
+
+describe("ControlExperimentResultComponent", () => {
+    it("states whether the step has a detectable effect", () => {
+        const c = new ControlExperimentResultComponent();
+        const base = { control: 200, test: 160, standardError: 2.5, relativeDelta: -0.2, pairs: 8, testBetter: 0, controlBetter: 8, ties: 0 };
+        expect(c.verdict({ ...base, delta: -40, ci95: [-44.9, -35.1], significant: true })).toContain("lowers performance by 40.00");
+        expect(c.verdict({ ...base, delta: 1, ci95: [-3.9, 5.9], significant: false })).toContain("No detectable effect");
     });
 });

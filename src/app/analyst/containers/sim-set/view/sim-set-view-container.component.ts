@@ -1,3 +1,4 @@
+import { isControlExperiment } from "../../experiment/control-experiment";
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SimSetDTO, StateType } from "aethon-arion-pipeline";
@@ -34,6 +35,7 @@ export class SimSetViewContainerComponent implements OnInit, OnDestroy {
     simSetId: number;
     simSetRefresh$!: Observable<SimSetDTO>;
     stepsData$!: Observable<StepData[]>;
+    experiment = isControlExperiment;
     refreshing: boolean = false;
     views = Views;
     activeTab: string = "optimiser-steps";

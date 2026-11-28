@@ -16,7 +16,8 @@ export class SimSetViewComponent {
 
     ngOnInit(): void {
         if (this.simSet?.optimiserParams) {
-            this.optimisationParameters = this.simSet?.optimiserParams.parameterSpace.filter(
+            // optimisers without a parameter space (e.g. a control experiment) have no optimised parameters
+            this.optimisationParameters = (this.simSet.optimiserParams.parameterSpace ?? []).filter(
                 (parameter: { id: string; domain: Domain }) => (parameter.domain.optimise ? true : false)
             );
         }

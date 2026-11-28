@@ -1,0 +1,68 @@
+<arion-breadcrumbs [breadcrumbs]="breadcrumbs"></arion-breadcrumbs>
+<h2>New control experiment</h2>
+<p class="opacity-70 mb-6">
+    Runs these settings twice: a <b>control group</b> with no control step, and a <b>test group</b> in which the board
+    switches its plan at the halfway point. Org config <i>k</i> of the two groups is the same organisation, so the result
+    is the paired difference in performance caused by the step.
+</p>
+
+<div *ngIf="error" class="alert alert-error mb-4">{{ error }}</div>
+
+<form *ngIf="form as f" (ngSubmit)="submit()" class="grid gap-6 max-w-3xl">
+    <div class="text-sm opacity-70">Settings from {{ source }}; anything not shown here is kept unchanged.</div>
+
+    <fieldset class="grid grid-cols-2 gap-4">
+        <label class="form-control col-span-2">
+            <span class="label-text">Description</span>
+            <input class="input input-bordered input-sm" name="description" [(ngModel)]="f.description" />
+        </label>
+        <label class="form-control">
+            <span class="label-text">Org configs per group</span>
+            <input class="input input-bordered input-sm" type="number" name="orgConfigs" min="2" max="2000" step="1" [(ngModel)]="f.orgConfigs" />
+            <span class="label-text-alt opacity-70">More org configs give a narrower confidence interval (about 1/√n)</span>
+        </label>
+        <label class="form-control">
+            <span class="label-text">Simulated days</span>
+            <input class="input input-bordered input-sm" type="number" name="days" min="1" step="1" [(ngModel)]="f.days" />
+        </label>
+    </fieldset>
+
+    <div class="divider my-0">Organisation</div>
+    <fieldset class="grid grid-cols-3 gap-4">
+        <label class="form-control"><span class="label-text">Spans</span><input class="input input-bordered input-sm" type="number" name="spans" min="1" step="1" [(ngModel)]="f.spans" /></label>
+        <label class="form-control"><span class="label-text">Layers</span><input class="input input-bordered input-sm" type="number" name="layers" min="1" step="1" [(ngModel)]="f.layers" /></label>
+        <label class="form-control"><span class="label-text">Graph</span>
+            <select class="select select-bordered select-sm" name="graph" [(ngModel)]="f.graph"><option *ngFor="let g of graphs" [value]="g">{{ g }}</option></select>
+        </label>
+        <label class="form-control"><span class="label-text">Action state probability</span><input class="input input-bordered input-sm" type="number" name="asp" min="0" max="1" step="0.01" [(ngModel)]="f.actionStateProbability" /></label>
+    </fieldset>
+
+    <div class="divider my-0">Gains and matrix initialisation</div>
+    <fieldset class="grid grid-cols-3 gap-4">
+        <label class="form-control"><span class="label-text">Influence gain</span><input class="input input-bordered input-sm" type="number" name="gi" min="0" step="any" [(ngModel)]="f.gains.influence" /></label>
+        <label class="form-control"><span class="label-text">Judgment gain</span><input class="input input-bordered input-sm" type="number" name="gj" min="0" step="any" [(ngModel)]="f.gains.judgment" /></label>
+        <label class="form-control"><span class="label-text">Incentive gain</span><input class="input input-bordered input-sm" type="number" name="gc" min="0" step="any" [(ngModel)]="f.gains.incentive" /></label>
+        <label class="form-control"><span class="label-text">Influence matrix</span>
+            <select class="select select-bordered select-sm" name="mi" [(ngModel)]="f.matrixInit.influence"><option *ngFor="let t of matrixInitTypes" [value]="t">{{ t }}</option></select>
+        </label>
+        <label class="form-control"><span class="label-text">Judgment matrix</span>
+            <select class="select select-bordered select-sm" name="mj" [(ngModel)]="f.matrixInit.judgment"><option *ngFor="let t of matrixInitTypes" [value]="t">{{ t }}</option></select>
+        </label>
+        <label class="form-control"><span class="label-text">Incentive matrix</span>
+            <select class="select select-bordered select-sm" name="mc" [(ngModel)]="f.matrixInit.incentive"><option *ngFor="let t of matrixInitTypes" [value]="t">{{ t }}</option></select>
+        </label>
+    </fieldset>
+
+    <div class="divider my-0">Reporting</div>
+    <fieldset class="grid grid-cols-3 gap-4">
+        <label class="form-control"><span class="label-text">Unit price</span><input class="input input-bordered input-sm" type="number" name="price" min="0" step="any" [(ngModel)]="f.reporting.unitPrice" /></label>
+        <label class="form-control"><span class="label-text">Unit payroll</span><input class="input input-bordered input-sm" type="number" name="payroll" min="0" step="any" [(ngModel)]="f.reporting.unitPayroll" /></label>
+    </fieldset>
+
+    <ul *ngIf="problems().length > 0" class="text-error text-sm list-disc ml-5">
+        <li *ngFor="let p of problems()">{{ p }}</li>
+    </ul>
+    <div class="flex gap-2 justify-end">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting || problems().length > 0">Run experiment</button>
+    </div>
+</form>

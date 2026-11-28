@@ -11,5 +11,8 @@ module.exports = [
     { path: "/result/46", text: ["Result 46", "Operating profit"], tabs: ["SimConfig", "OrgConfig"] },
     { path: "/org-config", text: ["Summary - All org configs", "Avg Performance/ agent"] },
     { path: "/org-config/1", text: ["OrgConfig 1", "Agent set tensors"], tabs: ["SimConfigs"] },
+    { path: "/sim-set/2", text: ["Experiment", "Effect of the step (test − control)", "-34.88", "excludes 0", "control better 8", "lowers performance by 34.88", "Run again with more org configs"] },
+    { path: "/experiment/new?orgConfig=1", text: ["New control experiment", "Settings from OrgConfig 1", "Org configs per group", "Run experiment"] },
+    { path: "/experiment/new?simSet=2", text: ["Settings from SimSet 2", "Run experiment"] },
     { path: "/monitor", text: ["Monitor", "Results / min", "Runs in flight", "Sim configs converged", "0 / 6", "http", "active"] }
 ];

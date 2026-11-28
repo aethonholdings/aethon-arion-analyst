@@ -1,0 +1,49 @@
+<div *ngIf="state; else noState">
+    <table class="table table-sm max-w-3xl">
+        <thead>
+            <tr><th>Group</th><th>Control step</th><th>Status</th><th class="text-right">Org configs</th><th class="text-right">Mean performance</th></tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let g of groups">
+                <td class="capitalize">{{ g.id }}</td>
+                <td>{{ g.id === "test" ? "Plan switches at the halfway point" : "None" }}</td>
+                <td><arion-status-indicator [status]="$any(g.status)"></arion-status-indicator> {{ g.status }}</td>
+                <td class="text-right">{{ g.orgConfigCount ?? "–" }} / {{ required }}</td>
+                <td class="text-right">{{ g.performance === undefined || g.performance === null ? "–" : (g.performance | number: "1.2-2") }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-container *ngIf="result as r; else running">
+        <div class="stats stats-vertical lg:stats-horizontal shadow w-full my-6">
+            <div class="stat">
+                <div class="stat-title">Effect of the step (test − control)</div>
+                <div class="stat-value" [class.text-error]="r.significant && r.delta < 0" [class.text-success]="r.significant && r.delta > 0">
+                    {{ r.delta | number: "1.2-2" }}
+                </div>
+                <div class="stat-desc">± {{ r.standardError | number: "1.2-2" }} standard error</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">95% interval</div>
+                <div class="stat-value text-2xl">{{ r.ci95[0] | number: "1.2-2" }} to {{ r.ci95[1] | number: "1.2-2" }}</div>
+                <div class="stat-desc">{{ r.significant ? "excludes 0" : "includes 0" }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Relative effect</div>
+                <div class="stat-value text-2xl">{{ r.relativeDelta === null ? "–" : (r.relativeDelta * 100 | number: "1.3-3") + "%" }}</div>
+                <div class="stat-desc">of control performance</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Paired org configs</div>
+                <div class="stat-value text-2xl">{{ r.pairs }}</div>
+                <div class="stat-desc">test better {{ r.testBetter }} · control better {{ r.controlBetter }} · tied {{ r.ties }}</div>
+            </div>
+        </div>
+        <p class="mb-4">{{ verdict(r) }}</p>
+        <a class="btn btn-sm" [routerLink]="['/experiment/new']" [queryParams]="{ simSet: simSet.id }">Run again with more org configs</a>
+    </ng-container>
+    <ng-template #running>
+        <p class="opacity-70 my-4">The effect is calculated when both groups have finished.</p>
+    </ng-template>
+</div>
+<ng-template #noState><p class="opacity-70">The experiment has not started yet.</p></ng-template>
